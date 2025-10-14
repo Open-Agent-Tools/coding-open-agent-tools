@@ -4,7 +4,7 @@ Thank you for your interest in contributing! This document provides guidelines f
 
 ## Project Status
 
-⚠️ **Note**: This project is currently in the planning phase. Implementation will begin soon. Check the [TODO.md](TODO.md) for the current roadmap.
+✅ **v0.1.0-beta Released**: The project has successfully migrated 39 functions across 4 modules from basic-open-agent-tools. Check the [TODO.md](TODO.md) for the current roadmap and [CHANGELOG.md](CHANGELOG.md) for release history.
 
 ## Development Setup
 
@@ -210,6 +210,68 @@ This project follows the [Contributor Covenant Code of Conduct](CODE_OF_CONDUCT.
 - Open an issue for bug reports or feature requests
 - Start a discussion for questions
 - Check existing issues before creating new ones
+
+## Release Process
+
+This project uses GitHub's trusted publishing to PyPI for secure, automated releases.
+
+### For Maintainers: Creating a Release
+
+1. **Update version number**
+   - Update version in `src/coding_open_agent_tools/__init__.py`
+   - Update version in `pyproject.toml`
+   - Follow semantic versioning (MAJOR.MINOR.PATCH)
+
+2. **Update CHANGELOG.md**
+   - Document all changes in the new version
+   - Follow Keep a Changelog format
+   - Include migration notes if applicable
+
+3. **Create a git tag**
+   ```bash
+   git tag -a v0.1.0 -m "Release v0.1.0: Brief description"
+   git push origin v0.1.0
+   ```
+
+4. **Create a GitHub Release**
+   - Go to the repository's Releases page
+   - Click "Draft a new release"
+   - Select the tag you created
+   - Title: `v0.1.0: Brief description`
+   - Description: Copy relevant section from CHANGELOG.md
+   - Publish the release
+
+5. **Automated Publishing**
+   - GitHub Actions will automatically build and publish to PyPI
+   - Uses trusted publishing (no API tokens needed)
+   - Monitor the workflow run for any issues
+
+### Testing Before Release
+
+Test on TestPyPI first:
+
+```bash
+# Manually trigger the publish workflow with test_pypi option
+# Go to Actions > Publish to PyPI > Run workflow
+# Select "Publish to Test PyPI instead of PyPI"
+```
+
+Then install from TestPyPI to verify:
+
+```bash
+pip install --index-url https://test.pypi.org/simple/ coding-open-agent-tools
+```
+
+### Trusted Publishing Setup
+
+This repository is configured for PyPI trusted publishing:
+
+- **Workflow**: `.github/workflows/publish.yml`
+- **Permissions**: `id-token: write` for OIDC
+- **Triggers**: GitHub releases and manual workflow dispatch
+- **Security**: No long-lived API tokens required
+
+The trusted publisher relationship is configured in the PyPI project settings.
 
 ## License
 
