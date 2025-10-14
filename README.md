@@ -6,7 +6,17 @@ This project provides specialized code generation, script creation, and developm
 
 ## Project Status
 
-🚧 **In Planning Phase** - Product Requirements Documents are complete. Implementation has not yet started.
+✅ **v0.1.0-beta Released** - First beta with 39 migrated developer-focused tools from basic-open-agent-tools.
+
+**What's Available Now:**
+- ✅ Analysis Module (14 functions) - AST parsing, complexity analysis, imports, secrets
+- ✅ Git Module (9 functions) - Read-only git operations
+- ✅ Profiling Module (8 functions) - Performance and memory profiling
+- ✅ Quality Module (7 functions) - Static analysis parsers
+
+**Coming Next:**
+- 🚧 Shell script generation module (planned for v0.2.0)
+- 🚧 Python code generation module (planned for v0.3.0)
 
 See [docs/PRD](./docs/PRD/) for detailed requirements and specifications.
 
@@ -159,13 +169,54 @@ if validation['is_valid'] == 'true':
   - [Shell Module PRD](./docs/PRD/02-shell-module-prd.md)
   - [Codegen Module PRD](./docs/PRD/03-codegen-module-prd.md)
 
-## Installation (Future)
+## Installation
 
 ```bash
-# Once published to PyPI
-pip install coding-open-agent-tools
+# Install latest beta from source
+git clone https://github.com/Open-Agent-Tools/coding-open-agent-tools.git
+cd coding-open-agent-tools
+pip install -e ".[dev]"
+
+# Or install specific version (when published to PyPI)
+pip install coding-open-agent-tools==0.1.0-beta
 
 # This will automatically install basic-open-agent-tools as a dependency
+```
+
+## Quick Start
+
+```python
+import coding_open_agent_tools as coat
+
+# Load all 39 functions
+all_tools = coat.load_all_tools()
+
+# Or load by category
+analysis_tools = coat.load_all_analysis_tools()  # 14 functions
+git_tools = coat.load_all_git_tools()            # 9 functions
+profiling_tools = coat.load_all_profiling_tools()  # 8 functions
+quality_tools = coat.load_all_quality_tools()    # 7 functions
+
+# Use with any agent framework
+from google.adk.agents import Agent
+
+agent = Agent(
+    tools=all_tools,
+    name="CodeAnalyzer",
+    instruction="Analyze code quality and performance"
+)
+
+# Example: Analyze code complexity
+from coding_open_agent_tools import analysis
+
+complexity = analysis.calculate_complexity("/path/to/code.py")
+print(f"Cyclomatic complexity: {complexity['total_complexity']}")
+
+# Example: Check git status
+from coding_open_agent_tools import git
+
+status = git.get_git_status("/path/to/repo")
+print(f"Modified files: {len(status['modified'])}")
 ```
 
 ## Development Status

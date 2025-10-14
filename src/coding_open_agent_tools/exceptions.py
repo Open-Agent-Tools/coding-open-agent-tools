@@ -35,6 +35,22 @@ class AnalysisError(CodingToolsError):
     pass
 
 
+# Alias for backwards compatibility
+CodeAnalysisError = AnalysisError
+
+
+class ProfilingError(CodingToolsError):
+    """Raised when profiling operations fail."""
+
+    pass
+
+
+class StaticAnalysisError(CodingToolsError):
+    """Raised when static analysis operations fail."""
+
+    pass
+
+
 class GitError(CodingToolsError):
     """Raised when git operations fail."""
 
