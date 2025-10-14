@@ -205,3 +205,106 @@ cython_debug/
 marimo/_static/
 marimo/_lsp/
 __marimo__/
+
+# Claude Code and AI assistants
+CLAUDE.md
+.claude/
+.aider*
+.cursor/
+.copilot/
+.junie/
+.junie
+.anthropic/
+.openai/
+.github-copilot/
+.tabnine/
+.codeium/
+.sourcegraph/
+.continue/
+.windsurf/
+
+# Development and debugging
+.debug/
+debug.py
+test_*.py.bak
+profile_*.py
+benchmark_*.py
+*.prof
+*.lprof
+
+# OS generated files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+Desktop.ini
+$RECYCLE.BIN/
+
+# IDEs and editors
+.vscode/*
+!.vscode/extensions.json
+.idea/
+*.swp
+*.swo
+*~
+.project
+.pydevproject
+.settings/
+.metadata
+.classpath
+.loadpath
+.externalToolBuilders/
+*.launch
+.cproject
+.autotools
+.sublime-workspace
+*.sublime-project
+.tern-project
+
+# Logs and temporary files
+*.tmp
+*.temp
+*.bak
+*.backup
+*.orig
+*.rej
+logs/
+log/
+temp/
+tmp/
+.tmp/
+
+# Secrets and keys
+.secrets
+secrets/
+*.pem
+*.key
+*.crt
+*.p12
+*.pfx
+
+# Documentation builds
+site/
+_site/
+.sass-cache/
+.jekyll-cache/
+.jekyll-metadata
+
+# Package manager locks and configs
+package-lock.json
+yarn.lock
+pnpm-lock.yaml
+.pnp.*
+node_modules/
+
+# Cache directories
+.cache/
+cache/
+.npm/
+.yarn/
+
+# Agent Development Kit (ADK) evaluation history
+.adk/

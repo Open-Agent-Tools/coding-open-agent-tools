@@ -1,0 +1,180 @@
+[build-system]
+requires = ["setuptools>=61.0", "wheel"]
+build-backend = "setuptools.build_meta:__legacy__"
+
+[project]
+name = "coding-open-agent-tools"
+version = "0.0.1"  # Initial planning phase
+description = "Advanced code generation and shell scripting toolkit for AI agents, complementing basic-open-agent-tools with development-focused capabilities."
+readme = "README.md"
+requires-python = ">=3.9"
+authors = [
+    { name = "Open Agent Tools", email = "unseriousai@gmail.com" },
+]
+keywords = [
+    "ai",
+    "agents",
+    "code-generation",
+    "shell-scripts",
+    "development-tools",
+    "automation",
+    "scaffolding",
+]
+classifiers = [
+    "Development Status :: 1 - Planning",
+    "Environment :: Console",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: MIT License",
+    "Natural Language :: English",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Topic :: Communications :: Chat",
+    "Topic :: Scientific/Engineering :: Artificial Intelligence",
+    "Topic :: Software Development :: Code Generators",
+    "Topic :: Software Development :: Libraries :: Application Frameworks",
+    "Topic :: Software Development :: Libraries :: Python Modules",
+    "Topic :: System :: Shells",
+    "Typing :: Typed",
+]
+dependencies = [
+    "basic-open-agent-tools>=0.12.0",
+]
+
+[project.optional-dependencies]
+# All optional features
+all = []
+# Strands integration testing
+strands = [
+    "strands>=0.1.0",
+    "anthropic>=0.25.0",
+    "python-dotenv>=1.0.0",
+]
+# Development dependencies
+dev = [
+    "pytest>=7.0.0",
+    "pytest-cov>=4.0.0",
+    "pytest-asyncio>=0.21.0",
+    "ruff>=0.1.0",
+    "mypy>=1.0.0",
+    "pre-commit>=3.0.0",
+    "freezegun>=1.2.0",
+    "google-adk>=0.1.0",
+    "basic-open-agent-tools[all]>=0.12.0",
+    # Strands testing dependencies
+    "strands>=0.1.0",
+    "anthropic>=0.25.0",
+    "python-dotenv>=1.0.0",
+]
+test = [
+    "pytest>=7.0.0",
+    "pytest-cov>=4.0.0",
+    "pytest-asyncio>=0.21.0",
+    "freezegun>=1.2.0",
+    "google-adk>=0.1.0",
+    "basic-open-agent-tools[all]>=0.12.0",
+]
+
+[project.urls]
+Homepage = "https://github.com/Open-Agent-Tools/coding-open-agent-tools"
+Documentation = "https://github.com/Open-Agent-Tools/coding-open-agent-tools#readme"
+Repository = "https://github.com/Open-Agent-Tools/coding-open-agent-tools"
+Issues = "https://github.com/Open-Agent-Tools/coding-open-agent-tools/issues"
+
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.ruff]
+target-version = "py39"
+line-length = 88
+
+[tool.ruff.lint]
+select = [
+    "E",  # pycodestyle errors
+    "W",  # pycodestyle warnings
+    "F",  # pyflakes
+    "I",  # isort
+    "B",  # flake8-bugbear
+    "C4", # flake8-comprehensions
+    "UP", # pyupgrade
+]
+ignore = [
+    "E501", # line too long, handled by black
+    "B008", # do not perform function calls in argument defaults
+    "B904", # raise ... from err (we'll handle this separately)
+    "C901", # too complex
+]
+
+[tool.ruff.lint.per-file-ignores]
+"__init__.py" = ["F401"]
+
+[tool.mypy]
+python_version = "3.9"
+warn_return_any = true
+warn_unused_configs = false  # allow unused type: ignore for optional imports
+disallow_untyped_defs = true
+disallow_incomplete_defs = true
+check_untyped_defs = true
+disallow_untyped_decorators = false  # @strands_tool decorator creates these errors
+no_implicit_optional = true
+warn_redundant_casts = true
+warn_unused_ignores = false  # optional strands import creates unused ignores
+warn_no_return = true
+warn_unreachable = true
+strict_equality = true
+
+[[tool.mypy.overrides]]
+module = ["strands", "strands.*", "pkg_resources", "basic_open_agent_tools", "basic_open_agent_tools.*"]
+ignore_missing_imports = true
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+python_files = ["test_*.py", "*_test.py"]
+python_classes = ["Test*"]
+python_functions = ["test_*"]
+addopts = [
+    "--strict-markers",
+    "--strict-config",
+    "--cov=src/coding_open_agent_tools",
+    "--cov-report=term-missing",
+    "--cov-report=html",
+    "--cov-report=xml",
+]
+markers = [
+    "agent_evaluation: marks tests as agent evaluation tests (may be slow due to API calls)",
+    "slow: marks tests as slow running",
+    "strands_integration: marks tests as requiring Strands framework integration",
+    "strands_agent: marks tests that create and run actual Strands agents (requires API keys)",
+    "asyncio: marks tests as asyncio tests",
+]
+filterwarnings = [
+    "ignore::pytest.PytestUnhandledThreadExceptionWarning",
+    "ignore::DeprecationWarning",
+]
+
+[tool.coverage.run]
+source = ["src"]
+branch = true
+
+[tool.coverage.report]
+exclude_lines = [
+    "pragma: no cover",
+    "def __repr__",
+    "if self.debug:",
+    "if settings.DEBUG",
+    "raise AssertionError",
+    "raise NotImplementedError",
+    "if 0:",
+    "if __name__ == .__main__.:",
+    "class .*\\bProtocol\\):",
+    "@(abc\\.)?abstractmethod",
+]
+
+[dependency-groups]
+dev = [
+    "ruff>=0.12.12",
+]
