@@ -5,6 +5,21 @@
 
 This document outlines the planned development roadmap for the Coding Open Agent Tools project.
 
+## 🎯 Core Philosophy: Token Efficiency
+
+**This project focuses on deterministic operations that save agent tokens:**
+- ✅ **Parsers** - Convert unstructured → structured (saves parsing tokens)
+- ✅ **Validators** - Catch errors before execution (prevents retry loops)
+- ✅ **Extractors** - Pull specific data from complex sources
+- ✅ **Formatters** - Apply deterministic rules (escaping, quoting)
+- ✅ **Scanners** - Rule-based pattern detection (security, anti-patterns)
+
+**We avoid building what agents already do well:**
+- ❌ Full code generation (agents excel at creative logic)
+- ❌ Architecture decisions (requires judgment and context)
+- ❌ Code refactoring (agents reason through transformations)
+- ❌ Project scaffolding (agents handle with examples)
+
 ## 📊 Current Status (v0.1.1)
 
 ### ✅ Completed Features
@@ -52,195 +67,271 @@ This document outlines the planned development roadmap for the Coding Open Agent
 
 ## 🗓️ Release Timeline
 
-### v0.2.0 - Shell Script Generation Module
+### v0.2.0 - Shell Validation & Security Module
 **Target**: Q1 2025
 **Status**: 🚧 Planned
 
+**Focus**: Validation and security analysis (NOT full script generation)
+
+**Features** (~12 functions):
+- **Validators**: `validate_shell_syntax()`, `check_shell_dependencies()`
+- **Security Scanners**: `analyze_shell_security()`, `detect_shell_injection_risks()`
+- **Formatters**: `escape_shell_argument()`, `normalize_shebang()`
+- **Parsers**: `parse_shell_script()`, `extract_shell_functions()`, `extract_shell_variables()`
+- **Analyzers**: `detect_unquoted_variables()`, `find_dangerous_commands()`, `check_error_handling()`
+
+**Rationale**:
+- Agents waste many tokens getting shell escaping/quoting right
+- Security issues (unquoted vars, eval, injection) are deterministic to detect
+- Syntax validation prevents failed executions (saves retry loops)
+- Parsing shell scripts to extract structure is tedious for agents
+
+**Success Criteria**:
+- All 12 functions implemented and tested
+- 80%+ test coverage
+- Security analysis catches OWASP shell injection patterns
+- Validation prevents 95%+ of syntax errors
+- 100% ruff and mypy compliance
+
+**Example Usage**:
+```python
+import coding_open_agent_tools as coat
+
+# Agent writes a shell script (they're good at this)
+script = """#!/bin/bash
+APP_DIR=/app
+cd $APP_DIR  # Unquoted variable!
+eval "$USER_INPUT"  # Dangerous!
+"""
+
+# Validate syntax (prevents execution failure)
+validation = coat.validate_shell_syntax(script, "bash")
+# {'is_valid': 'true', 'errors': ''}
+
+# Security analysis (deterministic rule checking)
+issues = coat.analyze_shell_security(script)
+# [
+#   {'severity': 'high', 'line': 3, 'issue': 'Unquoted variable expansion', ...},
+#   {'severity': 'critical', 'line': 4, 'issue': 'Use of eval with user input', ...}
+# ]
+
+# Fix escaping (deterministic formatting)
+safe_arg = coat.escape_shell_argument(user_input, quote_style="single")
+```
+
+**Dependencies**:
+- Python stdlib: `re`, `subprocess`, `shlex`
+- Optional: `shellcheck` (external tool) for enhanced validation
+
+**What We're NOT Building**:
+- ❌ Full script generators (agents write scripts well with prompting)
+- ❌ Template systems (agents use examples effectively)
+- ❌ Systemd/cron generators (agents handle these with docs)
+
+---
+
+### v0.3.0 - Python Validation & Analysis Module
+**Target**: Q2 2025
+**Status**: 🚧 Planned
+
+**Focus**: Validation, parsing, and formatting (NOT full code generation)
+
 **Features** (~15 functions):
-- Bash script generation with error handling
-- Shell script validation (syntax checking)
-- Security analysis for shell scripts
-- Systemd service file generation
-- Cron job generation
-- Docker entrypoint generation
-- CI pipeline script generation
-- Script templating system
-- Argument escaping and sanitization
-- Permission management helpers
-- Shell function generation
-- Documentation header generation
+- **Validators**: `validate_python_syntax()`, `validate_type_hints()`, `validate_import_order()`, `check_adk_compliance()`
+- **Extractors**: `parse_function_signature()`, `extract_docstring_info()`, `extract_type_annotations()`, `get_function_dependencies()`
+- **Formatters**: `format_docstring()`, `sort_imports()`, `normalize_type_hints()`
+- **Analyzers**: `detect_circular_imports()`, `find_unused_imports()`, `identify_anti_patterns()`, `check_test_coverage_gaps()`
+
+**Rationale**:
+- Validation prevents syntax/type errors (saves retry loops and tokens)
+- Parsing function signatures/docstrings is tedious and error-prone for agents
+- Import sorting and docstring formatting are purely deterministic
+- ADK compliance checking catches issues before runtime
+- Agents already write excellent Python code—they just need validation
 
 **Success Criteria**:
 - All 15 functions implemented and tested
 - 80%+ test coverage
-- Generated scripts pass shellcheck validation
-- Security analysis catches common vulnerabilities
-- Template library created
-- Documentation and examples complete
-- 100% ruff and mypy compliance
-
-**Example Capabilities**:
-```python
-import coding_open_agent_tools as coat
-
-# Generate deployment script
-script = coat.generate_bash_script(
-    commands=["cd /app", "git pull", "npm install"],
-    variables={"APP_DIR": "/app"},
-    add_error_handling=True,
-    add_logging=True,
-    set_flags=["u", "o pipefail"]
-)
-
-# Validate and analyze
-validation = coat.validate_shell_syntax(script, "bash")
-security = coat.analyze_shell_security(script)
-```
-
-**Dependencies**:
-- Python stdlib: `os`, `re`, `subprocess`, `shlex`
-- Optional: `shellcheck` (external tool) for enhanced validation
-
-**Documentation**:
-- Complete module documentation
-- Usage examples for each function
-- Security best practices guide
-- Template library documentation
-
----
-
-### v0.3.0 - Python Code Generation Module
-**Target**: Q2 2025
-**Status**: 🚧 Planned
-
-**Features** (~18 functions):
-- Function generation with type hints
-- Class generation (regular, dataclass, Pydantic)
-- Async function generation
-- Docstring generation (Google, NumPy, Sphinx styles)
-- Test skeleton generation (pytest)
-- Module scaffolding
-- Project structure generation
-- Exception class generation
-- Import statement generation
-- Type annotation helpers
-- CLI argument parser generation
-- Configuration class generation
-- Validation functions for generated code
-
-**Success Criteria**:
-- All 18 functions implemented and tested
-- 80%+ test coverage
-- Generated code passes ruff and mypy checks
-- Generated tests execute successfully
-- Support all 3 docstring styles
-- Template library for common patterns
+- Validation catches 95%+ of syntax/type errors
+- Support all 3 docstring styles (Google, NumPy, Sphinx)
 - 100% Google ADK compliance
+- Parsers handle complex Python 3.9-3.12 syntax
 
-**Example Capabilities**:
+**Example Usage**:
 ```python
 import coding_open_agent_tools as coat
 
-# Generate ADK-compliant function
-func = coat.generate_python_function(
-    name="process_data",
-    parameters=[
-        {"name": "data", "type": "list[dict[str, str]]", "description": "Input data"},
-        {"name": "operation", "type": "str", "description": "Operation type"}
-    ],
-    return_type="dict[str, str]",
-    description="Process data with specified operation",
-    docstring_style="google",
-    add_type_checking=True,
-    add_error_handling=True,
-    raises=[
-        {"type": "TypeError", "description": "If parameters are wrong type"}
-    ]
-)
+# Agent writes Python code (they're excellent at this)
+code = '''
+def process_data(data: list[dict], operation: str) -> dict:
+    """Process data with operation."""
+    return {"result": "done"}
+'''
 
-# Generate corresponding tests
-tests = coat.generate_test_skeleton(
-    function_signature=func,
-    test_cases=[...],
-    fixtures=[],
-    docstring="Test suite for process_data"
+# Validate syntax (catches errors before execution)
+validation = coat.validate_python_syntax(code)
+# {'is_valid': 'true', 'error_message': '', 'line_number': '0'}
+
+# Extract signature (tedious parsing for agents)
+sig = coat.parse_function_signature(code)
+# {'name': 'process_data', 'parameters': '[{"name":"data", "type":"list[dict]"}, ...]', ...}
+
+# Check ADK compliance (deterministic rules)
+compliance = coat.check_adk_compliance(code)
+# {'is_compliant': 'false', 'issues': ['Missing return type in docstring', ...]}
+
+# Format docstring (deterministic formatting)
+formatted = coat.format_docstring(
+    description="Process data with operation",
+    parameters=[{"name": "data", "type": "list[dict]", "description": "Input data"}],
+    return_description="Processing result",
+    style="google"
 )
 ```
 
 **Dependencies**:
 - Python stdlib: `ast`, `inspect`, `textwrap`, `typing`
-- Optional: `black`, `isort` for validation
+- Optional: `mypy`, `ruff` for enhanced validation
 
-**Documentation**:
-- Complete module documentation
-- Code generation best practices
-- Template customization guide
-- Integration examples with agent frameworks
+**What We're NOT Building**:
+- ❌ Full function/class generators (agents write excellent code)
+- ❌ Test generators (agents create comprehensive tests)
+- ❌ Project scaffolding (agents use cookiecutter/examples)
+- ❌ Documentation generators (agents write clear docs)
 
 ---
 
-### v0.4.0 - Configuration Generation Module
+### v0.3.5 - SQLite Database Operations Module
+**Target**: Q2 2025 (alongside v0.3.0)
+**Status**: 🚧 Planned
+
+**Focus**: Local data storage and structured data management (pure stdlib)
+
+**Features** (~10 functions):
+- **Database Operations**: `create_sqlite_database()`, `execute_query()`, `execute_many()`, `fetch_all()`, `fetch_one()`
+- **Schema Management**: `inspect_schema()`, `create_table_from_dict()`, `add_column()`, `create_index()`
+- **Safe Query Building**: `build_select_query()`, `build_insert_query()`, `escape_sql_identifier()`, `validate_sql_query()`
+- **Migration Helpers**: `export_to_json()`, `import_from_json()`, `backup_database()`
+
+**Rationale**:
+- Local data storage is essential for agent memory and state
+- SQLite is pure stdlib (no dependencies)
+- Agents waste tokens on SQL syntax and escaping
+- Safe query building prevents SQL injection
+- Schema inspection saves repetitive queries
+
+**Success Criteria**:
+- All 10 functions implemented and tested
+- 80%+ test coverage
+- Zero dependencies (pure stdlib `sqlite3`)
+- SQL injection prevention through parameterization
+- 100% ruff and mypy compliance
+
+**Example Usage**:
+```python
+import coding_open_agent_tools as coat
+
+# Create and populate database
+db_path = coat.create_sqlite_database("/tmp/agent_memory.db")
+
+# Safe query building (prevents SQL injection)
+query = coat.build_insert_query(
+    table="tasks",
+    columns=["id", "description", "status"],
+    values=[(1, "Analyze code", "done"), (2, "Write tests", "pending")]
+)
+
+# Execute safely
+coat.execute_many(db_path, query)
+
+# Inspect schema (tedious for agents)
+schema = coat.inspect_schema(db_path)
+# {'tasks': {'columns': [{'name': 'id', 'type': 'INTEGER'}, ...], 'indexes': [...]}}
+
+# Fetch results
+results = coat.fetch_all(db_path, "SELECT * FROM tasks WHERE status = ?", ["pending"])
+```
+
+**Use Cases**:
+- **Agent Memory**: Persist conversation context, learned patterns, user preferences
+- **Structured Data**: Store code metrics, test results, profiling data
+- **Cache Layer**: Cache expensive analysis results, API responses
+- **State Management**: Track multi-step agent workflows
+
+**Dependencies**:
+- Python stdlib: `sqlite3` only (no external dependencies)
+
+---
+
+### v0.4.0 - Configuration Validation Module
 **Target**: Q3 2025
 **Status**: 📋 Future
 
-**Features** (~12 functions):
-- Docker configuration generation
-  - Dockerfile creation
-  - docker-compose.yml generation
-  - .dockerignore generation
-- CI/CD pipeline generation
-  - GitHub Actions workflows
-  - GitLab CI configuration
-  - Jenkins pipelines
-- Package manager configuration
-  - pyproject.toml generation
-  - package.json generation
-  - requirements.txt generation
-- Infrastructure as code
-  - Terraform configuration
-  - Kubernetes manifests
-  - Environment file templates
+**Focus**: Config validation and security scanning (NOT generation)
+
+**Features** (~10 functions):
+- **Validators**: `validate_yaml_syntax()`, `validate_toml_syntax()`, `validate_json_schema()`, `check_ci_config_validity()`
+- **Security Scanners**: `scan_config_for_secrets()`, `detect_insecure_settings()`, `check_exposed_ports()`
+- **Analyzers**: `detect_dependency_conflicts()`, `validate_version_constraints()`, `check_compatibility()`
+
+**Rationale**:
+- Config syntax validation prevents deployment failures
+- Security scanning is deterministic (exposed secrets, insecure defaults)
+- Dependency conflict detection saves debugging time
+- Agents already write good configs when given examples/docs
 
 **Success Criteria**:
-- All configuration types supported
-- Generated configs pass validation
+- All 10 functions implemented and tested
 - 80%+ test coverage
-- Security best practices enforced
-- Template variations for different stacks
+- Catches common CI/CD misconfigurations
+- Detects 95%+ of exposed secrets in configs
+- Schema validation for major platforms (GitHub Actions, GitLab CI)
 
-**Dependencies**:
-- Python stdlib
-- Optional: `pyyaml`, `toml` for parsing and validation
+**Example Usage**:
+```python
+# Validate YAML syntax
+validation = coat.validate_yaml_syntax(config_content)
+
+# Security scan
+issues = coat.scan_config_for_secrets(dockerfile_content)
+# [{'severity': 'critical', 'line': 5, 'issue': 'Hardcoded API key', ...}]
+
+# Dependency conflicts
+conflicts = coat.detect_dependency_conflicts(requirements_txt)
+```
+
+**What We're NOT Building**:
+- ❌ Config generators (agents write configs well with examples)
 
 ---
 
-### v0.5.0 - Multi-Language Support
+### v0.5.0 - Enhanced Code Analysis Module
 **Target**: Q4 2025
 **Status**: 📋 Future
 
-**Features** (~15 functions per language):
-- JavaScript/TypeScript code generation
-  - Function and class generation
-  - React component generation
-  - TypeScript type definitions
-  - Jest test generation
-- Go code generation
-  - Function and struct generation
-  - Interface definitions
-  - Test generation
-- Rust code generation
-  - Function and struct generation
-  - Trait definitions
-  - Test generation
+**Focus**: Advanced deterministic analysis (double down on what works)
+
+**Features** (~12 functions):
+- **Dependency Analyzers**: `detect_circular_imports()`, `find_unused_dependencies()`, `analyze_import_cycles()`
+- **Security Scanners**: `detect_sql_injection_patterns()`, `find_xss_vulnerabilities()`, `scan_for_hardcoded_credentials()`
+- **Performance Detectors**: `identify_n_squared_loops()`, `detect_memory_leak_patterns()`, `find_blocking_io()`
+- **Compliance Checkers**: `check_gdpr_compliance()`, `validate_accessibility()`, `detect_license_violations()`
+
+**Rationale**:
+- These are all rule-based, deterministic checks
+- Agents struggle with complex static analysis
+- Prevents security and performance issues early
+- Builds on the project's core strengths
 
 **Success Criteria**:
-- At least 2 additional languages supported
-- Generated code compiles/runs
-- Language-specific best practices followed
-- 80%+ test coverage per language
+- All 12 functions implemented
+- 80%+ test coverage
+- Catches common security vulnerabilities (OWASP Top 10)
+- Performance checks detect major anti-patterns
 
-**Dependencies**:
-- Language-specific formatters and validators
+**What We're NOT Building**:
+- ❌ Multi-language code generation (low priority, agents handle well)
+- ❌ Language conversion tools (requires complex transformations)
 
 ---
 
@@ -249,46 +340,46 @@ tests = coat.generate_test_skeleton(
 **Status**: 📋 Future
 
 **Goals**:
-- Production-ready stability across all modules
-- Comprehensive documentation site
-- Example projects and tutorials
-- Integration guides for popular frameworks:
+- Production-ready stability across all validation/analysis modules
+- Comprehensive documentation with token-saving examples
+- Integration guides for popular agent frameworks:
   - Google ADK
   - Strands
   - LangChain
   - AutoGPT
-- Community adoption metrics
-- Plugin system for custom templates
-- Performance optimizations
+  - Roo Code
+- Community adoption from agent developers
+- Clear ROI: demonstrate token savings
 
 **Success Criteria**:
+- 75+ total functions (focused on validation/analysis, not generation)
 - 1000+ PyPI downloads/month
 - 100+ GitHub stars
 - Active community contributors
-- Documentation site live
+- Documentation site with token-saving metrics
 - Integration examples for 5+ frameworks
 
 ---
 
 ## 🎯 Feature Priorities
 
-### High Priority
-1. **Shell Module** (v0.2.0) - Core value proposition
-2. **Python Codegen** (v0.3.0) - Most requested feature
-3. **Security Validation** - Critical for generated code
-4. **Template System** - Extensibility
+### High Priority (Token Savers)
+1. **Shell Validation** (v0.2.0) - Agents waste tokens on escaping/security
+2. **Python Validation** (v0.3.0) - Prevent syntax/type errors (retry loops)
+3. **Security Scanning** - Deterministic vulnerability detection
+4. **Syntax Validators** - Catch errors before execution
 
-### Medium Priority
-1. **Configuration Generation** (v0.4.0)
-2. **Multi-language Support** (v0.5.0)
-3. **Plugin System** - Custom template support
-4. **Documentation Site** - Better discoverability
+### Medium Priority (Useful Analysis)
+1. **Config Validation** (v0.4.0) - Prevent deployment failures
+2. **Advanced Analysis** (v0.5.0) - Performance/security anti-patterns
+3. **Dependency Analysis** - Circular imports, conflicts
+4. **Compliance Checking** - GDPR, accessibility, licensing
 
-### Low Priority
-1. **Additional Languages** (Go, Rust, Java)
-2. **IDE Integration**
-3. **Web UI** for code generation
-4. **Cloud Service** for template marketplace
+### Low Priority (Not Core Mission)
+1. **Code Generation** - Agents already excel at this
+2. **Template Systems** - Agents use examples effectively
+3. **Multi-language Code Gen** - Low ROI for token savings
+4. **Refactoring Tools** - Agents reason through transformations
 
 ---
 
@@ -307,10 +398,10 @@ tests = coat.generate_test_skeleton(
 - **Security**: Zero critical vulnerabilities
 
 ### Functional Metrics
-- **Total Functions**: Target 100+ by v1.0.0
-- **Languages Supported**: Target 4+ by v1.0.0 (Python, Shell, JS/TS, Go/Rust)
-- **Templates**: Target 50+ templates by v1.0.0
-- **Framework Integrations**: Target 5+ by v1.0.0
+- **Total Functions**: Target 75+ by v1.0.0 (focused on validation/analysis)
+- **Token Savings**: Measurable reduction in retry loops and parsing overhead
+- **Error Prevention**: 95%+ syntax/security error detection rate
+- **Framework Integrations**: Target 5+ by v1.0.0 (Google ADK, Strands, LangChain, etc.)
 
 ---
 
@@ -359,29 +450,29 @@ See [CONTRIBUTING.md](../CONTRIBUTING.md) for detailed guidelines.
 
 ## 🎯 Strategic Priorities
 
-### Phase 1 (Q1 2025): Shell Module
-**Focus**: Enable agents to generate deployment and automation scripts
-- Critical for DevOps automation
-- High demand from agent developers
-- Builds on existing quality/analysis modules
+### Phase 1 (Q1 2025): Shell Validation & Security
+**Focus**: Prevent agent token waste on shell escaping and security
+- Validation catches errors before execution (saves retry loops)
+- Security scanning is deterministic (unquoted vars, eval, injection)
+- Argument escaping prevents common mistakes
 
-### Phase 2 (Q2 2025): Python Codegen Module
-**Focus**: Enable agents to scaffold Python projects
-- Core capability for coding agents
-- Complements existing analysis tools
-- Enables self-improvement workflows
+### Phase 2 (Q2 2025): Python Validation & SQLite Operations
+**Focus**: Validation, parsing, and local data storage
+- Python validation prevents syntax/type errors
+- Parsing extracts signatures/docstrings (tedious for agents)
+- SQLite provides agent memory and structured data (zero dependencies)
 
-### Phase 3 (Q3-Q4 2025): Expand Capabilities
-**Focus**: Configuration and multi-language support
-- Broaden applicability to more use cases
-- Support polyglot development
-- Infrastructure as code capabilities
+### Phase 3 (Q3-Q4 2025): Config Validation & Advanced Analysis
+**Focus**: Deployment safety and deep code analysis
+- Config validation prevents deployment failures
+- Advanced security/performance scanning
+- Dependency and compliance checking
 
-### Phase 4 (Q1 2026): Community Release
-**Focus**: Stability, documentation, and adoption
-- Documentation site and comprehensive guides
+### Phase 4 (Q1 2026): Community Release & Token Savings Documentation
+**Focus**: Demonstrate ROI and expand adoption
+- Documentation with token-saving metrics
+- Integration examples for major agent frameworks
 - Community building and support
-- Integration with popular frameworks
 
 ---
 
@@ -475,21 +566,22 @@ We actively seek community feedback! Please:
 - Active Contributors: 2
 
 **Target Stats** (v1.0.0):
-- Total Functions: 100+
+- Total Functions: 75+ (validation/analysis focused)
 - Test Coverage: 90%+
 - Code Quality: 100% (ruff + mypy)
 - GitHub Stars: 100+
-- PyPI Downloads: 1000+/month
+- PyPI Downloads: 1000+/month from agent developers
 - Active Contributors: 10+
+- Measurable Token Savings: Document 30-50% reduction in retry loops
 
 ---
 
 **Maintainers**: @jwesleye, @unseriousai
 **Organization**: [Open Agent Tools](https://github.com/Open-Agent-Tools)
 **License**: MIT
-**Roadmap Version**: 1.0
+**Roadmap Version**: 2.0 - Token Efficiency Focused
 **Status**: Active Development
-**Next Milestone**: v0.2.0 - Shell Module (Q1 2025)
+**Next Milestone**: v0.2.0 - Shell Validation & Security (Q1 2025)
 
 ---
 

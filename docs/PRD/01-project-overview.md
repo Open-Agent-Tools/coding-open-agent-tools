@@ -2,7 +2,7 @@
 
 ## Project Vision
 
-**Coding Open Agent Tools** is a specialized toolkit for AI agents focused on code generation, script creation, and development automation. This project complements the foundational `basic-open-agent-tools` by providing higher-level coding capabilities that agents need when scaffolding projects, generating boilerplate, and automating development workflows.
+**Coding Open Agent Tools** is a specialized toolkit for AI agents focused on **deterministic code operations** that would waste tokens or cause excessive retry loops. This project complements the foundational `basic-open-agent-tools` by providing parsing, validation, and analysis tools that agents struggle with or are inefficient at performing.
 
 ## Relationship to Basic Open Agent Tools
 
@@ -16,11 +16,11 @@
 - Low-level, general-purpose operations
 
 **coding-open-agent-tools** (Development Layer):
-- Code generation and scaffolding
-- Shell script creation
-- Project structure generation
-- Development workflow automation
-- Language-specific tooling
+- **Parsers**: Convert unstructured → structured (AST, tool output, logs)
+- **Validators**: Syntax checking, security analysis, compliance checks
+- **Extractors**: Pull specific data from complex sources
+- **Formatters**: Apply deterministic rules (escaping, quoting, style)
+- **Scanners**: Rule-based pattern detection (secrets, anti-patterns)
 
 ### Dependency Model
 
@@ -46,13 +46,29 @@ This project will:
 5. **High Quality**: 100% ruff compliance, comprehensive testing
 6. **Agent-First Design**: Functions designed for LLM comprehension and use
 
-### New Focus Areas
+### Token Efficiency Principles
 
-1. **Code Quality**: Generate code that follows best practices
-2. **Template-Driven**: Extensive template library for common patterns
-3. **Validation**: Built-in syntax checking and security analysis
-4. **Multi-Language**: Start with Python, expand to other languages
-5. **Self-Documenting**: Generated code includes comprehensive documentation
+1. **Deterministic Operations**: Focus on tasks with clear, rule-based logic
+2. **Parse, Don't Generate**: Convert unstructured data to structured formats
+3. **Validate Early**: Catch errors before execution to prevent retry loops
+4. **Save Agent Tokens**: Handle tedious tasks agents waste tokens on
+5. **Avoid Duplication**: Don't build what agents already do well (creative logic, architecture)
+
+### What This Project IS
+
+- ✅ **Parsers**: AST parsing, tool output parsing, log parsing
+- ✅ **Validators**: Syntax checking, type validation, security analysis
+- ✅ **Extractors**: Function signatures, imports, complexity metrics
+- ✅ **Formatters**: Argument escaping, import sorting, docstring formatting
+- ✅ **Scanners**: Secret detection, anti-pattern detection, compliance checking
+
+### What This Project is NOT
+
+- ❌ **Code generators**: Full function/class generation (agents handle this well)
+- ❌ **Architecture tools**: Design decisions (requires context and judgment)
+- ❌ **Refactoring tools**: Code transformation (agents reason through this)
+- ❌ **Template systems**: Project scaffolding (agents do this with examples)
+- ❌ **Documentation generators**: Writing docs (agents write good documentation)
 
 ## Target Audience
 
@@ -65,11 +81,11 @@ This project will:
 
 ### Use Cases
 
-1. **Project Scaffolding**: Agents creating new projects from templates
-2. **Boilerplate Reduction**: Generating repetitive code structures
-3. **Script Automation**: Creating deployment, CI/CD, and maintenance scripts
-4. **Code Modernization**: Updating legacy code patterns to modern standards
-5. **Documentation Generation**: Creating comprehensive docstrings and README files
+1. **Prevent Retry Loops**: Validate syntax before execution, saving tokens on failed attempts
+2. **Parse Tool Output**: Convert unstructured output (ruff, mypy, pytest) to structured data
+3. **Security Scanning**: Detect secrets, SQL injection, XSS patterns deterministically
+4. **Extract Metadata**: Pull function signatures, imports, complexity from code
+5. **Format Validation**: Check docstrings, imports, argument escaping against rules
 
 ## Current Status (v0.1.1)
 
@@ -106,36 +122,47 @@ The project has successfully migrated **38 developer-focused tools** from basic-
 - Published to PyPI with trusted publishing
 - Full GitHub infrastructure and automation
 
-### 🚧 Planned Modules
+### 🚧 Planned Modules (Refocused on Token Efficiency)
 
-#### Phase 1: Shell Script Generation (v0.2.0)
+#### Phase 1: Shell Validation & Security (v0.2.0)
 
-1. **Shell Script Generation Module** (~15 functions) - 🚧 Planned
-   - Bash script generation with error handling
-   - Service file creation (systemd, etc.)
-   - Script validation and security analysis
-   - See: `02-shell-module-prd.md`
+1. **Shell Validation Module** (~12 functions) - 🚧 Planned
+   - **Validators**: Bash syntax checking, dependency detection
+   - **Security Scanners**: Unquoted variables, eval usage, hardcoded secrets
+   - **Formatters**: Argument escaping, shebang normalization
+   - **Parsers**: Extract functions, variables, commands from scripts
+   - See: `02-shell-module-prd.md` (to be updated)
 
-#### Phase 2: Python Code Generation (v0.3.0)
+**Rationale**: Agents waste tokens getting shell escaping right and miss security issues. Validation prevents execution failures.
 
-2. **Python Code Generation Module** (~18 functions) - 🚧 Planned
-   - Function/class scaffolding with type hints
-   - Docstring generation (Google/NumPy/Sphinx styles)
-   - Test skeleton creation
-   - Project structure generation
-   - See: `03-codegen-module-prd.md`
+#### Phase 2: Python Validation & Analysis (v0.3.0)
 
-#### Phase 3: Advanced Features (v0.4.0+)
+2. **Python Validation Module** (~15 functions) - 🚧 Planned
+   - **Validators**: Enhanced syntax validation, type hint checking, import order
+   - **Extractors**: Function signatures, docstring parsing, type annotations
+   - **Formatters**: Docstring formatting (Google/NumPy/Sphinx), import sorting
+   - **Analyzers**: ADK compliance checking, anti-pattern detection
+   - See: `03-codegen-module-prd.md` (to be updated)
 
-3. **Configuration Generation Module** - 📋 Future
-   - Docker configuration (Dockerfile, docker-compose.yml)
-   - CI/CD pipelines (GitHub Actions, GitLab CI)
-   - Package managers (pyproject.toml, package.json)
+**Rationale**: Parsing and validation are deterministic. Skip generation—agents handle that well.
 
-4. **Multi-Language Support** - 📋 Future
-   - JavaScript/TypeScript code generation
-   - Go code generation
-   - Rust code generation
+#### Phase 3: Configuration Validation (v0.4.0)
+
+3. **Config Validation Module** (~10 functions) - 📋 Future
+   - **Validators**: YAML/TOML/JSON syntax, schema validation
+   - **Security Scanners**: Exposed secrets in configs, insecure settings
+   - **Analyzers**: Dependency conflict detection, compatibility checks
+   - **Parsers**: Extract structured data from CI/CD configs
+
+**Rationale**: Config validation prevents deployment failures. Agents already write good configs with examples.
+
+#### Phase 4: Enhanced Code Analysis (v0.5.0)
+
+4. **Advanced Analysis Module** (~12 functions) - 📋 Future
+   - **Dependency analyzers**: Circular imports, unused dependencies
+   - **Security scanners**: SQL injection patterns, XSS vulnerabilities
+   - **Performance detectors**: O(n²) loops, memory leaks, anti-patterns
+   - **Compliance checkers**: GDPR patterns, accessibility requirements
 
 ## Technical Architecture
 
@@ -385,12 +412,13 @@ MIT License (same as basic-open-agent-tools)
 
 ---
 
-**Document Version**: 2.0
+**Document Version**: 3.0
 **Last Updated**: 2025-10-14
 **Status**: Active - v0.1.1 Released
 **Owner**: Project Team
 
 ## Version History
 
+- **3.0** (2025-10-14): Refocused on token-efficiency and deterministic operations; updated vision, planned modules, use cases
 - **2.0** (2025-10-14): Updated with v0.1.1 status, actual module structure, corrected tool counts (38 not 39), added roadmap
 - **1.0** (2025-10-14): Initial draft with planned structure
