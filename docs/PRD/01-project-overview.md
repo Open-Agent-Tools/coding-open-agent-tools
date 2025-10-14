@@ -126,14 +126,15 @@ The project has successfully migrated **38 developer-focused tools** from basic-
 
 #### Phase 1: Shell Validation & Security (v0.2.0)
 
-1. **Shell Validation Module** (~12 functions) - 🚧 Planned
+1. **Shell Validation Module** (~13 functions) - 🚧 Planned
    - **Validators**: Bash syntax checking, dependency detection
-   - **Security Scanners**: Unquoted variables, eval usage, hardcoded secrets
+   - **Security Scanners**: Unquoted variables, eval usage, enhanced secret detection (detect-secrets)
    - **Formatters**: Argument escaping, shebang normalization
    - **Parsers**: Extract functions, variables, commands from scripts
+   - **Optional Dependency**: `detect-secrets>=1.5.0` for comprehensive secret scanning
    - See: `02-shell-module-prd.md` (to be updated)
 
-**Rationale**: Agents waste tokens getting shell escaping right and miss security issues. Validation prevents execution failures.
+**Rationale**: Agents waste tokens getting shell escaping right and miss security issues. Validation prevents execution failures. detect-secrets provides production-grade secret detection as optional enhancement.
 
 #### Phase 2: Python Validation & Analysis (v0.3.0)
 
@@ -150,11 +151,12 @@ The project has successfully migrated **38 developer-focused tools** from basic-
 
 3. **Config Validation Module** (~10 functions) - 📋 Future
    - **Validators**: YAML/TOML/JSON syntax, schema validation
-   - **Security Scanners**: Exposed secrets in configs, insecure settings
+   - **Security Scanners**: Exposed secrets in configs (detect-secrets), insecure settings
    - **Analyzers**: Dependency conflict detection, compatibility checks
    - **Parsers**: Extract structured data from CI/CD configs
+   - **Optional Dependency**: `detect-secrets>=1.5.0` for comprehensive secret scanning
 
-**Rationale**: Config validation prevents deployment failures. Agents already write good configs with examples.
+**Rationale**: Config validation prevents deployment failures. detect-secrets provides production-grade secret detection. Agents already write good configs with examples.
 
 #### Phase 4: Enhanced Code Analysis (v0.5.0)
 

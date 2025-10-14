@@ -37,7 +37,8 @@ This document outlines the planned development roadmap for the Coding Open Agent
 - AST parsing and code structure analysis
 - Cyclomatic complexity calculation
 - Import management and organization
-- Secret detection and security scanning
+- Secret detection and security scanning (basic regex patterns, stdlib only)
+- **Note**: Will be enhanced with optional detect-secrets integration in v0.2.0+
 
 **Git Module** (9 functions) - ✅ Released
 - Repository status and diff operations
@@ -73,12 +74,13 @@ This document outlines the planned development roadmap for the Coding Open Agent
 
 **Focus**: Validation and security analysis (NOT full script generation)
 
-**Features** (~12 functions):
+**Features** (~13 functions):
 - **Validators**: `validate_shell_syntax()`, `check_shell_dependencies()`
-- **Security Scanners**: `analyze_shell_security()`, `detect_shell_injection_risks()`
+- **Security Scanners**: `analyze_shell_security()`, `detect_shell_injection_risks()`, `scan_for_secrets_enhanced()`
 - **Formatters**: `escape_shell_argument()`, `normalize_shebang()`
 - **Parsers**: `parse_shell_script()`, `extract_shell_functions()`, `extract_shell_variables()`
 - **Analyzers**: `detect_unquoted_variables()`, `find_dangerous_commands()`, `check_error_handling()`
+- **Enhanced Secret Detection**: Optional detect-secrets integration for comprehensive scanning
 
 **Rationale**:
 - Agents waste many tokens getting shell escaping/quoting right
@@ -87,9 +89,10 @@ This document outlines the planned development roadmap for the Coding Open Agent
 - Parsing shell scripts to extract structure is tedious for agents
 
 **Success Criteria**:
-- All 12 functions implemented and tested
+- All 13 functions implemented and tested
 - 80%+ test coverage
 - Security analysis catches OWASP shell injection patterns
+- Enhanced secret detection with detect-secrets (optional dependency)
 - Validation prevents 95%+ of syntax errors
 - 100% ruff and mypy compliance
 
@@ -117,11 +120,16 @@ issues = coat.analyze_shell_security(script)
 
 # Fix escaping (deterministic formatting)
 safe_arg = coat.escape_shell_argument(user_input, quote_style="single")
+
+# Enhanced secret detection (optional detect-secrets integration)
+secrets = coat.scan_for_secrets_enhanced(script, use_detect_secrets=True)
+# Falls back to stdlib regex if detect-secrets not installed
 ```
 
 **Dependencies**:
 - Python stdlib: `re`, `subprocess`, `shlex`
-- Optional: `shellcheck` (external tool) for enhanced validation
+- Optional: `detect-secrets>=1.5.0` (pip installable Python library for enhanced secret scanning)
+- Optional: `shellcheck` (external tool) for enhanced syntax validation
 
 **What We're NOT Building**:
 - ❌ Full script generators (agents write scripts well with prompting)
@@ -271,7 +279,7 @@ results = coat.fetch_all(db_path, "SELECT * FROM tasks WHERE status = ?", ["pend
 
 **Features** (~10 functions):
 - **Validators**: `validate_yaml_syntax()`, `validate_toml_syntax()`, `validate_json_schema()`, `check_ci_config_validity()`
-- **Security Scanners**: `scan_config_for_secrets()`, `detect_insecure_settings()`, `check_exposed_ports()`
+- **Security Scanners**: `scan_config_for_secrets()` (uses detect-secrets), `detect_insecure_settings()`, `check_exposed_ports()`
 - **Analyzers**: `detect_dependency_conflicts()`, `validate_version_constraints()`, `check_compatibility()`
 
 **Rationale**:
@@ -292,13 +300,18 @@ results = coat.fetch_all(db_path, "SELECT * FROM tasks WHERE status = ?", ["pend
 # Validate YAML syntax
 validation = coat.validate_yaml_syntax(config_content)
 
-# Security scan
+# Security scan (uses detect-secrets under the hood)
 issues = coat.scan_config_for_secrets(dockerfile_content)
 # [{'severity': 'critical', 'line': 5, 'issue': 'Hardcoded API key', ...}]
 
 # Dependency conflicts
 conflicts = coat.detect_dependency_conflicts(requirements_txt)
 ```
+
+**Dependencies**:
+- Python stdlib: `json`, `re`, `pathlib`
+- Optional: `detect-secrets>=1.5.0` (for secret scanning)
+- Optional: `pyyaml`, `toml` (for enhanced parsing)
 
 **What We're NOT Building**:
 - ❌ Config generators (agents write configs well with examples)
