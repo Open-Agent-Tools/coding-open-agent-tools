@@ -1,8 +1,23 @@
 # Coding Open Agent Tools
 
-**Advanced code generation and shell scripting toolkit for AI agents**
+**Deterministic code validation and analysis toolkit for AI agents - Save tokens, prevent errors**
 
-This project provides specialized code generation, script creation, and development automation capabilities designed specifically for AI agents. It complements [basic-open-agent-tools](https://github.com/yourusername/basic-open-agent-tools) by building higher-level coding abstractions on top of its foundational utilities.
+This project provides **parsing, validation, and analysis tools** that save agent tokens by handling deterministic operations agents struggle with or waste excessive tokens on. It complements [basic-open-agent-tools](https://github.com/Open-Agent-Tools/basic-open-agent-tools) by providing higher-level code analysis capabilities.
+
+## 🎯 Core Philosophy: Token Efficiency
+
+**We focus on what agents waste tokens on:**
+- ✅ **Validators** - Catch syntax/type errors before execution (prevents retry loops)
+- ✅ **Parsers** - Convert unstructured → structured (AST, tool output, logs)
+- ✅ **Extractors** - Pull specific data from complex sources (tedious for agents)
+- ✅ **Formatters** - Apply deterministic rules (escaping, quoting, import sorting)
+- ✅ **Scanners** - Rule-based pattern detection (secrets, anti-patterns, security)
+
+**We avoid duplicating what agents do well:**
+- ❌ Full code generation (agents excel at creative logic)
+- ❌ Architecture decisions (requires judgment and context)
+- ❌ Code refactoring (agents reason through transformations)
+- ❌ Project scaffolding (agents use examples effectively)
 
 ## Project Status
 
@@ -14,11 +29,13 @@ This project provides specialized code generation, script creation, and developm
 - ✅ Profiling Module (8 functions) - Performance and memory profiling
 - ✅ Quality Module (7 functions) - Static analysis parsers
 
-**Coming Next:**
-- 🚧 Shell script generation module (planned for v0.2.0)
-- 🚧 Python code generation module (planned for v0.3.0)
+**Coming Next (Focused on Validation, NOT Generation):**
+- 🚧 Shell validation & security module (v0.2.0) - Syntax checking, security scanning, escaping
+- 🚧 Python validation & analysis module (v0.3.0) - Type checking, signature parsing, formatting
+- 🚧 SQLite operations module (v0.3.5) - Agent memory, structured data (pure stdlib)
+- 🚧 Config validation module (v0.4.0) - YAML/TOML/JSON validation, secret scanning
 
-See [docs/PRD](./docs/PRD/) for detailed requirements and specifications.
+See [docs/ROADMAP.md](./docs/ROADMAP.md) and [docs/PRD](./docs/PRD/) for detailed plans.
 
 ## Relationship to Basic Open Agent Tools
 
