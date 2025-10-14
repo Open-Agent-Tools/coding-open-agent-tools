@@ -188,7 +188,7 @@ pip install coding-open-agent-tools==0.1.0-beta
 ```python
 import coding_open_agent_tools as coat
 
-# Load all 39 functions
+# Load all 38 functions
 all_tools = coat.load_all_tools()
 
 # Or load by category

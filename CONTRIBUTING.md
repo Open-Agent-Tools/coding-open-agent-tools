@@ -4,7 +4,7 @@ Thank you for your interest in contributing! This document provides guidelines f
 
 ## Project Status
 
-✅ **v0.1.0-beta Released**: The project has successfully migrated 39 functions across 4 modules from basic-open-agent-tools. Check the [TODO.md](TODO.md) for the current roadmap and [CHANGELOG.md](CHANGELOG.md) for release history.
+✅ **v0.1.0-beta Released**: The project has successfully migrated 38 functions across 4 modules from basic-open-agent-tools. Check the [TODO.md](TODO.md) for the current roadmap and [CHANGELOG.md](CHANGELOG.md) for release history.
 
 ## Development Setup
 

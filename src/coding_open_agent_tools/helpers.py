@@ -138,11 +138,11 @@ def load_all_tools() -> list[Callable[..., Any]]:
     """Load all available tools from all modules.
 
     Returns:
-        List of all 39 tool functions (analysis, git, profiling, quality)
+        List of all 38 tool functions (analysis, git, profiling, quality)
 
     Example:
         >>> all_tools = load_all_tools()
-        >>> len(all_tools) == 39
+        >>> len(all_tools) == 38
         True
     """
     return merge_tool_lists(

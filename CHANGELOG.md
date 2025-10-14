@@ -39,7 +39,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - `load_all_git_tools()` - Load all 9 git functions
   - `load_all_profiling_tools()` - Load all 8 profiling functions
   - `load_all_quality_tools()` - Load all 7 quality functions
-  - `load_all_tools()` - Load all 39 functions at once
+  - `load_all_tools()` - Load all 38 functions at once
   - `merge_tool_lists()` - Merge and deduplicate tool lists
 
 ### Testing

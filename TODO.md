@@ -114,21 +114,21 @@ Functions to migrate:
 
 ### Migration Summary
 
-**Total Functions to Migrate**: 39 functions across 4 modules
+**Total Functions to Migrate**: 38 functions across 4 modules
 
 **Module Mapping**:
 ```
 basic-open-agent-tools          →  coding-open-agent-tools
 ├── code_analysis/ (14)         →  analysis/
-├── git/ (10)                   →  git/
-├── profiling/ (9)              →  profiling/
-└── static_analysis/ (6)        →  quality/
+├── git/ (9)                    →  git/
+├── profiling/ (8)              →  profiling/
+└── static_analysis/ (7)        →  quality/
 ```
 
 **Migration Benefits**:
 1. Clear separation between foundational tools and coding-specific tools
 2. Reduces basic-open-agent-tools scope to ~153 functions (from 200+)
-3. Gives coding-open-agent-tools strong start: 39 existing + 33 planned = 72 functions
+3. Gives coding-open-agent-tools strong start: 38 existing + 33 planned = 71 functions
 4. Better organization for users looking for code-related capabilities
 5. Allows coding project to add heavier dependencies without bloating basic tools
 
@@ -185,7 +185,7 @@ All are lightweight dependencies, mostly stdlib-based.
 - [x] Update documentation
 
 **Status**: Completed 2024-10-14
-- 39 functions successfully migrated
+- 38 functions successfully migrated
 - 170 tests passing with 82% coverage
 - 100% ruff and mypy compliance
 - Version updated to 0.1.0-beta
@@ -257,7 +257,7 @@ All are lightweight dependencies, mostly stdlib-based.
 
 ### v0.1.0-beta (Migrated Modules)
 **Target**: Early preview with migrated functionality
-- Migrate 4 modules from basic-open-agent-tools (39 functions)
+- Migrate 4 modules from basic-open-agent-tools (38 functions)
 - Full test coverage and documentation
 - PyPI beta release
 
