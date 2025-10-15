@@ -4,229 +4,208 @@ This module provides utility functions for loading and managing tools from
 different modules, making it easy to integrate with agent frameworks.
 """
 
-from typing import Any, Callable
+from typing import Any, Callable, Union
 
 
-def merge_tool_lists(*tool_lists: list[Callable[..., Any]]) -> list[Callable[..., Any]]:
-    """Merge multiple tool lists into one, removing duplicates.
+def merge_tool_lists(
+    *args: Union[list[Callable[..., Any]], Callable[..., Any]],
+) -> list[Callable[..., Any]]:
+    """Merge multiple tool lists and individual functions into a single list.
+
+    This function automatically deduplicates tools based on their function name and module.
+    If the same function appears multiple times, only the first occurrence is kept.
 
     Args:
-        *tool_lists: Variable number of tool lists to merge
+        *args: Tool lists (List[Callable]) and/or individual functions (Callable)
 
     Returns:
-        Combined list of unique tools
+        Combined list of all tools with duplicates removed
+
+    Raises:
+        TypeError: If any argument is not a list of callables or a callable
 
     Example:
-        >>> tools1 = [func1, func2]
-        >>> tools2 = [func2, func3]
-        >>> merged = merge_tool_lists(tools1, tools2)
-        >>> len(merged) == 3
+        >>> def custom_tool(x): return x
+        >>> analysis_tools = load_all_analysis_tools()
+        >>> git_tools = load_all_git_tools()
+        >>> all_tools = merge_tool_lists(analysis_tools, git_tools, custom_tool)
+        >>> custom_tool in all_tools
         True
     """
-    seen = set()
     merged = []
+    seen = set()  # Track (name, module) tuples to detect duplicates
 
-    for tool_list in tool_lists:
-        for tool in tool_list:
-            tool_id = id(tool)
-            if tool_id not in seen:
-                seen.add(tool_id)
-                merged.append(tool)
+    for arg in args:
+        if callable(arg):
+            # Single function
+            func_key = (arg.__name__, getattr(arg, "__module__", ""))
+            if func_key not in seen:
+                merged.append(arg)
+                seen.add(func_key)
+        elif isinstance(arg, list):
+            # List of functions
+            for item in arg:
+                if not callable(item):
+                    raise TypeError(
+                        f"All items in tool lists must be callable, got {type(item)}"
+                    )
+                func_key = (item.__name__, getattr(item, "__module__", ""))
+                if func_key not in seen:
+                    merged.append(item)
+                    seen.add(func_key)
+        else:
+            raise TypeError(
+                f"Arguments must be callable or list of callables, got {type(arg)}"
+            )
 
     return merged
 
 
 def load_all_analysis_tools() -> list[Callable[..., Any]]:
-    """Load all code analysis tools.
+    """Load all code analysis tools as a list of callable functions.
 
     Returns:
         List of 14 code analysis tool functions
+
+    Example:
+        >>> analysis_tools = load_all_analysis_tools()
+        >>> len(analysis_tools) == 14
+        True
     """
     from coding_open_agent_tools import analysis
 
-    return [
-        # AST Parsing
-        analysis.parse_python_ast,
-        analysis.extract_functions,
-        analysis.extract_classes,
-        analysis.extract_imports,
-        # Complexity Analysis
-        analysis.calculate_complexity,
-        analysis.calculate_function_complexity,
-        analysis.get_code_metrics,
-        analysis.identify_complex_functions,
-        # Import Management
-        analysis.find_unused_imports,
-        analysis.organize_imports,
-        analysis.validate_import_order,
-        # Secret Detection
-        analysis.scan_for_secrets,
-        analysis.scan_directory_for_secrets,
-        analysis.validate_secret_patterns,
-    ]
+    tools = []
+    for name in analysis.__all__:
+        func = getattr(analysis, name)
+        if callable(func):
+            tools.append(func)
+    return tools
 
 
 def load_all_git_tools() -> list[Callable[..., Any]]:
-    """Load all git tools.
+    """Load all git tools as a list of callable functions.
 
     Returns:
         List of 9 git tool functions
+
+    Example:
+        >>> git_tools = load_all_git_tools()
+        >>> len(git_tools) == 9
+        True
     """
     from coding_open_agent_tools import git
 
-    return [
-        # Status and diff operations
-        git.get_git_status,
-        git.get_current_branch,
-        git.get_git_diff,
-        # Log and blame operations
-        git.get_git_log,
-        git.get_git_blame,
-        git.get_file_history,
-        git.get_file_at_commit,
-        # Branch information
-        git.list_branches,
-        git.get_branch_info,
-    ]
+    tools = []
+    for name in git.__all__:
+        func = getattr(git, name)
+        if callable(func):
+            tools.append(func)
+    return tools
 
 
 def load_all_profiling_tools() -> list[Callable[..., Any]]:
-    """Load all profiling tools.
+    """Load all profiling tools as a list of callable functions.
 
     Returns:
         List of 8 profiling tool functions
+
+    Example:
+        >>> profiling_tools = load_all_profiling_tools()
+        >>> len(profiling_tools) == 8
+        True
     """
     from coding_open_agent_tools import profiling
 
-    return [
-        # Performance profiling
-        profiling.profile_function,
-        profiling.profile_script,
-        profiling.get_hotspots,
-        # Memory analysis
-        profiling.measure_memory_usage,
-        profiling.detect_memory_leaks,
-        profiling.get_memory_snapshot,
-        # Benchmarking
-        profiling.benchmark_execution,
-        profiling.compare_implementations,
-    ]
+    tools = []
+    for name in profiling.__all__:
+        func = getattr(profiling, name)
+        if callable(func):
+            tools.append(func)
+    return tools
 
 
 def load_all_quality_tools() -> list[Callable[..., Any]]:
-    """Load all quality/static analysis tools.
+    """Load all quality/static analysis tools as a list of callable functions.
 
     Returns:
         List of 7 quality tool functions
+
+    Example:
+        >>> quality_tools = load_all_quality_tools()
+        >>> len(quality_tools) == 7
+        True
     """
     from coding_open_agent_tools import quality
 
-    return [
-        # Output parsers
-        quality.parse_ruff_json,
-        quality.parse_mypy_json,
-        quality.parse_pytest_json,
-        quality.summarize_static_analysis,
-        # Issue analysis
-        quality.filter_issues_by_severity,
-        quality.group_issues_by_file,
-        quality.prioritize_issues,
-    ]
+    tools = []
+    for name in quality.__all__:
+        func = getattr(quality, name)
+        if callable(func):
+            tools.append(func)
+    return tools
 
 
 def load_all_shell_tools() -> list[Callable[..., Any]]:
-    """Load all shell validation and analysis tools.
+    """Load all shell validation and analysis tools as a list of callable functions.
 
     Returns:
         List of 13 shell tool functions
+
+    Example:
+        >>> shell_tools = load_all_shell_tools()
+        >>> len(shell_tools) == 13
+        True
     """
     from coding_open_agent_tools import shell
 
-    return [
-        # Validators
-        shell.validate_shell_syntax,
-        shell.check_shell_dependencies,
-        # Security
-        shell.analyze_shell_security,
-        shell.detect_shell_injection_risks,
-        shell.scan_for_secrets_enhanced,
-        # Formatters
-        shell.escape_shell_argument,
-        shell.normalize_shebang,
-        # Parsers
-        shell.parse_shell_script,
-        shell.extract_shell_functions,
-        shell.extract_shell_variables,
-        # Analyzers
-        shell.detect_unquoted_variables,
-        shell.find_dangerous_commands,
-        shell.check_error_handling,
-    ]
+    tools = []
+    for name in shell.__all__:
+        func = getattr(shell, name)
+        if callable(func):
+            tools.append(func)
+    return tools
 
 
 def load_all_python_tools() -> list[Callable[..., Any]]:
-    """Load all Python validation and analysis tools.
+    """Load all Python validation and analysis tools as a list of callable functions.
 
     Returns:
         List of 15 Python tool functions
+
+    Example:
+        >>> python_tools = load_all_python_tools()
+        >>> len(python_tools) == 15
+        True
     """
     from coding_open_agent_tools import python
 
-    return [
-        # Validators
-        python.validate_python_syntax,
-        python.validate_type_hints,
-        python.validate_import_order,
-        python.check_adk_compliance,
-        # Extractors
-        python.parse_function_signature,
-        python.extract_docstring_info,
-        python.extract_type_annotations,
-        python.get_function_dependencies,
-        # Formatters
-        python.format_docstring,
-        python.sort_imports,
-        python.normalize_type_hints,
-        # Analyzers
-        python.detect_circular_imports,
-        python.find_unused_imports,
-        python.identify_anti_patterns,
-        python.check_test_coverage_gaps,
-    ]
+    tools = []
+    for name in python.__all__:
+        func = getattr(python, name)
+        if callable(func):
+            tools.append(func)
+    return tools
 
 
 def load_all_database_tools() -> list[Callable[..., Any]]:
-    """Load all SQLite database operation tools.
+    """Load all SQLite database operation tools as a list of callable functions.
 
     Returns:
         List of 18 database tool functions
+
+    Example:
+        >>> database_tools = load_all_database_tools()
+        >>> len(database_tools) == 18
+        True
     """
     from coding_open_agent_tools import database
 
-    return [
-        # Database operations
-        database.create_sqlite_database,
-        database.execute_query,
-        database.execute_many,
-        database.fetch_all,
-        database.fetch_one,
-        # Schema management
-        database.inspect_schema,
-        database.create_table_from_dict,
-        database.add_column,
-        database.create_index,
-        # Safe query building
-        database.build_select_query,
-        database.build_insert_query,
-        database.build_update_query,
-        database.build_delete_query,
-        database.escape_sql_identifier,
-        database.validate_sql_query,
-        # Migration helpers
-        database.export_to_json,
-        database.import_from_json,
-        database.backup_database,
-    ]
+    tools = []
+    for name in database.__all__:
+        func = getattr(database, name)
+        if callable(func):
+            tools.append(func)
+    return tools
 
 
 def load_all_tools() -> list[Callable[..., Any]]:
