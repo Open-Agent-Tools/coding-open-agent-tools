@@ -455,8 +455,6 @@ def normalize_type_hints(source_code: str) -> dict[str, Any]:
     }
 
 
-@adk_tool
-@strands_tool
 def _wrap_text(text: str, max_length: int) -> list[str]:
     """Wrap text to specified line length, preserving word boundaries.
 
@@ -493,8 +491,6 @@ def _wrap_text(text: str, max_length: int) -> list[str]:
     return lines
 
 
-@adk_tool
-@strands_tool
 def _classify_import(import_name: str) -> str:
     """Classify an import as stdlib, third-party, or local.
 
@@ -519,8 +515,6 @@ def _classify_import(import_name: str) -> str:
         return "third_party"
 
 
-@adk_tool
-@strands_tool
 def _split_union_types(union_content: str) -> list[str]:
     """Split Union type content by commas, respecting nested brackets.
 

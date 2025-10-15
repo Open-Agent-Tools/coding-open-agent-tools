@@ -470,8 +470,6 @@ def check_adk_compliance(source_code: str, function_name: str) -> dict[str, Any]
     }
 
 
-@adk_tool
-@strands_tool
 def _classify_import(import_name: str) -> str:
     """Classify an import as stdlib, third-party, or local.
 

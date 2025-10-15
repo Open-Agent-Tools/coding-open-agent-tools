@@ -329,8 +329,6 @@ def identify_complex_functions(file_path: str, threshold: int) -> list[dict[str,
     return complex_functions
 
 
-@adk_tool
-@strands_tool
 def _calculate_node_complexity(node: ast.AST) -> int:
     """Calculate McCabe cyclomatic complexity for an AST node.
 
