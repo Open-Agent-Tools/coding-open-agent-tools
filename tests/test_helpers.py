@@ -309,6 +309,79 @@ class TestLoadAllTools:
         assert "create_sqlite_database" in tool_names  # database
 
 
+class TestGetToolInfo:
+    """Tests for get_tool_info function."""
+
+    def test_get_tool_info_returns_dict(self) -> None:
+        """Test that get_tool_info returns a dictionary."""
+        analysis_tools = helpers.load_all_analysis_tools()
+        tool = analysis_tools[0]
+
+        info = helpers.get_tool_info(tool)
+        assert isinstance(info, dict)
+
+    def test_get_tool_info_contains_required_keys(self) -> None:
+        """Test that tool info contains all required keys."""
+        analysis_tools = helpers.load_all_analysis_tools()
+        tool = analysis_tools[0]
+
+        info = helpers.get_tool_info(tool)
+        assert "name" in info
+        assert "docstring" in info
+        assert "signature" in info
+        assert "module" in info
+        assert "parameters" in info
+
+    def test_get_tool_info_name_matches(self) -> None:
+        """Test that tool info name matches function name."""
+        from coding_open_agent_tools.analysis import parse_python_ast
+
+        info = helpers.get_tool_info(parse_python_ast)
+        assert info["name"] == "parse_python_ast"
+
+    def test_get_tool_info_raises_on_non_callable(self) -> None:
+        """Test that get_tool_info raises TypeError for non-callable."""
+        import pytest
+
+        with pytest.raises(TypeError, match="Tool must be callable"):
+            helpers.get_tool_info("not a function")  # type: ignore
+
+
+class TestListAllAvailableTools:
+    """Tests for list_all_available_tools function."""
+
+    def test_list_all_available_tools_returns_dict(self) -> None:
+        """Test that list_all_available_tools returns a dictionary."""
+        tools = helpers.list_all_available_tools()
+        assert isinstance(tools, dict)
+
+    def test_list_all_available_tools_has_all_categories(self) -> None:
+        """Test that all module categories are present."""
+        tools = helpers.list_all_available_tools()
+        assert "analysis" in tools
+        assert "git" in tools
+        assert "profiling" in tools
+        assert "quality" in tools
+        assert "shell" in tools
+        assert "python" in tools
+        assert "database" in tools
+
+    def test_list_all_available_tools_values_are_lists(self) -> None:
+        """Test that each category contains a list."""
+        tools = helpers.list_all_available_tools()
+        for category, tool_list in tools.items():
+            assert isinstance(tool_list, list)
+
+    def test_list_all_available_tools_items_are_dicts(self) -> None:
+        """Test that each tool info is a dictionary."""
+        tools = helpers.list_all_available_tools()
+        for category, tool_list in tools.items():
+            for tool_info in tool_list:
+                assert isinstance(tool_info, dict)
+                assert "name" in tool_info
+                assert "docstring" in tool_info
+
+
 class TestHelperIntegration:
     """Integration tests for helper functions."""
 

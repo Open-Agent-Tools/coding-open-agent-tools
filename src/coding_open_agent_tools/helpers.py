@@ -4,6 +4,7 @@ This module provides utility functions for loading and managing tools from
 different modules, making it easy to integrate with agent frameworks.
 """
 
+import inspect
 from typing import Any, Callable, Union
 
 
@@ -209,22 +210,83 @@ def load_all_database_tools() -> list[Callable[..., Any]]:
 
 
 def load_all_tools() -> list[Callable[..., Any]]:
-    """Load all available tools from all modules.
+    """Load all available tools from all modules as a single list of callable functions.
+
+    This is a convenience function that loads and combines tools from all
+    implemented modules.
 
     Returns:
-        List of all 84 tool functions (analysis, git, profiling, quality, shell, python, database)
+        List of all 84 tool functions from all modules (automatically deduplicated)
 
     Example:
         >>> all_tools = load_all_tools()
         >>> len(all_tools) == 84
         True
+        >>> # Use with agent frameworks
+        >>> # agent = Agent(tools=load_all_tools())
     """
     return merge_tool_lists(
-        load_all_analysis_tools(),
-        load_all_git_tools(),
-        load_all_profiling_tools(),
-        load_all_quality_tools(),
-        load_all_shell_tools(),
-        load_all_python_tools(),
-        load_all_database_tools(),
+        load_all_analysis_tools(),  # 14 functions
+        load_all_git_tools(),  # 9 functions
+        load_all_profiling_tools(),  # 8 functions
+        load_all_quality_tools(),  # 7 functions
+        load_all_shell_tools(),  # 13 functions
+        load_all_python_tools(),  # 15 functions
+        load_all_database_tools(),  # 18 functions
     )
+
+
+def get_tool_info(tool: Callable[..., Any]) -> dict[str, Any]:
+    """Get information about a tool function.
+
+    Args:
+        tool: The tool function to inspect
+
+    Returns:
+        Dictionary containing tool information (name, docstring, signature)
+
+    Raises:
+        TypeError: If tool is not callable
+
+    Example:
+        >>> from coding_open_agent_tools.analysis import parse_python_ast
+        >>> info = get_tool_info(parse_python_ast)
+        >>> info['name']
+        'parse_python_ast'
+    """
+    if not callable(tool):
+        raise TypeError("Tool must be callable")
+
+    sig = inspect.signature(tool)
+
+    return {
+        "name": tool.__name__,
+        "docstring": tool.__doc__ or "",
+        "signature": str(sig),
+        "module": getattr(tool, "__module__", "unknown"),
+        "parameters": list(sig.parameters.keys()),
+    }
+
+
+def list_all_available_tools() -> dict[str, list[dict[str, Any]]]:
+    """List all available tools organized by category.
+
+    Returns:
+        Dictionary with tool categories as keys and lists of tool info as values
+
+    Example:
+        >>> tools = list_all_available_tools()
+        >>> 'analysis' in tools
+        True
+        >>> 'git' in tools
+        True
+    """
+    return {
+        "analysis": [get_tool_info(tool) for tool in load_all_analysis_tools()],
+        "git": [get_tool_info(tool) for tool in load_all_git_tools()],
+        "profiling": [get_tool_info(tool) for tool in load_all_profiling_tools()],
+        "quality": [get_tool_info(tool) for tool in load_all_quality_tools()],
+        "shell": [get_tool_info(tool) for tool in load_all_shell_tools()],
+        "python": [get_tool_info(tool) for tool in load_all_python_tools()],
+        "database": [get_tool_info(tool) for tool in load_all_database_tools()],
+    }
