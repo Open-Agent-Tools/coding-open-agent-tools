@@ -7,7 +7,7 @@ This project provides specialized code generation, script creation, and developm
 automation capabilities designed specifically for AI agents.
 """
 
-__version__ = "0.3.0"
+__version__ = "0.3.1"
 
 # Import migrated modules
 from . import analysis, database, git, profiling, python, quality, shell
