@@ -9,6 +9,7 @@ from typing import Any
 
 from coding_open_agent_tools._decorators import adk_tool, strands_tool
 from coding_open_agent_tools.exceptions import CodeAnalysisError
+from coding_open_agent_tools.types import STDLIB_MODULES
 
 
 @adk_tool
@@ -136,32 +137,6 @@ def organize_imports(file_path: str) -> str:
     except Exception as e:
         raise CodeAnalysisError(f"Error parsing {file_path}: {str(e)}")
 
-    # Standard library modules (subset for detection)
-    stdlib_modules = {
-        "abc",
-        "ast",
-        "asyncio",
-        "collections",
-        "copy",
-        "csv",
-        "datetime",
-        "enum",
-        "functools",
-        "io",
-        "itertools",
-        "json",
-        "logging",
-        "math",
-        "os",
-        "pathlib",
-        "random",
-        "re",
-        "sys",
-        "time",
-        "typing",
-        "unittest",
-    }
-
     stdlib_imports = []
     third_party_imports = []
     local_imports = []
@@ -174,7 +149,7 @@ def organize_imports(file_path: str) -> str:
                 if alias.asname:
                     import_str += f" as {alias.asname}"
 
-                if module_name in stdlib_modules:
+                if module_name in STDLIB_MODULES:
                     stdlib_imports.append(import_str)
                 else:
                     third_party_imports.append(import_str)
@@ -196,7 +171,7 @@ def organize_imports(file_path: str) -> str:
                 )
                 import_str = f"from {node.module} import {names}"
 
-                if module_name in stdlib_modules:
+                if module_name in STDLIB_MODULES:
                     stdlib_imports.append(import_str)
                 else:
                     third_party_imports.append(import_str)
@@ -269,32 +244,6 @@ def validate_import_order(file_path: str) -> dict[str, Any]:
     except Exception as e:
         raise CodeAnalysisError(f"Error parsing {file_path}: {str(e)}")
 
-    # Standard library modules
-    stdlib_modules = {
-        "abc",
-        "ast",
-        "asyncio",
-        "collections",
-        "copy",
-        "csv",
-        "datetime",
-        "enum",
-        "functools",
-        "io",
-        "itertools",
-        "json",
-        "logging",
-        "math",
-        "os",
-        "pathlib",
-        "random",
-        "re",
-        "sys",
-        "time",
-        "typing",
-        "unittest",
-    }
-
     # Track import order
     import_order = []  # List of (lineno, type, name)
 
@@ -302,7 +251,7 @@ def validate_import_order(file_path: str) -> dict[str, Any]:
         if isinstance(node, ast.Import):
             for alias in node.names:
                 module_name = alias.name.split(".")[0]
-                if module_name in stdlib_modules:
+                if module_name in STDLIB_MODULES:
                     import_order.append((node.lineno, "stdlib", alias.name))
                 else:
                     import_order.append((node.lineno, "third_party", alias.name))
@@ -313,7 +262,7 @@ def validate_import_order(file_path: str) -> dict[str, Any]:
                 import_order.append((node.lineno, "local", f".{module_name}"))
             elif node.module:
                 module_name = node.module.split(".")[0]
-                if module_name in stdlib_modules:
+                if module_name in STDLIB_MODULES:
                     import_order.append((node.lineno, "stdlib", node.module))
                 else:
                     import_order.append((node.lineno, "third_party", node.module))
