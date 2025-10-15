@@ -282,7 +282,7 @@ def build_update_query(
         raise ValueError("updates cannot be empty")
     if not where_conditions:
         raise ValueError(
-            "WHERE conditions required for UPDATE (use empty dict {} to update all rows explicitly)"
+            "WHERE conditions required for UPDATE to prevent accidental full-table updates"
         )
 
     table_name = escape_sql_identifier(table_name)
@@ -341,7 +341,7 @@ def build_delete_query(
 
     if not where_conditions:
         raise ValueError(
-            "WHERE conditions required for DELETE (use empty dict {} to delete all rows explicitly)"
+            "WHERE conditions required for DELETE to prevent accidental full-table deletion"
         )
 
     table_name = escape_sql_identifier(table_name)
