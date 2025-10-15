@@ -195,15 +195,49 @@ def load_all_python_tools() -> list[Callable[..., Any]]:
     ]
 
 
+def load_all_database_tools() -> list[Callable[..., Any]]:
+    """Load all SQLite database operation tools.
+
+    Returns:
+        List of 16 database tool functions
+    """
+    from coding_open_agent_tools import database
+
+    return [
+        # Database operations
+        database.create_sqlite_database,
+        database.execute_query,
+        database.execute_many,
+        database.fetch_all,
+        database.fetch_one,
+        # Schema management
+        database.inspect_schema,
+        database.create_table_from_dict,
+        database.add_column,
+        database.create_index,
+        # Safe query building
+        database.build_select_query,
+        database.build_insert_query,
+        database.build_update_query,
+        database.build_delete_query,
+        database.escape_sql_identifier,
+        database.validate_sql_query,
+        # Migration helpers
+        database.export_to_json,
+        database.import_from_json,
+        database.backup_database,
+    ]
+
+
 def load_all_tools() -> list[Callable[..., Any]]:
     """Load all available tools from all modules.
 
     Returns:
-        List of all 66 tool functions (analysis, git, profiling, quality, shell, python)
+        List of all 84 tool functions (analysis, git, profiling, quality, shell, python, database)
 
     Example:
         >>> all_tools = load_all_tools()
-        >>> len(all_tools) == 66
+        >>> len(all_tools) == 84
         True
     """
     return merge_tool_lists(
@@ -213,4 +247,5 @@ def load_all_tools() -> list[Callable[..., Any]]:
         load_all_quality_tools(),
         load_all_shell_tools(),
         load_all_python_tools(),
+        load_all_database_tools(),
     )

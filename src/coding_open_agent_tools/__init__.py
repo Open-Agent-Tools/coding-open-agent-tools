@@ -10,11 +10,12 @@ automation capabilities designed specifically for AI agents.
 __version__ = "0.2.0"
 
 # Import migrated modules
-from . import analysis, git, profiling, python, quality, shell
+from . import analysis, database, git, profiling, python, quality, shell
 
 # Import helper functions
 from .helpers import (
     load_all_analysis_tools,
+    load_all_database_tools,
     load_all_git_tools,
     load_all_profiling_tools,
     load_all_python_tools,
@@ -27,6 +28,7 @@ from .helpers import (
 __all__: list[str] = [
     # Modules
     "analysis",
+    "database",
     "git",
     "profiling",
     "python",
@@ -34,6 +36,7 @@ __all__: list[str] = [
     "shell",
     # Helper functions
     "load_all_analysis_tools",
+    "load_all_database_tools",
     "load_all_git_tools",
     "load_all_profiling_tools",
     "load_all_python_tools",

@@ -8,9 +8,40 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Planned
-- SQLite database operations module (v0.3.5)
-- Git enhancement module with 60+ functions (v0.4.0)
-- Configuration validation module (v0.5.0)
+- Git enhancement module with 60+ functions (v0.3.1)
+- Configuration validation module (v0.4.0)
+
+## [0.3.0] - 2025-10-15
+
+### Added
+- **SQLite Database Operations Module** (16 functions):
+  - Database operations: `create_sqlite_database`, `execute_query`, `execute_many`, `fetch_all`, `fetch_one`
+  - Schema management: `inspect_schema`, `create_table_from_dict`, `add_column`, `create_index`
+  - Safe query building: `build_select_query`, `build_insert_query`, `build_update_query`, `build_delete_query`, `escape_sql_identifier`, `validate_sql_query`
+  - Migration helpers: `export_to_json`, `import_from_json`, `backup_database`
+  - Pure stdlib implementation (sqlite3) with zero external dependencies
+  - SQL injection prevention via parameterized queries and identifier validation
+  - Comprehensive schema inspection with type information
+  - JSON import/export for data migration
+
+- **Helper Functions**:
+  - `load_all_database_tools()` - Load all 16 database functions
+  - Updated `load_all_tools()` to include database module (84 total functions)
+
+### Testing
+- Added 81 new comprehensive tests for database module
+- Total: 532 tests passing in 7.7s
+- Database module coverage: 75-89% per file (avg ~78%)
+- Overall project coverage: 85% (exceeds 80% target)
+
+### Documentation
+- Updated helpers.py with database module integration
+- Updated main __init__.py to export database module
+
+### Quality
+- 100% ruff compliance maintained
+- 100% mypy --strict compliance maintained
+- All functions follow Google ADK compliance (JSON-serializable, no defaults)
 
 ## [0.2.0] - 2025-10-15
 
