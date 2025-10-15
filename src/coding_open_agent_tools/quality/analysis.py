@@ -4,22 +4,9 @@ This module provides functions to filter, group, and prioritize issues from
 static analysis tools to help agents focus on the most important problems.
 """
 
-from typing import Any, Callable
+from typing import Any
 
-try:
-    from strands import tool as strands_tool
-except ImportError:
-    # Create a no-op decorator if strands is not installed
-    def strands_tool(func: Callable[..., Any]) -> Callable[..., Any]:  # type: ignore[no-redef]
-        return func
-
-
-try:
-    from google.adk.tools import tool as adk_tool
-except ImportError:
-    # Create a no-op decorator if google-adk is not installed
-    def adk_tool(func: Callable[..., Any]) -> Callable[..., Any]:  # type: ignore[no-redef]
-        return func
+from coding_open_agent_tools._decorators import adk_tool, strands_tool
 
 
 @adk_tool
@@ -66,7 +53,6 @@ def filter_issues_by_severity(
 
     return filtered
 
-
 @adk_tool
 @strands_tool
 def group_issues_by_file(
@@ -110,7 +96,6 @@ def group_issues_by_file(
         grouped[file_path].append(issue)
 
     return grouped
-
 
 @adk_tool
 @strands_tool

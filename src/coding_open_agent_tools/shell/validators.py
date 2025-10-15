@@ -8,24 +8,11 @@ retry loops and saving agent tokens.
 import re
 import shutil
 import subprocess
-from typing import Any, Callable
+from typing import Any
+
+from coding_open_agent_tools._decorators import adk_tool, strands_tool
 
 from ..exceptions import ToolExecutionError
-
-try:
-    from strands import tool as strands_tool
-except ImportError:
-    # Create a no-op decorator if strands is not installed
-    def strands_tool(func: Callable[..., Any]) -> Callable[..., Any]:  # type: ignore[no-redef]
-        return func
-
-
-try:
-    from google.adk.tools import tool as adk_tool
-except ImportError:
-    # Create a no-op decorator if google-adk is not installed
-    def adk_tool(func: Callable[..., Any]) -> Callable[..., Any]:  # type: ignore[no-redef]
-        return func
 
 
 @adk_tool
@@ -121,7 +108,6 @@ def validate_shell_syntax(script_content: str, shell_type: str) -> dict[str, str
     except Exception as e:
         raise ToolExecutionError(f"Failed to validate shell syntax: {e}") from e
 
-
 @adk_tool
 @strands_tool
 def check_shell_dependencies(script_content: str) -> dict[str, Any]:
@@ -206,7 +192,6 @@ def check_shell_dependencies(script_content: str) -> dict[str, Any]:
         "commands_missing": missing,
         "total_commands": str(len(commands)),
     }
-
 
 # Shell keywords and built-ins to exclude from command detection
 _SHELL_KEYWORDS = {

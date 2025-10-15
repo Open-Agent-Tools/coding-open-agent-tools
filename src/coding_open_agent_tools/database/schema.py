@@ -8,22 +8,9 @@ from __future__ import annotations
 
 import sqlite3
 from pathlib import Path
-from typing import Any, Callable
+from typing import Any
 
-try:
-    from strands import tool as strands_tool
-except ImportError:
-    # Create a no-op decorator if strands is not installed
-    def strands_tool(func: Callable[..., Any]) -> Callable[..., Any]:  # type: ignore[no-redef]
-        return func
-
-
-try:
-    from google.adk.tools import tool as adk_tool
-except ImportError:
-    # Create a no-op decorator if google-adk is not installed
-    def adk_tool(func: Callable[..., Any]) -> Callable[..., Any]:  # type: ignore[no-redef]
-        return func
+from coding_open_agent_tools._decorators import adk_tool, strands_tool
 
 
 @adk_tool
@@ -122,7 +109,6 @@ def inspect_schema(db_path: str) -> dict[str, Any]:
     finally:
         conn.close()
 
-
 @adk_tool
 @strands_tool
 def create_table_from_dict(
@@ -198,7 +184,6 @@ def create_table_from_dict(
         }
     finally:
         conn.close()
-
 
 @adk_tool
 @strands_tool
@@ -277,7 +262,6 @@ def add_column(
         }
     finally:
         conn.close()
-
 
 @adk_tool
 @strands_tool

@@ -6,22 +6,9 @@ agents and wastes tokens.
 """
 
 import re
-from typing import Any, Callable
+from typing import Any
 
-try:
-    from strands import tool as strands_tool
-except ImportError:
-    # Create a no-op decorator if strands is not installed
-    def strands_tool(func: Callable[..., Any]) -> Callable[..., Any]:  # type: ignore[no-redef]
-        return func
-
-
-try:
-    from google.adk.tools import tool as adk_tool
-except ImportError:
-    # Create a no-op decorator if google-adk is not installed
-    def adk_tool(func: Callable[..., Any]) -> Callable[..., Any]:  # type: ignore[no-redef]
-        return func
+from coding_open_agent_tools._decorators import adk_tool, strands_tool
 
 
 @adk_tool
@@ -109,7 +96,6 @@ def parse_shell_script(script_content: str) -> dict[str, Any]:
         "comment_count": str(comment_count),
     }
 
-
 @adk_tool
 @strands_tool
 def extract_shell_functions(script_content: str) -> list[dict[str, str]]:
@@ -194,7 +180,6 @@ def extract_shell_functions(script_content: str) -> list[dict[str, str]]:
         i += 1
 
     return functions
-
 
 @adk_tool
 @strands_tool

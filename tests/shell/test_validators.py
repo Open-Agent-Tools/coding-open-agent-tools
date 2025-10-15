@@ -2,7 +2,6 @@
 
 import pytest
 
-from coding_open_agent_tools.exceptions import ToolExecutionError
 from coding_open_agent_tools.shell.validators import (
     check_shell_dependencies,
     validate_shell_syntax,

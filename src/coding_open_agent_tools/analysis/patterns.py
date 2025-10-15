@@ -1,10 +1,10 @@
-from typing import Any, Callable
-
 """Secret pattern definitions for code scanning.
 
 This module contains regex patterns for detecting various types of secrets
 and credentials in source code.
 """
+
+from coding_open_agent_tools._decorators import adk_tool, strands_tool
 
 # Secret pattern definitions with severity levels
 SECRET_PATTERNS: list[dict[str, str]] = [
@@ -178,22 +178,6 @@ SECRET_PATTERNS: list[dict[str, str]] = [
     },
 ]
 
-try:
-    from strands import tool as strands_tool
-except ImportError:
-    # Create a no-op decorator if strands is not installed
-    def strands_tool(func: Callable[..., Any]) -> Callable[..., Any]:  # type: ignore[no-redef]
-        return func
-
-
-try:
-    from google.adk.tools import tool as adk_tool
-except ImportError:
-    # Create a no-op decorator if google-adk is not installed
-    def adk_tool(func: Callable[..., Any]) -> Callable[..., Any]:  # type: ignore[no-redef]
-        return func
-
-
 @adk_tool
 @strands_tool
 def get_all_patterns() -> list[dict[str, str]]:
@@ -203,7 +187,6 @@ def get_all_patterns() -> list[dict[str, str]]:
         List of pattern dictionaries with name, pattern, severity, description
     """
     return SECRET_PATTERNS.copy()
-
 
 @adk_tool
 @strands_tool
@@ -223,7 +206,6 @@ def get_patterns_by_severity(severity: str) -> list[dict[str, str]]:
         raise ValueError(f"Invalid severity: {severity}. Must be high, medium, or low")
 
     return [p for p in SECRET_PATTERNS if p["severity"] == severity]
-
 
 @adk_tool
 @strands_tool

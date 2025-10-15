@@ -9,22 +9,9 @@ This module provides extraction functions to pull structured data from Python co
 
 import ast
 import re
-from typing import Any, Callable
+from typing import Any
 
-try:
-    from strands import tool as strands_tool
-except ImportError:
-    # Create a no-op decorator if strands is not installed
-    def strands_tool(func: Callable[..., Any]) -> Callable[..., Any]:  # type: ignore[no-redef]
-        return func
-
-
-try:
-    from google.adk.tools import tool as adk_tool
-except ImportError:
-    # Create a no-op decorator if google-adk is not installed
-    def adk_tool(func: Callable[..., Any]) -> Callable[..., Any]:  # type: ignore[no-redef]
-        return func
+from coding_open_agent_tools._decorators import adk_tool, strands_tool
 
 
 @adk_tool
@@ -118,7 +105,6 @@ def parse_function_signature(source_code: str, function_name: str) -> dict[str, 
         else "false",
         "total_parameters": str(len(parameters)),
     }
-
 
 @adk_tool
 @strands_tool
@@ -288,7 +274,6 @@ def extract_docstring_info(source_code: str, function_name: str) -> dict[str, An
         "style": style,
     }
 
-
 @adk_tool
 @strands_tool
 def extract_type_annotations(source_code: str) -> dict[str, Any]:
@@ -372,7 +357,6 @@ def extract_type_annotations(source_code: str) -> dict[str, Any]:
         "total_functions": str(len(functions)),
         "total_variables": str(len(variables)),
     }
-
 
 @adk_tool
 @strands_tool

@@ -9,22 +9,9 @@ from __future__ import annotations
 
 import sqlite3
 from pathlib import Path
-from typing import Any, Callable
+from typing import Any
 
-try:
-    from strands import tool as strands_tool
-except ImportError:
-    # Create a no-op decorator if strands is not installed
-    def strands_tool(func: Callable[..., Any]) -> Callable[..., Any]:  # type: ignore[no-redef]
-        return func
-
-
-try:
-    from google.adk.tools import tool as adk_tool
-except ImportError:
-    # Create a no-op decorator if google-adk is not installed
-    def adk_tool(func: Callable[..., Any]) -> Callable[..., Any]:  # type: ignore[no-redef]
-        return func
+from coding_open_agent_tools._decorators import adk_tool, strands_tool
 
 
 @adk_tool
@@ -84,7 +71,6 @@ def create_sqlite_database(db_path: str) -> dict[str, str]:
         "message": message,
     }
 
-
 @adk_tool
 @strands_tool
 def execute_query(
@@ -140,7 +126,6 @@ def execute_query(
         }
     finally:
         conn.close()
-
 
 @adk_tool
 @strands_tool
@@ -199,7 +184,6 @@ def execute_many(
         }
     finally:
         conn.close()
-
 
 @adk_tool
 @strands_tool
@@ -261,7 +245,6 @@ def fetch_all(
         }
     finally:
         conn.close()
-
 
 @adk_tool
 @strands_tool

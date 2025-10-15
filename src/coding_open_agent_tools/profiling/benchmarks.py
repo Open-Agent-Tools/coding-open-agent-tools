@@ -8,24 +8,10 @@ import importlib.util
 import os
 import statistics
 import time
-from typing import Any, Callable
+from typing import Any
 
+from coding_open_agent_tools._decorators import adk_tool, strands_tool
 from coding_open_agent_tools.exceptions import ProfilingError
-
-try:
-    from strands import tool as strands_tool
-except ImportError:
-    # Create a no-op decorator if strands is not installed
-    def strands_tool(func: Callable[..., Any]) -> Callable[..., Any]:  # type: ignore[no-redef]
-        return func
-
-
-try:
-    from google.adk.tools import tool as adk_tool
-except ImportError:
-    # Create a no-op decorator if google-adk is not installed
-    def adk_tool(func: Callable[..., Any]) -> Callable[..., Any]:  # type: ignore[no-redef]
-        return func
 
 
 @adk_tool
@@ -134,7 +120,6 @@ def benchmark_execution(
         "stddev_time": round(statistics.stdev(times), 6) if len(times) > 1 else 0.0,
         "total_time": round(sum(times), 6),
     }
-
 
 @adk_tool
 @strands_tool

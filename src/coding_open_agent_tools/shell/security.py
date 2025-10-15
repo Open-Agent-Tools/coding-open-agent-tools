@@ -6,22 +6,9 @@ with optional detect-secrets integration.
 """
 
 import re
-from typing import Any, Callable
+from typing import Any
 
-try:
-    from strands import tool as strands_tool
-except ImportError:
-    # Create a no-op decorator if strands is not installed
-    def strands_tool(func: Callable[..., Any]) -> Callable[..., Any]:  # type: ignore[no-redef]
-        return func
-
-
-try:
-    from google.adk.tools import tool as adk_tool
-except ImportError:
-    # Create a no-op decorator if google-adk is not installed
-    def adk_tool(func: Callable[..., Any]) -> Callable[..., Any]:  # type: ignore[no-redef]
-        return func
+from coding_open_agent_tools._decorators import adk_tool, strands_tool
 
 
 @adk_tool
@@ -168,7 +155,6 @@ def analyze_shell_security(script_content: str) -> list[dict[str, str]]:
 
     return issues
 
-
 @adk_tool
 @strands_tool
 def detect_shell_injection_risks(script_content: str) -> list[dict[str, str]]:
@@ -268,7 +254,6 @@ def detect_shell_injection_risks(script_content: str) -> list[dict[str, str]]:
                 )
 
     return risks
-
 
 @adk_tool
 @strands_tool
@@ -371,7 +356,6 @@ def scan_for_secrets_enhanced(content: str, use_detect_secrets: str) -> dict[str
         "patterns_checked": str(len(_SECRET_PATTERNS)),
         "has_secrets": "true" if enhanced_secrets else "false",
     }
-
 
 # Secret patterns for stdlib fallback (subset of common patterns)
 _SECRET_PATTERNS = {

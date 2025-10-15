@@ -5,24 +5,10 @@ into structured formats that agents can use for analysis.
 """
 
 import json
-from typing import Any, Callable
+from typing import Any
 
+from coding_open_agent_tools._decorators import adk_tool, strands_tool
 from coding_open_agent_tools.exceptions import StaticAnalysisError
-
-try:
-    from strands import tool as strands_tool
-except ImportError:
-    # Create a no-op decorator if strands is not installed
-    def strands_tool(func: Callable[..., Any]) -> Callable[..., Any]:  # type: ignore[no-redef]
-        return func
-
-
-try:
-    from google.adk.tools import tool as adk_tool
-except ImportError:
-    # Create a no-op decorator if google-adk is not installed
-    def adk_tool(func: Callable[..., Any]) -> Callable[..., Any]:  # type: ignore[no-redef]
-        return func
 
 
 @adk_tool
@@ -84,7 +70,6 @@ def parse_ruff_json(json_output: str) -> list[dict[str, Any]]:
 
     return issues
 
-
 @adk_tool
 @strands_tool
 def parse_mypy_json(json_output: str) -> list[dict[str, Any]]:
@@ -144,7 +129,6 @@ def parse_mypy_json(json_output: str) -> list[dict[str, Any]]:
         )
 
     return errors
-
 
 @adk_tool
 @strands_tool
@@ -210,7 +194,6 @@ def parse_pytest_json(json_output: str) -> dict[str, Any]:
         "duration": data.get("duration", 0.0),
         "failures": failures,
     }
-
 
 @adk_tool
 @strands_tool

@@ -5,24 +5,10 @@ McCabe cyclomatic complexity and other code quality indicators.
 """
 
 import ast
-from typing import Any, Callable
+from typing import Any
 
+from coding_open_agent_tools._decorators import adk_tool, strands_tool
 from coding_open_agent_tools.exceptions import CodeAnalysisError
-
-try:
-    from strands import tool as strands_tool
-except ImportError:
-    # Create a no-op decorator if strands is not installed
-    def strands_tool(func: Callable[..., Any]) -> Callable[..., Any]:  # type: ignore[no-redef]
-        return func
-
-
-try:
-    from google.adk.tools import tool as adk_tool
-except ImportError:
-    # Create a no-op decorator if google-adk is not installed
-    def adk_tool(func: Callable[..., Any]) -> Callable[..., Any]:  # type: ignore[no-redef]
-        return func
 
 
 @adk_tool
@@ -107,7 +93,6 @@ def calculate_complexity(file_path: str) -> dict[str, Any]:
         "total_functions": len(complexities),
     }
 
-
 @adk_tool
 @strands_tool
 def calculate_function_complexity(file_path: str, function_name: str) -> int:
@@ -163,7 +148,6 @@ def calculate_function_complexity(file_path: str, function_name: str) -> int:
                 return complexity
 
     raise CodeAnalysisError(f"Function '{function_name}' not found in {file_path}")
-
 
 @adk_tool
 @strands_tool
@@ -255,7 +239,6 @@ def get_code_metrics(file_path: str) -> dict[str, Any]:
         "class_count": class_count,
     }
 
-
 @adk_tool
 @strands_tool
 def identify_complex_functions(file_path: str, threshold: int) -> list[dict[str, Any]]:
@@ -341,7 +324,6 @@ def identify_complex_functions(file_path: str, threshold: int) -> list[dict[str,
                 )
 
     return complex_functions
-
 
 @adk_tool
 @strands_tool

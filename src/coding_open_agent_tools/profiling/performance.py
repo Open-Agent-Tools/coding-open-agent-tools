@@ -9,24 +9,10 @@ import importlib.util
 import os
 import pstats
 import sys
-from typing import Any, Callable
+from typing import Any
 
+from coding_open_agent_tools._decorators import adk_tool, strands_tool
 from coding_open_agent_tools.exceptions import ProfilingError
-
-try:
-    from strands import tool as strands_tool
-except ImportError:
-    # Create a no-op decorator if strands is not installed
-    def strands_tool(func: Callable[..., Any]) -> Callable[..., Any]:  # type: ignore[no-redef]
-        return func
-
-
-try:
-    from google.adk.tools import tool as adk_tool
-except ImportError:
-    # Create a no-op decorator if google-adk is not installed
-    def adk_tool(func: Callable[..., Any]) -> Callable[..., Any]:  # type: ignore[no-redef]
-        return func
 
 
 @adk_tool
@@ -136,7 +122,6 @@ def profile_function(
         "top_functions": top_functions,
     }
 
-
 @adk_tool
 @strands_tool
 def profile_script(file_path: str) -> dict[str, Any]:
@@ -222,7 +207,6 @@ def profile_script(file_path: str) -> dict[str, Any]:
         "primitive_calls": stats.prim_calls,  # type: ignore[attr-defined]
         "top_functions": top_functions,
     }
-
 
 @adk_tool
 @strands_tool

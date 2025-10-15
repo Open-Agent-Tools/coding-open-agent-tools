@@ -5,24 +5,10 @@ statements for code quality and consistency.
 """
 
 import ast
-from typing import Any, Callable
+from typing import Any
 
+from coding_open_agent_tools._decorators import adk_tool, strands_tool
 from coding_open_agent_tools.exceptions import CodeAnalysisError
-
-try:
-    from strands import tool as strands_tool
-except ImportError:
-    # Create a no-op decorator if strands is not installed
-    def strands_tool(func: Callable[..., Any]) -> Callable[..., Any]:  # type: ignore[no-redef]
-        return func
-
-
-try:
-    from google.adk.tools import tool as adk_tool
-except ImportError:
-    # Create a no-op decorator if google-adk is not installed
-    def adk_tool(func: Callable[..., Any]) -> Callable[..., Any]:  # type: ignore[no-redef]
-        return func
 
 
 @adk_tool
@@ -98,7 +84,6 @@ def find_unused_imports(file_path: str) -> list[str]:
     unused = sorted(imported_names - used_names)
 
     return unused
-
 
 @adk_tool
 @strands_tool
@@ -230,7 +215,6 @@ def organize_imports(file_path: str) -> str:
         result_parts.append("\n".join(local_imports))
 
     return "\n\n".join(result_parts)
-
 
 @adk_tool
 @strands_tool

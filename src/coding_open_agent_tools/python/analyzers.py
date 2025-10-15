@@ -10,22 +10,9 @@ This module provides analysis functions to identify code issues:
 import ast
 import os
 from pathlib import Path
-from typing import Any, Callable
+from typing import Any
 
-try:
-    from strands import tool as strands_tool
-except ImportError:
-    # Create a no-op decorator if strands is not installed
-    def strands_tool(func: Callable[..., Any]) -> Callable[..., Any]:  # type: ignore[no-redef]
-        return func
-
-
-try:
-    from google.adk.tools import tool as adk_tool
-except ImportError:
-    # Create a no-op decorator if google-adk is not installed
-    def adk_tool(func: Callable[..., Any]) -> Callable[..., Any]:  # type: ignore[no-redef]
-        return func
+from coding_open_agent_tools._decorators import adk_tool, strands_tool
 
 
 @adk_tool
@@ -146,7 +133,6 @@ def detect_circular_imports(project_root: str) -> dict[str, Any]:
         "total_circular_chains": str(len(unique_chains)),
     }
 
-
 @adk_tool
 @strands_tool
 def find_unused_imports(source_code: str) -> dict[str, Any]:
@@ -241,7 +227,6 @@ def find_unused_imports(source_code: str) -> dict[str, Any]:
         "total_imports": str(len(imports)),
         "total_unused": str(len(unused)),
     }
-
 
 @adk_tool
 @strands_tool
@@ -408,7 +393,6 @@ def identify_anti_patterns(source_code: str) -> dict[str, Any]:
         "critical_count": str(critical_count),
         "high_count": str(high_count),
     }
-
 
 @adk_tool
 @strands_tool

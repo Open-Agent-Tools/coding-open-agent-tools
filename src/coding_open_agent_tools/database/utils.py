@@ -9,24 +9,10 @@ from __future__ import annotations
 import json
 import shutil
 from pathlib import Path
-from typing import Any, Callable
+
+from coding_open_agent_tools._decorators import adk_tool, strands_tool
 
 from .operations import execute_many, fetch_all
-
-try:
-    from strands import tool as strands_tool
-except ImportError:
-    # Create a no-op decorator if strands is not installed
-    def strands_tool(func: Callable[..., Any]) -> Callable[..., Any]:  # type: ignore[no-redef]
-        return func
-
-
-try:
-    from google.adk.tools import tool as adk_tool
-except ImportError:
-    # Create a no-op decorator if google-adk is not installed
-    def adk_tool(func: Callable[..., Any]) -> Callable[..., Any]:  # type: ignore[no-redef]
-        return func
 
 
 @adk_tool
@@ -97,7 +83,6 @@ def export_to_json(db_path: str, table_name: str, output_file: str) -> dict[str,
         "table_name": table_name,
         "status": "success",
     }
-
 
 @adk_tool
 @strands_tool
@@ -213,7 +198,6 @@ def import_from_json(
         "cleared": clear_table,
         "status": "success",
     }
-
 
 @adk_tool
 @strands_tool

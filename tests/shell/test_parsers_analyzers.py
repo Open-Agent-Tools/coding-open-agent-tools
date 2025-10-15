@@ -1,6 +1,5 @@
 """Tests for shell parsers and analyzers modules."""
 
-import pytest
 
 from coding_open_agent_tools.shell.analyzers import (
     check_error_handling,

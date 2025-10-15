@@ -6,22 +6,8 @@ These are tedious checks that agents often miss.
 """
 
 import re
-from typing import Any, Callable
 
-try:
-    from strands import tool as strands_tool
-except ImportError:
-    # Create a no-op decorator if strands is not installed
-    def strands_tool(func: Callable[..., Any]) -> Callable[..., Any]:  # type: ignore[no-redef]
-        return func
-
-
-try:
-    from google.adk.tools import tool as adk_tool
-except ImportError:
-    # Create a no-op decorator if google-adk is not installed
-    def adk_tool(func: Callable[..., Any]) -> Callable[..., Any]:  # type: ignore[no-redef]
-        return func
+from coding_open_agent_tools._decorators import adk_tool, strands_tool
 
 
 @adk_tool
@@ -126,7 +112,6 @@ def detect_unquoted_variables(script_content: str) -> list[dict[str, str]]:
                 )
 
     return issues
-
 
 @adk_tool
 @strands_tool
@@ -254,7 +239,6 @@ def find_dangerous_commands(script_content: str) -> list[dict[str, str]]:
                 )
 
     return findings
-
 
 @adk_tool
 @strands_tool

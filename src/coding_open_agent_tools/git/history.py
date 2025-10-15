@@ -6,24 +6,10 @@ file history, blame information, and retrieve file contents at specific commits.
 
 import os
 import subprocess
-from typing import Any, Callable
+from typing import Any
 
+from coding_open_agent_tools._decorators import adk_tool, strands_tool
 from coding_open_agent_tools.exceptions import GitError
-
-try:
-    from strands import tool as strands_tool
-except ImportError:
-    # Create a no-op decorator if strands is not installed
-    def strands_tool(func: Callable[..., Any]) -> Callable[..., Any]:  # type: ignore[no-redef]
-        return func
-
-
-try:
-    from google.adk.tools import tool as adk_tool
-except ImportError:
-    # Create a no-op decorator if google-adk is not installed
-    def adk_tool(func: Callable[..., Any]) -> Callable[..., Any]:  # type: ignore[no-redef]
-        return func
 
 
 @adk_tool
@@ -139,7 +125,6 @@ def get_git_log(repository_path: str, max_count: int) -> list[dict[str, Any]]:
     except subprocess.CalledProcessError as e:
         raise GitError(f"Git command failed: {e.stderr}")
 
-
 @adk_tool
 @strands_tool
 def get_git_blame(repository_path: str, file_path: str) -> list[dict[str, Any]]:
@@ -250,7 +235,6 @@ def get_git_blame(repository_path: str, file_path: str) -> list[dict[str, Any]]:
     except subprocess.CalledProcessError as e:
         raise GitError(f"Git command failed: {e.stderr}")
 
-
 @adk_tool
 @strands_tool
 def get_file_history(repository_path: str, file_path: str) -> list[dict[str, Any]]:
@@ -359,7 +343,6 @@ def get_file_history(repository_path: str, file_path: str) -> list[dict[str, Any
 
     except subprocess.CalledProcessError as e:
         raise GitError(f"Git command failed: {e.stderr}")
-
 
 @adk_tool
 @strands_tool

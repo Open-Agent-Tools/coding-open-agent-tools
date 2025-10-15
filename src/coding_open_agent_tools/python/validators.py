@@ -9,22 +9,9 @@ This module provides validation functions to catch errors before execution:
 
 import ast
 import re
-from typing import Any, Callable
+from typing import Any
 
-try:
-    from strands import tool as strands_tool
-except ImportError:
-    # Create a no-op decorator if strands is not installed
-    def strands_tool(func: Callable[..., Any]) -> Callable[..., Any]:  # type: ignore[no-redef]
-        return func
-
-
-try:
-    from google.adk.tools import tool as adk_tool
-except ImportError:
-    # Create a no-op decorator if google-adk is not installed
-    def adk_tool(func: Callable[..., Any]) -> Callable[..., Any]:  # type: ignore[no-redef]
-        return func
+from coding_open_agent_tools._decorators import adk_tool, strands_tool
 
 
 @adk_tool
@@ -80,7 +67,6 @@ def validate_python_syntax(source_code: str) -> dict[str, str]:
             "column_offset": "0",
             "error_type": type(e).__name__,
         }
-
 
 @adk_tool
 @strands_tool
@@ -207,7 +193,6 @@ def validate_type_hints(source_code: str) -> dict[str, Any]:
         "total_issues": str(len(issues)),
         "functions_checked": str(functions_checked),
     }
-
 
 @adk_tool
 @strands_tool
@@ -345,7 +330,6 @@ def validate_import_order(source_code: str) -> dict[str, Any]:
         "imports_checked": str(imports_checked),
     }
 
-
 @adk_tool
 @strands_tool
 def check_adk_compliance(source_code: str, function_name: str) -> dict[str, Any]:
@@ -480,7 +464,6 @@ def check_adk_compliance(source_code: str, function_name: str) -> dict[str, Any]
         "total_issues": str(len(issues)),
         "function_name": function_name,
     }
-
 
 @adk_tool
 @strands_tool

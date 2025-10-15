@@ -8,22 +8,9 @@ separate parameter lists.
 from __future__ import annotations
 
 import re
-from typing import Any, Callable
+from typing import Any
 
-try:
-    from strands import tool as strands_tool
-except ImportError:
-    # Create a no-op decorator if strands is not installed
-    def strands_tool(func: Callable[..., Any]) -> Callable[..., Any]:  # type: ignore[no-redef]
-        return func
-
-
-try:
-    from google.adk.tools import tool as adk_tool
-except ImportError:
-    # Create a no-op decorator if google-adk is not installed
-    def adk_tool(func: Callable[..., Any]) -> Callable[..., Any]:  # type: ignore[no-redef]
-        return func
+from coding_open_agent_tools._decorators import adk_tool, strands_tool
 
 
 @adk_tool
@@ -63,7 +50,6 @@ def escape_sql_identifier(identifier: str) -> str:
         raise ValueError("SQL identifier cannot start with a number")
 
     return identifier
-
 
 @adk_tool
 @strands_tool
@@ -133,7 +119,6 @@ def validate_sql_query(query: str) -> dict[str, Any]:
         "issues": issues,
         "query_type": query_type,
     }
-
 
 @adk_tool
 @strands_tool
@@ -207,7 +192,6 @@ def build_select_query(
         "column_count": str(column_count),
     }
 
-
 @adk_tool
 @strands_tool
 def build_insert_query(
@@ -261,7 +245,6 @@ def build_insert_query(
         "parameters": values,
         "column_count": str(len(columns)),
     }
-
 
 @adk_tool
 @strands_tool
@@ -328,7 +311,6 @@ def build_update_query(
         "parameters": parameters,
         "columns_updated": str(len(updates)),
     }
-
 
 @adk_tool
 @strands_tool

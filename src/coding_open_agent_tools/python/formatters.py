@@ -8,22 +8,9 @@ This module provides deterministic formatting functions:
 
 import ast
 import re
-from typing import Any, Callable
+from typing import Any
 
-try:
-    from strands import tool as strands_tool
-except ImportError:
-    # Create a no-op decorator if strands is not installed
-    def strands_tool(func: Callable[..., Any]) -> Callable[..., Any]:  # type: ignore[no-redef]
-        return func
-
-
-try:
-    from google.adk.tools import tool as adk_tool
-except ImportError:
-    # Create a no-op decorator if google-adk is not installed
-    def adk_tool(func: Callable[..., Any]) -> Callable[..., Any]:  # type: ignore[no-redef]
-        return func
+from coding_open_agent_tools._decorators import adk_tool, strands_tool
 
 
 @adk_tool
@@ -181,7 +168,6 @@ def format_docstring(docstring: str, style: str, line_length: str) -> dict[str, 
         "changes_made": "; ".join(changes),
     }
 
-
 @adk_tool
 @strands_tool
 def sort_imports(source_code: str) -> dict[str, Any]:
@@ -330,7 +316,6 @@ def sort_imports(source_code: str) -> dict[str, Any]:
         "total_imports": str(len(import_lines)),
     }
 
-
 @adk_tool
 @strands_tool
 def normalize_type_hints(source_code: str) -> dict[str, Any]:
@@ -466,7 +451,6 @@ def normalize_type_hints(source_code: str) -> dict[str, Any]:
         "deprecated_typing_removed": deprecated_typing_removed,
     }
 
-
 @adk_tool
 @strands_tool
 def _wrap_text(text: str, max_length: int) -> list[str]:
@@ -503,7 +487,6 @@ def _wrap_text(text: str, max_length: int) -> list[str]:
         lines.append(" ".join(current_line))
 
     return lines
-
 
 @adk_tool
 @strands_tool
@@ -577,7 +560,6 @@ def _classify_import(import_name: str) -> str:
         ):
             return "local"
         return "third_party"
-
 
 @adk_tool
 @strands_tool
