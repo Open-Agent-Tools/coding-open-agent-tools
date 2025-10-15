@@ -180,6 +180,43 @@ if validation['is_valid'] == 'true':
     )
 ```
 
+## Safety Features
+
+### Smart Confirmation System (3 Modes)
+
+The confirmation module provides intelligent confirmation handling for future write/delete operations:
+
+**🔄 Bypass Mode** - `skip_confirm=True` or `BYPASS_TOOL_CONSENT=true` env var
+- Proceeds immediately without prompts
+- Perfect for CI/CD and automation
+
+**💬 Interactive Mode** - Terminal with `skip_confirm=False`
+- Prompts user with `y/n` confirmation
+- Shows preview info (file sizes, etc.)
+
+**🤖 Agent Mode** - Non-TTY with `skip_confirm=False`
+- Raises `CONFIRMATION_REQUIRED` error with instructions
+- LLM agents can ask user and retry with `skip_confirm=True`
+
+```python
+from coding_open_agent_tools.confirmation import check_user_confirmation
+
+# Safe by default - adapts to context
+confirmed = check_user_confirmation(
+    operation="overwrite file",
+    target="/path/to/file.py",
+    skip_confirm=False,  # Interactive prompt OR agent error
+    preview_info="1024 bytes"
+)
+
+# Automation mode
+import os
+os.environ['BYPASS_TOOL_CONSENT'] = 'true'
+# All confirmations bypassed for CI/CD
+```
+
+**Note**: Current modules (analysis, git, profiling, quality) are read-only and don't require confirmations. The confirmation system is ready for future write/delete operations in planned modules (shell generation, code generation, etc.).
+
 ## Documentation
 
 - **[Product Requirements Documents](./docs/PRD/)**: Detailed specifications
