@@ -6,9 +6,26 @@ with optional detect-secrets integration.
 """
 
 import re
-from typing import Any
+from typing import Any, Callable
+
+try:
+    from strands import tool as strands_tool
+except ImportError:
+    # Create a no-op decorator if strands is not installed
+    def strands_tool(func: Callable[..., Any]) -> Callable[..., Any]:  # type: ignore[no-redef]
+        return func
 
 
+try:
+    from google.adk.tools import tool as adk_tool
+except ImportError:
+    # Create a no-op decorator if google-adk is not installed
+    def adk_tool(func: Callable[..., Any]) -> Callable[..., Any]:  # type: ignore[no-redef]
+        return func
+
+
+@adk_tool
+@strands_tool
 def analyze_shell_security(script_content: str) -> list[dict[str, str]]:
     """Analyze shell script for security issues using deterministic rules.
 
@@ -152,6 +169,8 @@ def analyze_shell_security(script_content: str) -> list[dict[str, str]]:
     return issues
 
 
+@adk_tool
+@strands_tool
 def detect_shell_injection_risks(script_content: str) -> list[dict[str, str]]:
     """Detect potential shell injection vulnerabilities.
 
@@ -251,6 +270,8 @@ def detect_shell_injection_risks(script_content: str) -> list[dict[str, str]]:
     return risks
 
 
+@adk_tool
+@strands_tool
 def scan_for_secrets_enhanced(content: str, use_detect_secrets: str) -> dict[str, Any]:
     """Scan for secrets with optional detect-secrets integration.
 
@@ -287,8 +308,12 @@ def scan_for_secrets_enhanced(content: str, use_detect_secrets: str) -> dict[str
     # Try detect-secrets if requested
     if use_detect_secrets == "true":
         try:
-            from detect_secrets import SecretsCollection  # type: ignore[import-not-found]
-            from detect_secrets.settings import default_settings  # type: ignore[import-not-found]
+            from detect_secrets import (
+                SecretsCollection,  # type: ignore[import-not-found]
+            )
+            from detect_secrets.settings import (
+                default_settings,  # type: ignore[import-not-found]
+            )
 
             # Create a secrets collection
             secrets_collection = SecretsCollection()

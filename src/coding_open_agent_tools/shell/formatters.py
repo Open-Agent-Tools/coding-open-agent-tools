@@ -1,3 +1,5 @@
+from typing import Any, Callable
+
 """Shell script formatting and escaping functions.
 
 This module provides deterministic formatting utilities for shell scripts,
@@ -5,7 +7,24 @@ including argument escaping and shebang normalization. These save agent
 tokens by handling tedious escaping rules correctly.
 """
 
+try:
+    from strands import tool as strands_tool
+except ImportError:
+    # Create a no-op decorator if strands is not installed
+    def strands_tool(func: Callable[..., Any]) -> Callable[..., Any]:  # type: ignore[no-redef]
+        return func
 
+
+try:
+    from google.adk.tools import tool as adk_tool
+except ImportError:
+    # Create a no-op decorator if google-adk is not installed
+    def adk_tool(func: Callable[..., Any]) -> Callable[..., Any]:  # type: ignore[no-redef]
+        return func
+
+
+@adk_tool
+@strands_tool
 def escape_shell_argument(argument: str, quote_style: str) -> str:
     """Safely escape an argument for use in shell commands.
 
@@ -64,6 +83,8 @@ def escape_shell_argument(argument: str, quote_style: str) -> str:
         return f'"{escaped}"'
 
 
+@adk_tool
+@strands_tool
 def normalize_shebang(shebang_line: str, shell_type: str) -> str:
     """Normalize shebang line to use proper interpreter path.
 

@@ -8,11 +8,28 @@ retry loops and saving agent tokens.
 import re
 import shutil
 import subprocess
-from typing import Any
+from typing import Any, Callable
 
 from ..exceptions import ToolExecutionError
 
+try:
+    from strands import tool as strands_tool
+except ImportError:
+    # Create a no-op decorator if strands is not installed
+    def strands_tool(func: Callable[..., Any]) -> Callable[..., Any]:  # type: ignore[no-redef]
+        return func
 
+
+try:
+    from google.adk.tools import tool as adk_tool
+except ImportError:
+    # Create a no-op decorator if google-adk is not installed
+    def adk_tool(func: Callable[..., Any]) -> Callable[..., Any]:  # type: ignore[no-redef]
+        return func
+
+
+@adk_tool
+@strands_tool
 def validate_shell_syntax(script_content: str, shell_type: str) -> dict[str, str]:
     """Validate shell script syntax using shell's built-in syntax checker.
 
@@ -105,6 +122,8 @@ def validate_shell_syntax(script_content: str, shell_type: str) -> dict[str, str
         raise ToolExecutionError(f"Failed to validate shell syntax: {e}") from e
 
 
+@adk_tool
+@strands_tool
 def check_shell_dependencies(script_content: str) -> dict[str, Any]:
     """Check which external commands/tools are used in a shell script.
 

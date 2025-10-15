@@ -7,14 +7,31 @@ credentials, and sensitive information using pattern matching.
 import os
 import re
 from re import Pattern
-from typing import Any
+from typing import Any, Callable
 
 from coding_open_agent_tools.analysis.patterns import (
     get_all_patterns,
 )
 from coding_open_agent_tools.exceptions import CodeAnalysisError
 
+try:
+    from strands import tool as strands_tool
+except ImportError:
+    # Create a no-op decorator if strands is not installed
+    def strands_tool(func: Callable[..., Any]) -> Callable[..., Any]:  # type: ignore[no-redef]
+        return func
 
+
+try:
+    from google.adk.tools import tool as adk_tool
+except ImportError:
+    # Create a no-op decorator if google-adk is not installed
+    def adk_tool(func: Callable[..., Any]) -> Callable[..., Any]:  # type: ignore[no-redef]
+        return func
+
+
+@adk_tool
+@strands_tool
 def scan_for_secrets(file_path: str) -> list[dict[str, Any]]:
     """Scan a Python file for hardcoded secrets and credentials.
 
@@ -97,6 +114,8 @@ def scan_for_secrets(file_path: str) -> list[dict[str, Any]]:
     return findings
 
 
+@adk_tool
+@strands_tool
 def scan_directory_for_secrets(directory_path: str) -> list[dict[str, Any]]:
     """Recursively scan a directory for hardcoded secrets.
 
@@ -167,6 +186,8 @@ def scan_directory_for_secrets(directory_path: str) -> list[dict[str, Any]]:
     return all_findings
 
 
+@adk_tool
+@strands_tool
 def validate_secret_patterns(content: str, patterns: list[str]) -> list[dict[str, Any]]:
     """Check content against custom secret patterns.
 

@@ -5,11 +5,28 @@ into structured formats that agents can use for analysis.
 """
 
 import json
-from typing import Any
+from typing import Any, Callable
 
 from coding_open_agent_tools.exceptions import StaticAnalysisError
 
+try:
+    from strands import tool as strands_tool
+except ImportError:
+    # Create a no-op decorator if strands is not installed
+    def strands_tool(func: Callable[..., Any]) -> Callable[..., Any]:  # type: ignore[no-redef]
+        return func
 
+
+try:
+    from google.adk.tools import tool as adk_tool
+except ImportError:
+    # Create a no-op decorator if google-adk is not installed
+    def adk_tool(func: Callable[..., Any]) -> Callable[..., Any]:  # type: ignore[no-redef]
+        return func
+
+
+@adk_tool
+@strands_tool
 def parse_ruff_json(json_output: str) -> list[dict[str, Any]]:
     """Parse ruff JSON output into structured format.
 
@@ -68,6 +85,8 @@ def parse_ruff_json(json_output: str) -> list[dict[str, Any]]:
     return issues
 
 
+@adk_tool
+@strands_tool
 def parse_mypy_json(json_output: str) -> list[dict[str, Any]]:
     """Parse mypy JSON output into structured format.
 
@@ -127,6 +146,8 @@ def parse_mypy_json(json_output: str) -> list[dict[str, Any]]:
     return errors
 
 
+@adk_tool
+@strands_tool
 def parse_pytest_json(json_output: str) -> dict[str, Any]:
     """Parse pytest JSON report into structured format.
 
@@ -191,6 +212,8 @@ def parse_pytest_json(json_output: str) -> dict[str, Any]:
     }
 
 
+@adk_tool
+@strands_tool
 def summarize_static_analysis(ruff_json: str, mypy_json: str) -> dict[str, Any]:
     """Combine multiple tool outputs into comprehensive summary.
 

@@ -4,9 +4,26 @@ This module provides functions to filter, group, and prioritize issues from
 static analysis tools to help agents focus on the most important problems.
 """
 
-from typing import Any
+from typing import Any, Callable
+
+try:
+    from strands import tool as strands_tool
+except ImportError:
+    # Create a no-op decorator if strands is not installed
+    def strands_tool(func: Callable[..., Any]) -> Callable[..., Any]:  # type: ignore[no-redef]
+        return func
 
 
+try:
+    from google.adk.tools import tool as adk_tool
+except ImportError:
+    # Create a no-op decorator if google-adk is not installed
+    def adk_tool(func: Callable[..., Any]) -> Callable[..., Any]:  # type: ignore[no-redef]
+        return func
+
+
+@adk_tool
+@strands_tool
 def filter_issues_by_severity(
     issues: list[dict[str, Any]], severity: str
 ) -> list[dict[str, Any]]:
@@ -50,6 +67,8 @@ def filter_issues_by_severity(
     return filtered
 
 
+@adk_tool
+@strands_tool
 def group_issues_by_file(
     issues: list[dict[str, Any]],
 ) -> dict[str, list[dict[str, Any]]]:
@@ -93,6 +112,8 @@ def group_issues_by_file(
     return grouped
 
 
+@adk_tool
+@strands_tool
 def prioritize_issues(issues: list[dict[str, Any]]) -> list[dict[str, Any]]:
     """Sort issues by priority based on severity and frequency.
 

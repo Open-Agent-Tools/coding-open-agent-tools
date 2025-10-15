@@ -139,8 +139,10 @@ When adding a new function, ask:
 - **100% ruff compliance** - No exceptions
 - **100% mypy compliance** - Full type coverage
 - **80%+ test coverage** - Every function tested
-- **Google ADK compliance** - JSON-serializable only, no defaults
-- **Zero external dependencies** - Prefer stdlib (exception: optional enhancements)
+- **Google ADK compliance** - JSON-serializable only, no defaults, proper decorators
+- **Required decorators** - All agent tools MUST have `@strands_tool` and `@tool` decorators
+- **Strands framework dependency** - Required (not optional) for agent tool registration
+- **Zero external dependencies (core logic)** - Prefer stdlib for implementation (decorators are required)
 
 ## Optional Dependencies Pattern
 
@@ -307,3 +309,173 @@ src/coding_open_agent_tools/
 
 **When in doubt, ask**: "Does this save agent tokens or prevent retry loops?"
 If no, it probably doesn't belong here.
+
+---
+
+## Required Decorator Pattern for All Tools
+
+**CRITICAL**: All 84 agent tools MUST use the `@strands_tool` decorator with conditional import.
+
+### Decorator Requirements (Matches basic-open-agent-tools Pattern)
+
+Every tool module requires conditional import with fallback:
+
+```python
+try:
+    from strands import tool as strands_tool
+except ImportError:
+    # Create a no-op decorator if strands is not installed
+    def strands_tool(func: Callable[..., Any]) -> Callable[..., Any]:  # type: ignore[no-redef]
+        return func
+
+@strands_tool
+def your_function_name(param1: str, param2: str) -> dict[str, str]:
+    """Function description.
+
+    Args:
+        param1: Description of param1
+        param2: Description of param2
+
+    Returns:
+        Dictionary with:
+        - key1: Description
+        - key2: Description
+    """
+    # Implementation here
+    pass
+```
+
+### Framework Compatibility
+
+| Framework | Requirement | Notes |
+|-----------|-------------|-------|
+| **Strands** | `@strands_tool` decorator | Registers function with Strands agent framework (optional dependency) |
+| **Google ADK** | Works with `@strands_tool` | ADK can use functions decorated with @strands_tool |
+| **LangGraph** | Standard callable | Works automatically - no decorator needed |
+
+### Why This Pattern?
+
+1. **Zero required dependencies** - Package works without strands installed
+2. **Graceful degradation** - Functions work normally when strands not available
+3. **Framework agnostic** - Same pattern as basic-open-agent-tools
+4. **Type safety** - Mypy configured to ignore missing imports
+
+### Example: Complete Tool Function
+
+```python
+try:
+    from strands import tool as strands_tool
+except ImportError:
+    def strands_tool(func: Callable[..., Any]) -> Callable[..., Any]:  # type: ignore[no-redef]
+        return func
+
+@strands_tool
+def validate_python_syntax(source_code: str) -> dict[str, str]:
+    """Validate Python source code syntax using AST parsing.
+
+    Prevents execution failures by catching syntax errors early.
+
+    Args:
+        source_code: Python source code to validate
+
+    Returns:
+        Dictionary with:
+        - is_valid: "true" or "false"
+        - error_message: Error description if invalid
+        - line_number: Line number of error
+        - column_offset: Column offset of error
+        - error_type: Type of syntax error
+
+    Raises:
+        TypeError: If source_code is not a string
+        ValueError: If source_code is empty
+    """
+    if not isinstance(source_code, str):
+        raise TypeError("source_code must be a string")
+    if not source_code.strip():
+        raise ValueError("source_code cannot be empty")
+
+    try:
+        ast.parse(source_code)
+        return {
+            "is_valid": "true",
+            "error_message": "",
+            "line_number": "0",
+            "column_offset": "0",
+            "error_type": "",
+        }
+    except SyntaxError as e:
+        return {
+            "is_valid": "false",
+            "error_message": str(e.msg) if e.msg else "Syntax error",
+            "line_number": str(e.lineno) if e.lineno else "0",
+            "column_offset": str(e.offset) if e.offset else "0",
+            "error_type": "SyntaxError",
+        }
+```
+
+### Common Decorator Mistakes
+
+❌ **Missing decorator:**
+```python
+def validate_python_syntax(source_code: str) -> dict[str, str]:
+    # Will NOT work with Strands framework!
+    pass
+```
+
+❌ **Using parentheses:**
+```python
+@strands_tool()  # WRONG! No parentheses needed
+def validate_python_syntax(source_code: str) -> dict[str, str]:
+    pass
+```
+
+❌ **Missing conditional import:**
+```python
+from strands import tool as strands_tool  # WRONG! Will fail if strands not installed
+
+@strands_tool
+def validate_python_syntax(source_code: str) -> dict[str, str]:
+    pass
+```
+
+✅ **Correct:**
+```python
+try:
+    from strands import tool as strands_tool
+except ImportError:
+    def strands_tool(func: Callable[..., Any]) -> Callable[..., Any]:  # type: ignore[no-redef]
+        return func
+
+@strands_tool
+def validate_python_syntax(source_code: str) -> dict[str, str]:
+    pass
+```
+
+### Dependencies
+
+Add to `pyproject.toml`:
+
+```toml
+dependencies = [
+    "basic-open-agent-tools>=0.12.0",
+]
+
+[project.optional-dependencies]
+# Strands integration (OPTIONAL)
+strands = [
+    "strands>=0.1.0",
+    "anthropic>=0.25.0",
+    "python-dotenv>=1.0.0",
+]
+
+# Development dependencies
+dev = [
+    "pytest>=7.0.0",
+    # ... other dev deps
+    "google-adk>=0.1.0",  # For testing ADK compatibility
+    "strands>=0.1.0",     # For testing Strands integration
+]
+```
+
+**Strands is OPTIONAL**, not required. Package works without it.

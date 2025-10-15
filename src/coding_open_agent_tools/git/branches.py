@@ -6,11 +6,28 @@ including listing branches and getting detailed branch metadata.
 
 import os
 import subprocess
-from typing import Any
+from typing import Any, Callable
 
 from coding_open_agent_tools.exceptions import GitError
 
+try:
+    from strands import tool as strands_tool
+except ImportError:
+    # Create a no-op decorator if strands is not installed
+    def strands_tool(func: Callable[..., Any]) -> Callable[..., Any]:  # type: ignore[no-redef]
+        return func
 
+
+try:
+    from google.adk.tools import tool as adk_tool
+except ImportError:
+    # Create a no-op decorator if google-adk is not installed
+    def adk_tool(func: Callable[..., Any]) -> Callable[..., Any]:  # type: ignore[no-redef]
+        return func
+
+
+@adk_tool
+@strands_tool
 def list_branches(repository_path: str) -> list[str]:
     """List all branches in a git repository.
 
@@ -62,6 +79,8 @@ def list_branches(repository_path: str) -> list[str]:
         raise GitError(f"Git command failed: {e.stderr}")
 
 
+@adk_tool
+@strands_tool
 def get_branch_info(repository_path: str, branch_name: str) -> dict[str, Any]:
     """Get detailed information about a specific branch.
 

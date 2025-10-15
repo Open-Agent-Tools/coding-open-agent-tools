@@ -10,9 +10,26 @@ This module provides analysis functions to identify code issues:
 import ast
 import os
 from pathlib import Path
-from typing import Any
+from typing import Any, Callable
+
+try:
+    from strands import tool as strands_tool
+except ImportError:
+    # Create a no-op decorator if strands is not installed
+    def strands_tool(func: Callable[..., Any]) -> Callable[..., Any]:  # type: ignore[no-redef]
+        return func
 
 
+try:
+    from google.adk.tools import tool as adk_tool
+except ImportError:
+    # Create a no-op decorator if google-adk is not installed
+    def adk_tool(func: Callable[..., Any]) -> Callable[..., Any]:  # type: ignore[no-redef]
+        return func
+
+
+@adk_tool
+@strands_tool
 def detect_circular_imports(project_root: str) -> dict[str, Any]:
     """Detect circular import dependencies in a Python project.
 
@@ -81,6 +98,7 @@ def detect_circular_imports(project_root: str) -> dict[str, Any]:
     circular_chains: list[dict[str, Any]] = []
     visited: set[str] = set()
 
+    @strands_tool
     def detect_cycle(module: str, path: list[str]) -> None:
         if module in path:
             # Found circular import
@@ -129,6 +147,8 @@ def detect_circular_imports(project_root: str) -> dict[str, Any]:
     }
 
 
+@adk_tool
+@strands_tool
 def find_unused_imports(source_code: str) -> dict[str, Any]:
     """Find imported modules/names that are never used in the code.
 
@@ -223,6 +243,8 @@ def find_unused_imports(source_code: str) -> dict[str, Any]:
     }
 
 
+@adk_tool
+@strands_tool
 def identify_anti_patterns(source_code: str) -> dict[str, Any]:
     """Identify common Python anti-patterns and code smells.
 
@@ -388,6 +410,8 @@ def identify_anti_patterns(source_code: str) -> dict[str, Any]:
     }
 
 
+@adk_tool
+@strands_tool
 def check_test_coverage_gaps(source_file: str, test_file: str) -> dict[str, Any]:
     """Analyze test coverage gaps between source and test files.
 

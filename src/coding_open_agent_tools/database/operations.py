@@ -9,9 +9,26 @@ from __future__ import annotations
 
 import sqlite3
 from pathlib import Path
-from typing import Any
+from typing import Any, Callable
+
+try:
+    from strands import tool as strands_tool
+except ImportError:
+    # Create a no-op decorator if strands is not installed
+    def strands_tool(func: Callable[..., Any]) -> Callable[..., Any]:  # type: ignore[no-redef]
+        return func
 
 
+try:
+    from google.adk.tools import tool as adk_tool
+except ImportError:
+    # Create a no-op decorator if google-adk is not installed
+    def adk_tool(func: Callable[..., Any]) -> Callable[..., Any]:  # type: ignore[no-redef]
+        return func
+
+
+@adk_tool
+@strands_tool
 def create_sqlite_database(db_path: str) -> dict[str, str]:
     """Create a new SQLite database file.
 
@@ -68,6 +85,8 @@ def create_sqlite_database(db_path: str) -> dict[str, str]:
     }
 
 
+@adk_tool
+@strands_tool
 def execute_query(
     db_path: str, query: str, parameters: list[Any] | None = None
 ) -> dict[str, str]:
@@ -123,6 +142,8 @@ def execute_query(
         conn.close()
 
 
+@adk_tool
+@strands_tool
 def execute_many(
     db_path: str, query: str, parameters_list: list[list[Any]]
 ) -> dict[str, str]:
@@ -180,6 +201,8 @@ def execute_many(
         conn.close()
 
 
+@adk_tool
+@strands_tool
 def fetch_all(
     db_path: str, query: str, parameters: list[Any] | None = None
 ) -> dict[str, Any]:
@@ -240,6 +263,8 @@ def fetch_all(
         conn.close()
 
 
+@adk_tool
+@strands_tool
 def fetch_one(
     db_path: str, query: str, parameters: list[Any] | None = None
 ) -> dict[str, Any]:

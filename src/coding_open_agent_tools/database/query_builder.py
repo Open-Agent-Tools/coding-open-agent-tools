@@ -8,9 +8,26 @@ separate parameter lists.
 from __future__ import annotations
 
 import re
-from typing import Any
+from typing import Any, Callable
+
+try:
+    from strands import tool as strands_tool
+except ImportError:
+    # Create a no-op decorator if strands is not installed
+    def strands_tool(func: Callable[..., Any]) -> Callable[..., Any]:  # type: ignore[no-redef]
+        return func
 
 
+try:
+    from google.adk.tools import tool as adk_tool
+except ImportError:
+    # Create a no-op decorator if google-adk is not installed
+    def adk_tool(func: Callable[..., Any]) -> Callable[..., Any]:  # type: ignore[no-redef]
+        return func
+
+
+@adk_tool
+@strands_tool
 def escape_sql_identifier(identifier: str) -> str:
     """Escape a SQL identifier (table/column name) for safe use.
 
@@ -48,6 +65,8 @@ def escape_sql_identifier(identifier: str) -> str:
     return identifier
 
 
+@adk_tool
+@strands_tool
 def validate_sql_query(query: str) -> dict[str, Any]:
     """Validate a SQL query for safety and correctness.
 
@@ -116,6 +135,8 @@ def validate_sql_query(query: str) -> dict[str, Any]:
     }
 
 
+@adk_tool
+@strands_tool
 def build_select_query(
     table_name: str,
     columns: list[str] | None = None,
@@ -187,6 +208,8 @@ def build_select_query(
     }
 
 
+@adk_tool
+@strands_tool
 def build_insert_query(
     table_name: str, columns: list[str], values: list[Any]
 ) -> dict[str, Any]:
@@ -240,6 +263,8 @@ def build_insert_query(
     }
 
 
+@adk_tool
+@strands_tool
 def build_update_query(
     table_name: str,
     updates: dict[str, Any],
@@ -305,6 +330,8 @@ def build_update_query(
     }
 
 
+@adk_tool
+@strands_tool
 def build_delete_query(
     table_name: str, where_conditions: dict[str, Any] | None = None
 ) -> dict[str, Any]:

@@ -8,11 +8,28 @@ import importlib.util
 import os
 import sys
 import tracemalloc
-from typing import Any
+from typing import Any, Callable
 
 from coding_open_agent_tools.exceptions import ProfilingError
 
+try:
+    from strands import tool as strands_tool
+except ImportError:
+    # Create a no-op decorator if strands is not installed
+    def strands_tool(func: Callable[..., Any]) -> Callable[..., Any]:  # type: ignore[no-redef]
+        return func
 
+
+try:
+    from google.adk.tools import tool as adk_tool
+except ImportError:
+    # Create a no-op decorator if google-adk is not installed
+    def adk_tool(func: Callable[..., Any]) -> Callable[..., Any]:  # type: ignore[no-redef]
+        return func
+
+
+@adk_tool
+@strands_tool
 def measure_memory_usage(
     file_path: str, function_name: str, args_json: str
 ) -> dict[str, Any]:
@@ -124,6 +141,8 @@ def measure_memory_usage(
     }
 
 
+@adk_tool
+@strands_tool
 def detect_memory_leaks(
     file_path: str, function_name: str, args_json: str, iterations: int
 ) -> list[dict[str, Any]]:
@@ -256,6 +275,8 @@ def detect_memory_leaks(
     return results
 
 
+@adk_tool
+@strands_tool
 def get_memory_snapshot(file_path: str) -> dict[str, Any]:
     """Take a memory snapshot during script execution.
 

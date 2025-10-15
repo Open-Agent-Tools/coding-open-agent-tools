@@ -8,9 +8,26 @@ This module provides deterministic formatting functions:
 
 import ast
 import re
-from typing import Any
+from typing import Any, Callable
+
+try:
+    from strands import tool as strands_tool
+except ImportError:
+    # Create a no-op decorator if strands is not installed
+    def strands_tool(func: Callable[..., Any]) -> Callable[..., Any]:  # type: ignore[no-redef]
+        return func
 
 
+try:
+    from google.adk.tools import tool as adk_tool
+except ImportError:
+    # Create a no-op decorator if google-adk is not installed
+    def adk_tool(func: Callable[..., Any]) -> Callable[..., Any]:  # type: ignore[no-redef]
+        return func
+
+
+@adk_tool
+@strands_tool
 def format_docstring(docstring: str, style: str, line_length: str) -> dict[str, str]:
     """Format a docstring to conform to a specific style guide.
 
@@ -165,6 +182,8 @@ def format_docstring(docstring: str, style: str, line_length: str) -> dict[str, 
     }
 
 
+@adk_tool
+@strands_tool
 def sort_imports(source_code: str) -> dict[str, Any]:
     """Sort and group imports according to PEP 8 conventions.
 
@@ -312,6 +331,8 @@ def sort_imports(source_code: str) -> dict[str, Any]:
     }
 
 
+@adk_tool
+@strands_tool
 def normalize_type_hints(source_code: str) -> dict[str, Any]:
     """Normalize type hints to use modern syntax (PEP 585, PEP 604).
 
@@ -446,6 +467,8 @@ def normalize_type_hints(source_code: str) -> dict[str, Any]:
     }
 
 
+@adk_tool
+@strands_tool
 def _wrap_text(text: str, max_length: int) -> list[str]:
     """Wrap text to specified line length, preserving word boundaries.
 
@@ -482,6 +505,8 @@ def _wrap_text(text: str, max_length: int) -> list[str]:
     return lines
 
 
+@adk_tool
+@strands_tool
 def _classify_import(import_name: str) -> str:
     """Classify an import as stdlib, third-party, or local.
 
@@ -554,6 +579,8 @@ def _classify_import(import_name: str) -> str:
         return "third_party"
 
 
+@adk_tool
+@strands_tool
 def _split_union_types(union_content: str) -> list[str]:
     """Split Union type content by commas, respecting nested brackets.
 

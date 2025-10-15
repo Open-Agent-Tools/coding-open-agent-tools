@@ -1,3 +1,5 @@
+from typing import Any, Callable
+
 """Secret pattern definitions for code scanning.
 
 This module contains regex patterns for detecting various types of secrets
@@ -176,7 +178,24 @@ SECRET_PATTERNS: list[dict[str, str]] = [
     },
 ]
 
+try:
+    from strands import tool as strands_tool
+except ImportError:
+    # Create a no-op decorator if strands is not installed
+    def strands_tool(func: Callable[..., Any]) -> Callable[..., Any]:  # type: ignore[no-redef]
+        return func
 
+
+try:
+    from google.adk.tools import tool as adk_tool
+except ImportError:
+    # Create a no-op decorator if google-adk is not installed
+    def adk_tool(func: Callable[..., Any]) -> Callable[..., Any]:  # type: ignore[no-redef]
+        return func
+
+
+@adk_tool
+@strands_tool
 def get_all_patterns() -> list[dict[str, str]]:
     """Get all secret patterns.
 
@@ -186,6 +205,8 @@ def get_all_patterns() -> list[dict[str, str]]:
     return SECRET_PATTERNS.copy()
 
 
+@adk_tool
+@strands_tool
 def get_patterns_by_severity(severity: str) -> list[dict[str, str]]:
     """Get secret patterns filtered by severity level.
 
@@ -204,10 +225,13 @@ def get_patterns_by_severity(severity: str) -> list[dict[str, str]]:
     return [p for p in SECRET_PATTERNS if p["severity"] == severity]
 
 
+@adk_tool
+@strands_tool
 def get_high_severity_patterns() -> list[dict[str, str]]:
     """Get only high severity secret patterns.
 
     Returns:
         List of high severity pattern dictionaries
     """
-    return get_patterns_by_severity("high")
+    result: list[dict[str, str]] = get_patterns_by_severity("high")
+    return result

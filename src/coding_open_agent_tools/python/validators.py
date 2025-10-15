@@ -9,9 +9,26 @@ This module provides validation functions to catch errors before execution:
 
 import ast
 import re
-from typing import Any
+from typing import Any, Callable
+
+try:
+    from strands import tool as strands_tool
+except ImportError:
+    # Create a no-op decorator if strands is not installed
+    def strands_tool(func: Callable[..., Any]) -> Callable[..., Any]:  # type: ignore[no-redef]
+        return func
 
 
+try:
+    from google.adk.tools import tool as adk_tool
+except ImportError:
+    # Create a no-op decorator if google-adk is not installed
+    def adk_tool(func: Callable[..., Any]) -> Callable[..., Any]:  # type: ignore[no-redef]
+        return func
+
+
+@adk_tool
+@strands_tool
 def validate_python_syntax(source_code: str) -> dict[str, str]:
     """Validate Python source code syntax using AST parsing.
 
@@ -65,6 +82,8 @@ def validate_python_syntax(source_code: str) -> dict[str, str]:
         }
 
 
+@adk_tool
+@strands_tool
 def validate_type_hints(source_code: str) -> dict[str, Any]:
     """Validate type hints for correctness and consistency.
 
@@ -190,6 +209,8 @@ def validate_type_hints(source_code: str) -> dict[str, Any]:
     }
 
 
+@adk_tool
+@strands_tool
 def validate_import_order(source_code: str) -> dict[str, Any]:
     """Validate that imports follow PEP 8 ordering conventions.
 
@@ -325,6 +346,8 @@ def validate_import_order(source_code: str) -> dict[str, Any]:
     }
 
 
+@adk_tool
+@strands_tool
 def check_adk_compliance(source_code: str, function_name: str) -> dict[str, Any]:
     """Check if a function follows Google ADK compliance standards.
 
@@ -459,6 +482,8 @@ def check_adk_compliance(source_code: str, function_name: str) -> dict[str, Any]
     }
 
 
+@adk_tool
+@strands_tool
 def _classify_import(import_name: str) -> str:
     """Classify an import as stdlib, third-party, or local.
 

@@ -126,9 +126,10 @@ warn_unused_ignores = false  # optional strands import creates unused ignores
 warn_no_return = true
 warn_unreachable = true
 strict_equality = true
+exclude = ["venv/", ".venv/", "build/", "dist/"]
 
 [[tool.mypy.overrides]]
-module = ["strands", "strands.*", "pkg_resources", "basic_open_agent_tools", "basic_open_agent_tools.*"]
+module = ["strands", "strands.*", "pkg_resources", "basic_open_agent_tools", "basic_open_agent_tools.*", "google.adk", "google.adk.*", "langgraph", "langgraph.*", "detect_secrets", "detect_secrets.*", "mcp", "mcp.*"]
 ignore_missing_imports = true
 
 [tool.pytest.ini_options]

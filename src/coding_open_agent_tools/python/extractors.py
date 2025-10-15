@@ -9,9 +9,26 @@ This module provides extraction functions to pull structured data from Python co
 
 import ast
 import re
-from typing import Any
+from typing import Any, Callable
+
+try:
+    from strands import tool as strands_tool
+except ImportError:
+    # Create a no-op decorator if strands is not installed
+    def strands_tool(func: Callable[..., Any]) -> Callable[..., Any]:  # type: ignore[no-redef]
+        return func
 
 
+try:
+    from google.adk.tools import tool as adk_tool
+except ImportError:
+    # Create a no-op decorator if google-adk is not installed
+    def adk_tool(func: Callable[..., Any]) -> Callable[..., Any]:  # type: ignore[no-redef]
+        return func
+
+
+@adk_tool
+@strands_tool
 def parse_function_signature(source_code: str, function_name: str) -> dict[str, Any]:
     """Extract function signature components from Python code.
 
@@ -103,6 +120,8 @@ def parse_function_signature(source_code: str, function_name: str) -> dict[str, 
     }
 
 
+@adk_tool
+@strands_tool
 def extract_docstring_info(source_code: str, function_name: str) -> dict[str, Any]:
     """Extract structured information from a function's docstring.
 
@@ -270,6 +289,8 @@ def extract_docstring_info(source_code: str, function_name: str) -> dict[str, An
     }
 
 
+@adk_tool
+@strands_tool
 def extract_type_annotations(source_code: str) -> dict[str, Any]:
     """Extract all type annotations from Python source code.
 
@@ -353,6 +374,8 @@ def extract_type_annotations(source_code: str) -> dict[str, Any]:
     }
 
 
+@adk_tool
+@strands_tool
 def get_function_dependencies(source_code: str, function_name: str) -> dict[str, Any]:
     """Analyze function dependencies (calls, imports, global variables used).
 

@@ -9,10 +9,28 @@ from __future__ import annotations
 import json
 import shutil
 from pathlib import Path
+from typing import Any, Callable
 
 from .operations import execute_many, fetch_all
 
+try:
+    from strands import tool as strands_tool
+except ImportError:
+    # Create a no-op decorator if strands is not installed
+    def strands_tool(func: Callable[..., Any]) -> Callable[..., Any]:  # type: ignore[no-redef]
+        return func
 
+
+try:
+    from google.adk.tools import tool as adk_tool
+except ImportError:
+    # Create a no-op decorator if google-adk is not installed
+    def adk_tool(func: Callable[..., Any]) -> Callable[..., Any]:  # type: ignore[no-redef]
+        return func
+
+
+@adk_tool
+@strands_tool
 def export_to_json(db_path: str, table_name: str, output_file: str) -> dict[str, str]:
     """Export table data to a JSON file.
 
@@ -81,6 +99,8 @@ def export_to_json(db_path: str, table_name: str, output_file: str) -> dict[str,
     }
 
 
+@adk_tool
+@strands_tool
 def import_from_json(
     db_path: str, table_name: str, json_file: str, clear_table: str = "false"
 ) -> dict[str, str]:
@@ -195,6 +215,8 @@ def import_from_json(
     }
 
 
+@adk_tool
+@strands_tool
 def backup_database(db_path: str, backup_path: str) -> dict[str, str]:
     """Create a backup copy of the database.
 

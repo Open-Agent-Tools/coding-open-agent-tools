@@ -8,9 +8,26 @@ from __future__ import annotations
 
 import sqlite3
 from pathlib import Path
-from typing import Any
+from typing import Any, Callable
+
+try:
+    from strands import tool as strands_tool
+except ImportError:
+    # Create a no-op decorator if strands is not installed
+    def strands_tool(func: Callable[..., Any]) -> Callable[..., Any]:  # type: ignore[no-redef]
+        return func
 
 
+try:
+    from google.adk.tools import tool as adk_tool
+except ImportError:
+    # Create a no-op decorator if google-adk is not installed
+    def adk_tool(func: Callable[..., Any]) -> Callable[..., Any]:  # type: ignore[no-redef]
+        return func
+
+
+@adk_tool
+@strands_tool
 def inspect_schema(db_path: str) -> dict[str, Any]:
     """Inspect database schema and return structured information.
 
@@ -106,6 +123,8 @@ def inspect_schema(db_path: str) -> dict[str, Any]:
         conn.close()
 
 
+@adk_tool
+@strands_tool
 def create_table_from_dict(
     db_path: str, table_name: str, columns: dict[str, str]
 ) -> dict[str, str]:
@@ -181,6 +200,8 @@ def create_table_from_dict(
         conn.close()
 
 
+@adk_tool
+@strands_tool
 def add_column(
     db_path: str, table_name: str, column_name: str, column_type: str
 ) -> dict[str, str]:
@@ -258,6 +279,8 @@ def add_column(
         conn.close()
 
 
+@adk_tool
+@strands_tool
 def create_index(
     db_path: str, table_name: str, column_names: list[str], index_name: str = ""
 ) -> dict[str, str]:

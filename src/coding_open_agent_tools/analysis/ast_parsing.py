@@ -5,11 +5,28 @@ source files using the Abstract Syntax Tree (AST).
 """
 
 import ast
-from typing import Any
+from typing import Any, Callable
 
 from coding_open_agent_tools.exceptions import CodeAnalysisError
 
+try:
+    from strands import tool as strands_tool
+except ImportError:
+    # Create a no-op decorator if strands is not installed
+    def strands_tool(func: Callable[..., Any]) -> Callable[..., Any]:  # type: ignore[no-redef]
+        return func
 
+
+try:
+    from google.adk.tools import tool as adk_tool
+except ImportError:
+    # Create a no-op decorator if google-adk is not installed
+    def adk_tool(func: Callable[..., Any]) -> Callable[..., Any]:  # type: ignore[no-redef]
+        return func
+
+
+@adk_tool
+@strands_tool
 def parse_python_ast(file_path: str) -> dict[str, Any]:
     """Parse a Python file and extract complete AST structure.
 
@@ -84,6 +101,8 @@ def parse_python_ast(file_path: str) -> dict[str, Any]:
     }
 
 
+@adk_tool
+@strands_tool
 def extract_functions(file_path: str) -> list[dict[str, Any]]:
     """Extract all function definitions from a Python file.
 
@@ -170,6 +189,8 @@ def extract_functions(file_path: str) -> list[dict[str, Any]]:
     return functions
 
 
+@adk_tool
+@strands_tool
 def extract_classes(file_path: str) -> list[dict[str, Any]]:
     """Extract all class definitions from a Python file.
 
@@ -260,6 +281,8 @@ def extract_classes(file_path: str) -> list[dict[str, Any]]:
     return classes
 
 
+@adk_tool
+@strands_tool
 def extract_imports(file_path: str) -> dict[str, list[str]]:
     """Extract all import statements from a Python file.
 

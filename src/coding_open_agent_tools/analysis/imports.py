@@ -5,11 +5,28 @@ statements for code quality and consistency.
 """
 
 import ast
-from typing import Any
+from typing import Any, Callable
 
 from coding_open_agent_tools.exceptions import CodeAnalysisError
 
+try:
+    from strands import tool as strands_tool
+except ImportError:
+    # Create a no-op decorator if strands is not installed
+    def strands_tool(func: Callable[..., Any]) -> Callable[..., Any]:  # type: ignore[no-redef]
+        return func
 
+
+try:
+    from google.adk.tools import tool as adk_tool
+except ImportError:
+    # Create a no-op decorator if google-adk is not installed
+    def adk_tool(func: Callable[..., Any]) -> Callable[..., Any]:  # type: ignore[no-redef]
+        return func
+
+
+@adk_tool
+@strands_tool
 def find_unused_imports(file_path: str) -> list[str]:
     """Identify imports that are not used in the file.
 
@@ -83,6 +100,8 @@ def find_unused_imports(file_path: str) -> list[str]:
     return unused
 
 
+@adk_tool
+@strands_tool
 def organize_imports(file_path: str) -> str:
     """Sort and organize imports according to PEP 8 conventions.
 
@@ -213,6 +232,8 @@ def organize_imports(file_path: str) -> str:
     return "\n\n".join(result_parts)
 
 
+@adk_tool
+@strands_tool
 def validate_import_order(file_path: str) -> dict[str, Any]:
     """Check if imports follow PEP 8 ordering conventions.
 
