@@ -7,16 +7,62 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-### Added
-- **Confirmation Module**: Smart 3-mode confirmation system for future write/delete operations
-  - Bypass mode: `skip_confirm=True` or `BYPASS_TOOL_CONSENT=true` environment variable
-  - Interactive mode: TTY-enabled terminals prompt user with `y/n` confirmation
-  - Agent mode: Non-TTY environments raise `CONFIRMATION_REQUIRED` error with instructions
-  - Shares implementation with basic-open-agent-tools for consistency
-
 ### Planned
-- Shell script generation module
-- Python code generation module
+- SQLite database operations module (v0.3.5)
+- Git enhancement module with 60+ functions (v0.4.0)
+- Configuration validation module (v0.5.0)
+
+## [0.2.0] - 2025-10-15
+
+### Added
+- **Shell Validation & Security Module** (13 functions):
+  - Validators: `validate_shell_syntax`, `check_shell_dependencies`, `validate_shellcheck_integration`
+  - Security: `analyze_shell_security`, `detect_shell_injection_risks`
+  - Formatters: `escape_shell_argument`, `quote_shell_string`, `normalize_shebang`
+  - Parsers: `parse_shell_script`, `extract_shell_functions`, `extract_shell_variables`
+  - Analyzers: `detect_unquoted_variables`, `find_dangerous_commands`
+  - Enhanced secret scanning with optional detect-secrets integration
+
+- **Python Validation & Analysis Module** (15 functions):
+  - Validators: `validate_python_syntax`, `validate_type_hints`, `validate_import_order`, `check_adk_compliance`
+  - Extractors: `parse_function_signature`, `extract_docstring_info`, `extract_type_annotations`, `get_function_dependencies`
+  - Formatters: `format_docstring`, `sort_imports`, `normalize_type_hints`
+  - Analyzers: `detect_circular_imports`, `find_unused_imports`, `identify_anti_patterns`, `check_test_coverage_gaps`
+
+- **Helper Functions**:
+  - `load_all_shell_tools()` - Load all 13 shell functions
+  - `load_all_python_tools()` - Load all 15 python functions
+  - Updated `load_all_tools()` to include shell and python modules (66 total)
+
+### Testing
+- Added 271 new tests (127 shell + 144 python)
+- Total: 451 tests passing in 3.78s
+- Code coverage: 86% overall (exceeds 80% target)
+- Shell module: 87-95% coverage per file
+- Python module: 85-96% coverage per file
+
+### Documentation
+- Updated ROADMAP.md with comprehensive Git Enhancement Module (v0.4.0)
+- Added 60+ git functions across 11 subcategories
+- Updated TODO.md with v0.2.0 completion status
+- Expanded SQLite module planning to 16 functions
+
+### Quality
+- 100% ruff compliance maintained
+- 100% mypy --strict compliance maintained
+- Fixed optional dependency imports (detect-secrets)
+
+## [0.1.1] - 2025-10-14
+
+### Added
+- GitHub infrastructure (issue templates, PR templates, CODEOWNERS)
+- Automation workflows (stale bot, auto-greet, auto-labeler)
+- Repository topics and enhanced description
+- GitHub Discussions enabled
+
+### Documentation
+- Complete community documentation set
+- Enhanced README with badges and quick start
 
 ## [0.1.0-beta] - 2024-10-14
 
