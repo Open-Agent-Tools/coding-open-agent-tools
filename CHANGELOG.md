@@ -7,6 +7,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+- **Confirmation Module**: Smart 3-mode confirmation system for future write/delete operations
+  - Bypass mode: `skip_confirm=True` or `BYPASS_TOOL_CONSENT=true` environment variable
+  - Interactive mode: TTY-enabled terminals prompt user with `y/n` confirmation
+  - Agent mode: Non-TTY environments raise `CONFIRMATION_REQUIRED` error with instructions
+  - Shares implementation with basic-open-agent-tools for consistency
+
 ### Planned
 - Shell script generation module
 - Python code generation module

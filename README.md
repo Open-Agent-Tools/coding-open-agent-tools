@@ -134,6 +134,7 @@ func = coat.generate_python_function(
 4. **Type Safety**: Full mypy compliance with comprehensive type hints
 5. **High Quality**: 100% ruff compliance, comprehensive testing (80%+ coverage)
 6. **Agent-First Design**: Functions designed for LLM comprehension and use
+7. **Smart Confirmation**: 3-mode confirmation system (bypass/interactive/agent) for write/delete operations
 
 ### Additional Focus Areas
 
