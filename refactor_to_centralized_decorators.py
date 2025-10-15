@@ -42,14 +42,15 @@ MODULE_FILES = [
 
 # Pattern to match the conditional import blocks
 DECORATOR_PATTERN = re.compile(
-    r'try:\s+from strands import tool as strands_tool\s+'
-    r'except ImportError:\s+.*?def strands_tool\(func: Callable\[\.\.\..*?\]\) -> Callable\[\.\.\..*?\]:.*?'
-    r'return func\s+'
-    r'try:\s+from google\.adk\.tools import tool as adk_tool\s+'
-    r'except ImportError:\s+.*?def adk_tool\(func: Callable\[\.\.\..*?\]\) -> Callable\[\.\.\..*?\]:.*?'
-    r'return func',
-    re.DOTALL | re.MULTILINE
+    r"try:\s+from strands import tool as strands_tool\s+"
+    r"except ImportError:\s+.*?def strands_tool\(func: Callable\[\.\.\..*?\]\) -> Callable\[\.\.\..*?\]:.*?"
+    r"return func\s+"
+    r"try:\s+from google\.adk\.tools import tool as adk_tool\s+"
+    r"except ImportError:\s+.*?def adk_tool\(func: Callable\[\.\.\..*?\]\) -> Callable\[\.\.\..*?\]:.*?"
+    r"return func",
+    re.DOTALL | re.MULTILINE,
 )
+
 
 def process_file(file_path: Path) -> bool:
     """Process a single file to replace decorator imports.
@@ -65,23 +66,23 @@ def process_file(file_path: Path) -> bool:
         return False
 
     # Remove the conditional import blocks
-    new_content = DECORATOR_PATTERN.sub('', content)
+    new_content = DECORATOR_PATTERN.sub("", content)
 
     # Check if file uses Callable or Any elsewhere (beyond decorators)
     # Look for uses of Callable/Any in type hints, function signatures, etc.
     uses_typing = False
-    for line in new_content.split('\n'):
+    for line in new_content.split("\n"):
         # Skip import lines
-        if line.strip().startswith('import ') or line.strip().startswith('from '):
+        if line.strip().startswith("import ") or line.strip().startswith("from "):
             continue
         # Check if Callable or Any used in the code
-        if 'Callable' in line or 'Any' in line:
+        if "Callable" in line or "Any" in line:
             uses_typing = True
             break
 
     # Find where to insert the new import
     # Look for the first import statement or after docstring
-    lines = new_content.split('\n')
+    lines = new_content.split("\n")
     insert_index = 0
     in_docstring = False
     docstring_char = None
@@ -105,7 +106,7 @@ def process_file(file_path: Path) -> bool:
             continue
 
         # Found first import line
-        if stripped.startswith('import ') or stripped.startswith('from '):
+        if stripped.startswith("import ") or stripped.startswith("from "):
             insert_index = i
             break
 
@@ -114,23 +115,26 @@ def process_file(file_path: Path) -> bool:
 
     # Add typing import if needed
     if uses_typing:
-        import_lines.append('from typing import Any, Callable')
-        import_lines.append('')
+        import_lines.append("from typing import Any, Callable")
+        import_lines.append("")
 
     # Add centralized decorator import
-    import_lines.append('from coding_open_agent_tools._decorators import adk_tool, strands_tool')
+    import_lines.append(
+        "from coding_open_agent_tools._decorators import adk_tool, strands_tool"
+    )
 
     # Insert the new imports
-    lines.insert(insert_index, '\n'.join(import_lines))
-    new_content = '\n'.join(lines)
+    lines.insert(insert_index, "\n".join(import_lines))
+    new_content = "\n".join(lines)
 
     # Clean up excessive blank lines (more than 2 in a row)
-    new_content = re.sub(r'\n\n\n+', '\n\n', new_content)
+    new_content = re.sub(r"\n\n\n+", "\n\n", new_content)
 
     # Write the updated content
     file_path.write_text(new_content)
     print(f"✅ Updated {file_path.name}")
     return True
+
 
 def main() -> None:
     """Process all module files."""
@@ -147,6 +151,7 @@ def main() -> None:
             updated_count += 1
 
     print(f"\n✨ Refactoring complete! Updated {updated_count} files.")
+
 
 if __name__ == "__main__":
     main()

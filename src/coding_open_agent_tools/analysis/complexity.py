@@ -93,6 +93,7 @@ def calculate_complexity(file_path: str) -> dict[str, Any]:
         "total_functions": len(complexities),
     }
 
+
 @adk_tool
 @strands_tool
 def calculate_function_complexity(file_path: str, function_name: str) -> int:
@@ -148,6 +149,7 @@ def calculate_function_complexity(file_path: str, function_name: str) -> int:
                 return complexity
 
     raise CodeAnalysisError(f"Function '{function_name}' not found in {file_path}")
+
 
 @adk_tool
 @strands_tool
@@ -239,6 +241,7 @@ def get_code_metrics(file_path: str) -> dict[str, Any]:
         "class_count": class_count,
     }
 
+
 @adk_tool
 @strands_tool
 def identify_complex_functions(file_path: str, threshold: int) -> list[dict[str, Any]]:
@@ -324,6 +327,7 @@ def identify_complex_functions(file_path: str, threshold: int) -> list[dict[str,
                 )
 
     return complex_functions
+
 
 @adk_tool
 @strands_tool

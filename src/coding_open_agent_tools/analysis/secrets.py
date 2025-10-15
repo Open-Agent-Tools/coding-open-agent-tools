@@ -97,6 +97,7 @@ def scan_for_secrets(file_path: str) -> list[dict[str, Any]]:
 
     return findings
 
+
 @adk_tool
 @strands_tool
 def scan_directory_for_secrets(directory_path: str) -> list[dict[str, Any]]:
@@ -167,6 +168,7 @@ def scan_directory_for_secrets(directory_path: str) -> list[dict[str, Any]]:
         raise CodeAnalysisError(f"Error scanning directory {directory_path}: {str(e)}")
 
     return all_findings
+
 
 @adk_tool
 @strands_tool

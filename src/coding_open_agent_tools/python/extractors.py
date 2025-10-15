@@ -106,6 +106,7 @@ def parse_function_signature(source_code: str, function_name: str) -> dict[str, 
         "total_parameters": str(len(parameters)),
     }
 
+
 @adk_tool
 @strands_tool
 def extract_docstring_info(source_code: str, function_name: str) -> dict[str, Any]:
@@ -274,6 +275,7 @@ def extract_docstring_info(source_code: str, function_name: str) -> dict[str, An
         "style": style,
     }
 
+
 @adk_tool
 @strands_tool
 def extract_type_annotations(source_code: str) -> dict[str, Any]:
@@ -357,6 +359,7 @@ def extract_type_annotations(source_code: str) -> dict[str, Any]:
         "total_functions": str(len(functions)),
         "total_variables": str(len(variables)),
     }
+
 
 @adk_tool
 @strands_tool

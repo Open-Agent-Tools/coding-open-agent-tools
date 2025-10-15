@@ -43,7 +43,10 @@ if [ -f /tmp/test ]; then
 """
         result = validate_shell_syntax(script, "bash")
         assert result["is_valid"] == "false"
-        assert "fi" in result["error_message"].lower() or "end" in result["error_message"].lower()
+        assert (
+            "fi" in result["error_message"].lower()
+            or "end" in result["error_message"].lower()
+        )
 
     def test_sh_shell_type(self):
         """Test validation with sh shell type."""
@@ -119,7 +122,7 @@ awk '{print $1}' data.csv
 
     def test_command_substitution(self):
         """Test detection of commands in command substitution."""
-        script = 'result=$(date +%Y%m%d)'
+        script = "result=$(date +%Y%m%d)"
         result = check_shell_dependencies(script)
         assert "date" in result["commands_used"]
 
@@ -146,7 +149,9 @@ nonexistent_command_xyz123
 """
         result = check_shell_dependencies(script)
         # ls should be available on most systems
-        assert "ls" in result["commands_available"] or "ls" in result["commands_missing"]
+        assert (
+            "ls" in result["commands_available"] or "ls" in result["commands_missing"]
+        )
         # This command definitely doesn't exist
         assert "nonexistent_command_xyz123" in result["commands_missing"]
 

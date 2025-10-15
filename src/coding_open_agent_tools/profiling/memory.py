@@ -126,6 +126,7 @@ def measure_memory_usage(
         "top_allocations": top_allocations,
     }
 
+
 @adk_tool
 @strands_tool
 def detect_memory_leaks(
@@ -258,6 +259,7 @@ def detect_memory_leaks(
                 )
 
     return results
+
 
 @adk_tool
 @strands_tool

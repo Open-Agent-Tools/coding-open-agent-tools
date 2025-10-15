@@ -68,6 +68,7 @@ def validate_python_syntax(source_code: str) -> dict[str, str]:
             "error_type": type(e).__name__,
         }
 
+
 @adk_tool
 @strands_tool
 def validate_type_hints(source_code: str) -> dict[str, Any]:
@@ -193,6 +194,7 @@ def validate_type_hints(source_code: str) -> dict[str, Any]:
         "total_issues": str(len(issues)),
         "functions_checked": str(functions_checked),
     }
+
 
 @adk_tool
 @strands_tool
@@ -330,6 +332,7 @@ def validate_import_order(source_code: str) -> dict[str, Any]:
         "imports_checked": str(imports_checked),
     }
 
+
 @adk_tool
 @strands_tool
 def check_adk_compliance(source_code: str, function_name: str) -> dict[str, Any]:
@@ -464,6 +467,7 @@ def check_adk_compliance(source_code: str, function_name: str) -> dict[str, Any]
         "total_issues": str(len(issues)),
         "function_name": function_name,
     }
+
 
 @adk_tool
 @strands_tool

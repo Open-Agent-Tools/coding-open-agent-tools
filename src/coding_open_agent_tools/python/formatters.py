@@ -168,6 +168,7 @@ def format_docstring(docstring: str, style: str, line_length: str) -> dict[str, 
         "changes_made": "; ".join(changes),
     }
 
+
 @adk_tool
 @strands_tool
 def sort_imports(source_code: str) -> dict[str, Any]:
@@ -316,6 +317,7 @@ def sort_imports(source_code: str) -> dict[str, Any]:
         "total_imports": str(len(import_lines)),
     }
 
+
 @adk_tool
 @strands_tool
 def normalize_type_hints(source_code: str) -> dict[str, Any]:
@@ -451,6 +453,7 @@ def normalize_type_hints(source_code: str) -> dict[str, Any]:
         "deprecated_typing_removed": deprecated_typing_removed,
     }
 
+
 @adk_tool
 @strands_tool
 def _wrap_text(text: str, max_length: int) -> list[str]:
@@ -487,6 +490,7 @@ def _wrap_text(text: str, max_length: int) -> list[str]:
         lines.append(" ".join(current_line))
 
     return lines
+
 
 @adk_tool
 @strands_tool
@@ -560,6 +564,7 @@ def _classify_import(import_name: str) -> str:
         ):
             return "local"
         return "third_party"
+
 
 @adk_tool
 @strands_tool

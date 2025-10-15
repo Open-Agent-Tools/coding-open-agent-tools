@@ -40,6 +40,7 @@ MODULE_FILES = [
     "src/coding_open_agent_tools/git/history.py",
 ]
 
+
 def process_file(file_path: Path) -> bool:
     """Process a single file to replace decorator imports.
 
@@ -50,40 +51,40 @@ def process_file(file_path: Path) -> bool:
 
     # Remove the decorators import if already added by v1
     content = re.sub(
-        r'from coding_open_agent_tools\._decorators import adk_tool, strands_tool\n',
-        '',
-        content
+        r"from coding_open_agent_tools\._decorators import adk_tool, strands_tool\n",
+        "",
+        content,
     )
 
     # Remove conditional import blocks for strands
     content = re.sub(
-        r'try:\s+from strands import tool as strands_tool\s+'
-        r'except ImportError:\s+.*?def strands_tool\(func: Callable\[\.\.\..*?\]\) -> Callable\[\.\.\..*?\]:.*?'
-        r'return func\s+',
-        '',
+        r"try:\s+from strands import tool as strands_tool\s+"
+        r"except ImportError:\s+.*?def strands_tool\(func: Callable\[\.\.\..*?\]\) -> Callable\[\.\.\..*?\]:.*?"
+        r"return func\s+",
+        "",
         content,
-        flags=re.DOTALL
+        flags=re.DOTALL,
     )
 
     # Remove conditional import blocks for adk_tool
     content = re.sub(
-        r'try:\s+from google\.adk\.tools import tool as adk_tool\s+'
-        r'except ImportError:\s+.*?def adk_tool\(func: Callable\[\.\.\..*?\]\) -> Callable\[\.\.\..*?\]:.*?'
-        r'return func\s+',
-        '',
+        r"try:\s+from google\.adk\.tools import tool as adk_tool\s+"
+        r"except ImportError:\s+.*?def adk_tool\(func: Callable\[\.\.\..*?\]\) -> Callable\[\.\.\..*?\]:.*?"
+        r"return func\s+",
+        "",
         content,
-        flags=re.DOTALL
+        flags=re.DOTALL,
     )
 
     # Remove duplicate "from typing import Any, Callable" lines
-    lines = content.split('\n')
+    lines = content.split("\n")
     seen_typing_import = False
     cleaned_lines = []
     decorator_import_added = False
 
     for i, line in enumerate(lines):
         # Skip duplicate typing imports
-        if line.strip() == 'from typing import Any, Callable':
+        if line.strip() == "from typing import Any, Callable":
             if seen_typing_import:
                 continue  # Skip duplicate
             seen_typing_import = True
@@ -91,10 +92,14 @@ def process_file(file_path: Path) -> bool:
         # Add decorator import right after first typing import
         if seen_typing_import and not decorator_import_added and line.strip():
             # Check if this is still an import line or if we've moved past imports
-            if not (line.strip().startswith('import ') or line.strip().startswith('from ')):
+            if not (
+                line.strip().startswith("import ") or line.strip().startswith("from ")
+            ):
                 # We're past imports, insert decorator import before this line
-                cleaned_lines.append('')
-                cleaned_lines.append('from coding_open_agent_tools._decorators import adk_tool, strands_tool')
+                cleaned_lines.append("")
+                cleaned_lines.append(
+                    "from coding_open_agent_tools._decorators import adk_tool, strands_tool"
+                )
                 decorator_import_added = True
 
         cleaned_lines.append(line)
@@ -103,20 +108,24 @@ def process_file(file_path: Path) -> bool:
     if not decorator_import_added:
         # Find the last import line
         for i in range(len(cleaned_lines) - 1, -1, -1):
-            if cleaned_lines[i].strip().startswith(('import ', 'from ')):
-                cleaned_lines.insert(i + 1, '')
-                cleaned_lines.insert(i + 2, 'from coding_open_agent_tools._decorators import adk_tool, strands_tool')
+            if cleaned_lines[i].strip().startswith(("import ", "from ")):
+                cleaned_lines.insert(i + 1, "")
+                cleaned_lines.insert(
+                    i + 2,
+                    "from coding_open_agent_tools._decorators import adk_tool, strands_tool",
+                )
                 break
 
-    content = '\n'.join(cleaned_lines)
+    content = "\n".join(cleaned_lines)
 
     # Clean up excessive blank lines (more than 2 in a row)
-    content = re.sub(r'\n\n\n+', '\n\n', content)
+    content = re.sub(r"\n\n\n+", "\n\n", content)
 
     # Write the updated content
     file_path.write_text(content)
     print(f"✅ Cleaned up {file_path.name}")
     return True
+
 
 def main() -> None:
     """Process all module files."""
@@ -133,6 +142,7 @@ def main() -> None:
             updated_count += 1
 
     print(f"\n✨ Cleanup complete! Updated {updated_count} files.")
+
 
 if __name__ == "__main__":
     main()

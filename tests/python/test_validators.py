@@ -42,7 +42,10 @@ return 'bad indent'
 """
         result = validate_python_syntax(code)
         assert result["is_valid"] == "false"
-        assert "indent" in result["error_message"].lower() or result["error_type"] == "IndentationError"
+        assert (
+            "indent" in result["error_message"].lower()
+            or result["error_type"] == "IndentationError"
+        )
 
     def test_type_error_non_string(self):
         """Test TypeError for non-string input."""
@@ -84,7 +87,10 @@ def process(data: str):
         result = validate_type_hints(code)
         assert result["is_valid"] == "false"
         assert len(result["issues_found"]) > 0
-        assert any(issue["issue_type"] == "missing_return_type" for issue in result["issues_found"])
+        assert any(
+            issue["issue_type"] == "missing_return_type"
+            for issue in result["issues_found"]
+        )
 
     def test_missing_parameter_type(self):
         """Test detection of missing parameter type."""
@@ -94,7 +100,10 @@ def greet(name) -> str:
 """
         result = validate_type_hints(code)
         assert result["is_valid"] == "false"
-        assert any(issue["issue_type"] == "missing_parameter_type" for issue in result["issues_found"])
+        assert any(
+            issue["issue_type"] == "missing_parameter_type"
+            for issue in result["issues_found"]
+        )
 
     def test_deprecated_typing_list(self):
         """Test detection of deprecated List from typing."""
@@ -106,7 +115,10 @@ def get_names() -> List[str]:
 """
         result = validate_type_hints(code)
         assert result["is_valid"] == "false"
-        assert any(issue["issue_type"] == "deprecated_typing" for issue in result["issues_found"])
+        assert any(
+            issue["issue_type"] == "deprecated_typing"
+            for issue in result["issues_found"]
+        )
         assert any("List" in issue["description"] for issue in result["issues_found"])
 
     def test_deprecated_typing_dict(self):
@@ -130,7 +142,11 @@ class MyClass:
 """
         result = validate_type_hints(code)
         # Should not flag __init__ as missing return type
-        init_issues = [i for i in result["issues_found"] if "issue_type" in i and i["issue_type"] == "missing_return_type"]
+        init_issues = [
+            i
+            for i in result["issues_found"]
+            if "issue_type" in i and i["issue_type"] == "missing_return_type"
+        ]
         assert len(init_issues) == 0
 
     def test_self_parameter_ok(self):
@@ -142,7 +158,9 @@ class MyClass:
 """
         result = validate_type_hints(code)
         # Should not flag 'self' as missing type
-        self_issues = [i for i in result["issues_found"] if "'self'" in i.get("description", "")]
+        self_issues = [
+            i for i in result["issues_found"] if "'self'" in i.get("description", "")
+        ]
         assert len(self_issues) == 0
 
     def test_syntax_error_handling(self):
@@ -185,7 +203,10 @@ import os
 """
         result = validate_import_order(code)
         assert result["is_valid"] == "false"
-        assert any(issue["issue_type"] == "incorrect_group_order" for issue in result["issues_found"])
+        assert any(
+            issue["issue_type"] == "incorrect_group_order"
+            for issue in result["issues_found"]
+        )
 
     def test_incorrect_alphabetical_order(self):
         """Test detection of incorrect alphabetical ordering."""
@@ -195,7 +216,10 @@ import os
 """
         result = validate_import_order(code)
         assert result["is_valid"] == "false"
-        assert any(issue["issue_type"] == "incorrect_alphabetical_order" for issue in result["issues_found"])
+        assert any(
+            issue["issue_type"] == "incorrect_alphabetical_order"
+            for issue in result["issues_found"]
+        )
 
     def test_no_imports(self):
         """Test code with no imports."""
@@ -258,7 +282,10 @@ def process_data(input_data: str):
 """
         result = check_adk_compliance(code, "process_data")
         assert result["is_compliant"] == "false"
-        assert any(issue["issue_type"] == "missing_return_type" for issue in result["issues_found"])
+        assert any(
+            issue["issue_type"] == "missing_return_type"
+            for issue in result["issues_found"]
+        )
 
     def test_default_parameter_values(self):
         """Test detection of default parameter values (not allowed in ADK)."""
@@ -268,7 +295,10 @@ def process_data(input_data: str = "default") -> str:
 """
         result = check_adk_compliance(code, "process_data")
         assert result["is_compliant"] == "false"
-        assert any(issue["issue_type"] == "default_parameter_values" for issue in result["issues_found"])
+        assert any(
+            issue["issue_type"] == "default_parameter_values"
+            for issue in result["issues_found"]
+        )
 
     def test_missing_parameter_type(self):
         """Test detection of missing parameter type."""
@@ -278,7 +308,10 @@ def process_data(input_data) -> str:
 """
         result = check_adk_compliance(code, "process_data")
         assert result["is_compliant"] == "false"
-        assert any(issue["issue_type"] == "missing_parameter_type" for issue in result["issues_found"])
+        assert any(
+            issue["issue_type"] == "missing_parameter_type"
+            for issue in result["issues_found"]
+        )
 
     def test_non_json_serializable_return(self):
         """Test detection of non-JSON-serializable return types."""
@@ -288,7 +321,10 @@ def get_items() -> set[str]:
 """
         result = check_adk_compliance(code, "get_items")
         assert result["is_compliant"] == "false"
-        assert any(issue["issue_type"] == "non_json_serializable_return" for issue in result["issues_found"])
+        assert any(
+            issue["issue_type"] == "non_json_serializable_return"
+            for issue in result["issues_found"]
+        )
 
     def test_bytes_return_type(self):
         """Test detection of bytes return type (not JSON-serializable)."""
@@ -314,7 +350,9 @@ def other_function() -> str:
         code = "def broken("
         result = check_adk_compliance(code, "broken")
         assert result["is_compliant"] == "false"
-        assert any(issue["issue_type"] == "syntax_error" for issue in result["issues_found"])
+        assert any(
+            issue["issue_type"] == "syntax_error" for issue in result["issues_found"]
+        )
 
     def test_type_error_source_code(self):
         """Test TypeError for non-string source_code."""

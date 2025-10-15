@@ -177,20 +177,27 @@ class TestIdentifyAntiPatterns:
         code = """result = eval(user_input)"""
         result = identify_anti_patterns(code)
         assert result["has_anti_patterns"] == "true"
-        assert any(issue["issue_type"] == "dangerous_eval" for issue in result["issues_found"])
+        assert any(
+            issue["issue_type"] == "dangerous_eval" for issue in result["issues_found"]
+        )
         assert any(issue["severity"] == "critical" for issue in result["issues_found"])
 
     def test_exec_usage(self):
         """Test detection of exec() usage."""
         code = """exec(malicious_code)"""
         result = identify_anti_patterns(code)
-        assert any(issue["issue_type"] == "dangerous_exec" for issue in result["issues_found"])
+        assert any(
+            issue["issue_type"] == "dangerous_exec" for issue in result["issues_found"]
+        )
 
     def test_compile_usage(self):
         """Test detection of compile() usage."""
         code = """compiled = compile(source, "file", "exec")"""
         result = identify_anti_patterns(code)
-        assert any(issue["issue_type"] == "dangerous_compile" for issue in result["issues_found"])
+        assert any(
+            issue["issue_type"] == "dangerous_compile"
+            for issue in result["issues_found"]
+        )
 
     def test_pickle_usage(self):
         """Test detection of unsafe pickle usage."""
@@ -199,7 +206,9 @@ class TestIdentifyAntiPatterns:
 data = pickle.loads(untrusted_data)
 """
         result = identify_anti_patterns(code)
-        assert any(issue["issue_type"] == "unsafe_pickle" for issue in result["issues_found"])
+        assert any(
+            issue["issue_type"] == "unsafe_pickle" for issue in result["issues_found"]
+        )
 
     def test_bare_except(self):
         """Test detection of bare except clause."""
@@ -209,7 +218,9 @@ except:
     pass
 """
         result = identify_anti_patterns(code)
-        assert any(issue["issue_type"] == "bare_except" for issue in result["issues_found"])
+        assert any(
+            issue["issue_type"] == "bare_except" for issue in result["issues_found"]
+        )
 
     def test_mutable_default_argument(self):
         """Test detection of mutable default arguments."""
@@ -218,7 +229,9 @@ except:
     return target
 """
         result = identify_anti_patterns(code)
-        assert any(issue["issue_type"] == "mutable_default" for issue in result["issues_found"])
+        assert any(
+            issue["issue_type"] == "mutable_default" for issue in result["issues_found"]
+        )
 
     def test_long_function(self):
         """Test detection of long functions."""
@@ -227,7 +240,9 @@ except:
         code = "\n".join(lines)
 
         result = identify_anti_patterns(code)
-        assert any(issue["issue_type"] == "long_function" for issue in result["issues_found"])
+        assert any(
+            issue["issue_type"] == "long_function" for issue in result["issues_found"]
+        )
 
     def test_string_concat_in_loop(self):
         """Test detection of string concatenation in loop."""
@@ -236,7 +251,10 @@ for item in items:
     result += str(item)
 """
         result = identify_anti_patterns(code)
-        assert any(issue["issue_type"] == "string_concat_in_loop" for issue in result["issues_found"])
+        assert any(
+            issue["issue_type"] == "string_concat_in_loop"
+            for issue in result["issues_found"]
+        )
 
     def test_clean_code(self):
         """Test that clean code has no anti-patterns."""
@@ -288,14 +306,18 @@ class TestCheckTestCoverageGaps:
 
     def test_full_coverage(self):
         """Test source with full test coverage."""
-        with tempfile.NamedTemporaryFile(mode="w", suffix=".py", delete=False) as source_file:
+        with tempfile.NamedTemporaryFile(
+            mode="w", suffix=".py", delete=False
+        ) as source_file:
             source_file.write("""
 def process(data: str) -> str:
     return data.upper()
 """)
             source_path = source_file.name
 
-        with tempfile.NamedTemporaryFile(mode="w", suffix=".py", delete=False) as test_file:
+        with tempfile.NamedTemporaryFile(
+            mode="w", suffix=".py", delete=False
+        ) as test_file:
             test_file.write("""
 from source import process
 
@@ -314,7 +336,9 @@ def test_process():
 
     def test_coverage_gaps(self):
         """Test detection of coverage gaps."""
-        with tempfile.NamedTemporaryFile(mode="w", suffix=".py", delete=False) as source_file:
+        with tempfile.NamedTemporaryFile(
+            mode="w", suffix=".py", delete=False
+        ) as source_file:
             source_file.write("""
 def tested_function():
     pass
@@ -324,7 +348,9 @@ def untested_function():
 """)
             source_path = source_file.name
 
-        with tempfile.NamedTemporaryFile(mode="w", suffix=".py", delete=False) as test_file:
+        with tempfile.NamedTemporaryFile(
+            mode="w", suffix=".py", delete=False
+        ) as test_file:
             test_file.write("""
 def test_tested_function():
     tested_function()
@@ -341,7 +367,9 @@ def test_tested_function():
 
     def test_coverage_ratio(self):
         """Test coverage ratio calculation."""
-        with tempfile.NamedTemporaryFile(mode="w", suffix=".py", delete=False) as source_file:
+        with tempfile.NamedTemporaryFile(
+            mode="w", suffix=".py", delete=False
+        ) as source_file:
             source_file.write("""
 def func1():
     pass
@@ -351,7 +379,9 @@ def func2():
 """)
             source_path = source_file.name
 
-        with tempfile.NamedTemporaryFile(mode="w", suffix=".py", delete=False) as test_file:
+        with tempfile.NamedTemporaryFile(
+            mode="w", suffix=".py", delete=False
+        ) as test_file:
             test_file.write("""
 def test_func1():
     func1()
@@ -368,11 +398,15 @@ def test_func1():
 
     def test_recommendation_provided(self):
         """Test that recommendations are provided."""
-        with tempfile.NamedTemporaryFile(mode="w", suffix=".py", delete=False) as source_file:
+        with tempfile.NamedTemporaryFile(
+            mode="w", suffix=".py", delete=False
+        ) as source_file:
             source_file.write("def func(): pass\n")
             source_path = source_file.name
 
-        with tempfile.NamedTemporaryFile(mode="w", suffix=".py", delete=False) as test_file:
+        with tempfile.NamedTemporaryFile(
+            mode="w", suffix=".py", delete=False
+        ) as test_file:
             test_file.write("# no tests\n")
             test_path = test_file.name
 
@@ -406,7 +440,9 @@ def test_func1():
 
     def test_test_file_not_exists(self):
         """Test error when test file doesn't exist."""
-        with tempfile.NamedTemporaryFile(mode="w", suffix=".py", delete=False) as source_file:
+        with tempfile.NamedTemporaryFile(
+            mode="w", suffix=".py", delete=False
+        ) as source_file:
             source_file.write("pass\n")
             source_path = source_file.name
 

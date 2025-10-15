@@ -108,6 +108,7 @@ def validate_shell_syntax(script_content: str, shell_type: str) -> dict[str, str
     except Exception as e:
         raise ToolExecutionError(f"Failed to validate shell syntax: {e}") from e
 
+
 @adk_tool
 @strands_tool
 def check_shell_dependencies(script_content: str) -> dict[str, Any]:
@@ -192,6 +193,7 @@ def check_shell_dependencies(script_content: str) -> dict[str, Any]:
         "commands_missing": missing,
         "total_commands": str(len(commands)),
     }
+
 
 # Shell keywords and built-ins to exclude from command detection
 _SHELL_KEYWORDS = {

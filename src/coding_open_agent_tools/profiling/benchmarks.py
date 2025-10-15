@@ -121,6 +121,7 @@ def benchmark_execution(
         "total_time": round(sum(times), 6),
     }
 
+
 @adk_tool
 @strands_tool
 def compare_implementations(

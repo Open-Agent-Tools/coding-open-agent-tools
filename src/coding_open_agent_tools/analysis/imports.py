@@ -85,6 +85,7 @@ def find_unused_imports(file_path: str) -> list[str]:
 
     return unused
 
+
 @adk_tool
 @strands_tool
 def organize_imports(file_path: str) -> str:
@@ -215,6 +216,7 @@ def organize_imports(file_path: str) -> str:
         result_parts.append("\n".join(local_imports))
 
     return "\n\n".join(result_parts)
+
 
 @adk_tool
 @strands_tool

@@ -125,6 +125,7 @@ def get_git_log(repository_path: str, max_count: int) -> list[dict[str, Any]]:
     except subprocess.CalledProcessError as e:
         raise GitError(f"Git command failed: {e.stderr}")
 
+
 @adk_tool
 @strands_tool
 def get_git_blame(repository_path: str, file_path: str) -> list[dict[str, Any]]:
@@ -235,6 +236,7 @@ def get_git_blame(repository_path: str, file_path: str) -> list[dict[str, Any]]:
     except subprocess.CalledProcessError as e:
         raise GitError(f"Git command failed: {e.stderr}")
 
+
 @adk_tool
 @strands_tool
 def get_file_history(repository_path: str, file_path: str) -> list[dict[str, Any]]:
@@ -343,6 +345,7 @@ def get_file_history(repository_path: str, file_path: str) -> list[dict[str, Any
 
     except subprocess.CalledProcessError as e:
         raise GitError(f"Git command failed: {e.stderr}")
+
 
 @adk_tool
 @strands_tool

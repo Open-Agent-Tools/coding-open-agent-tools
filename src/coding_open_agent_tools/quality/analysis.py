@@ -53,6 +53,7 @@ def filter_issues_by_severity(
 
     return filtered
 
+
 @adk_tool
 @strands_tool
 def group_issues_by_file(
@@ -96,6 +97,7 @@ def group_issues_by_file(
         grouped[file_path].append(issue)
 
     return grouped
+
 
 @adk_tool
 @strands_tool

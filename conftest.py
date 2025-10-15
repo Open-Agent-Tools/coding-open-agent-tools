@@ -9,7 +9,8 @@ def pytest_configure(config):
     """Configure pytest with custom settings."""
     # Ensure agent evaluation tests run sequentially
     config.addinivalue_line(
-        "markers", "agent_evaluation: marks tests as agent evaluation tests (run sequentially)"
+        "markers",
+        "agent_evaluation: marks tests as agent evaluation tests (run sequentially)",
     )
 
 

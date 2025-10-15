@@ -1,6 +1,5 @@
 """Tests for shell parsers and analyzers modules."""
 
-
 from coding_open_agent_tools.shell.analyzers import (
     check_error_handling,
     detect_unquoted_variables,

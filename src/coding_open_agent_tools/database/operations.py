@@ -71,6 +71,7 @@ def create_sqlite_database(db_path: str) -> dict[str, str]:
         "message": message,
     }
 
+
 @adk_tool
 @strands_tool
 def execute_query(
@@ -126,6 +127,7 @@ def execute_query(
         }
     finally:
         conn.close()
+
 
 @adk_tool
 @strands_tool
@@ -184,6 +186,7 @@ def execute_many(
         }
     finally:
         conn.close()
+
 
 @adk_tool
 @strands_tool
@@ -245,6 +248,7 @@ def fetch_all(
         }
     finally:
         conn.close()
+
 
 @adk_tool
 @strands_tool

@@ -109,6 +109,7 @@ def inspect_schema(db_path: str) -> dict[str, Any]:
     finally:
         conn.close()
 
+
 @adk_tool
 @strands_tool
 def create_table_from_dict(
@@ -184,6 +185,7 @@ def create_table_from_dict(
         }
     finally:
         conn.close()
+
 
 @adk_tool
 @strands_tool
@@ -262,6 +264,7 @@ def add_column(
         }
     finally:
         conn.close()
+
 
 @adk_tool
 @strands_tool

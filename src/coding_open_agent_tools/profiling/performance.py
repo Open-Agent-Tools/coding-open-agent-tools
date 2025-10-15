@@ -122,6 +122,7 @@ def profile_function(
         "top_functions": top_functions,
     }
 
+
 @adk_tool
 @strands_tool
 def profile_script(file_path: str) -> dict[str, Any]:
@@ -207,6 +208,7 @@ def profile_script(file_path: str) -> dict[str, Any]:
         "primitive_calls": stats.prim_calls,  # type: ignore[attr-defined]
         "top_functions": top_functions,
     }
+
 
 @adk_tool
 @strands_tool

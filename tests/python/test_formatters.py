@@ -117,7 +117,9 @@ import os
 """
         result = sort_imports(code)
         assert "import os" in result["sorted_code"]
-        assert result["sorted_code"].index("import os") < result["sorted_code"].index("import sys")
+        assert result["sorted_code"].index("import os") < result["sorted_code"].index(
+            "import sys"
+        )
 
     def test_group_imports(self):
         """Test grouping of imports by type."""

@@ -51,6 +51,7 @@ def escape_sql_identifier(identifier: str) -> str:
 
     return identifier
 
+
 @adk_tool
 @strands_tool
 def validate_sql_query(query: str) -> dict[str, Any]:
@@ -119,6 +120,7 @@ def validate_sql_query(query: str) -> dict[str, Any]:
         "issues": issues,
         "query_type": query_type,
     }
+
 
 @adk_tool
 @strands_tool
@@ -192,6 +194,7 @@ def build_select_query(
         "column_count": str(column_count),
     }
 
+
 @adk_tool
 @strands_tool
 def build_insert_query(
@@ -245,6 +248,7 @@ def build_insert_query(
         "parameters": values,
         "column_count": str(len(columns)),
     }
+
 
 @adk_tool
 @strands_tool
@@ -311,6 +315,7 @@ def build_update_query(
         "parameters": parameters,
         "columns_updated": str(len(updates)),
     }
+
 
 @adk_tool
 @strands_tool

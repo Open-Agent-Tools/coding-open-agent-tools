@@ -70,6 +70,7 @@ def parse_ruff_json(json_output: str) -> list[dict[str, Any]]:
 
     return issues
 
+
 @adk_tool
 @strands_tool
 def parse_mypy_json(json_output: str) -> list[dict[str, Any]]:
@@ -129,6 +130,7 @@ def parse_mypy_json(json_output: str) -> list[dict[str, Any]]:
         )
 
     return errors
+
 
 @adk_tool
 @strands_tool
@@ -194,6 +196,7 @@ def parse_pytest_json(json_output: str) -> dict[str, Any]:
         "duration": data.get("duration", 0.0),
         "failures": failures,
     }
+
 
 @adk_tool
 @strands_tool

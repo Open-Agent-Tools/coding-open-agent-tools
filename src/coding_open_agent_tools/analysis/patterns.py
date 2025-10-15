@@ -178,6 +178,7 @@ SECRET_PATTERNS: list[dict[str, str]] = [
     },
 ]
 
+
 @adk_tool
 @strands_tool
 def get_all_patterns() -> list[dict[str, str]]:
@@ -187,6 +188,7 @@ def get_all_patterns() -> list[dict[str, str]]:
         List of pattern dictionaries with name, pattern, severity, description
     """
     return SECRET_PATTERNS.copy()
+
 
 @adk_tool
 @strands_tool
@@ -206,6 +208,7 @@ def get_patterns_by_severity(severity: str) -> list[dict[str, str]]:
         raise ValueError(f"Invalid severity: {severity}. Must be high, medium, or low")
 
     return [p for p in SECRET_PATTERNS if p["severity"] == severity]
+
 
 @adk_tool
 @strands_tool

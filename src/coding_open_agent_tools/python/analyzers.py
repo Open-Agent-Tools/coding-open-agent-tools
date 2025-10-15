@@ -133,6 +133,7 @@ def detect_circular_imports(project_root: str) -> dict[str, Any]:
         "total_circular_chains": str(len(unique_chains)),
     }
 
+
 @adk_tool
 @strands_tool
 def find_unused_imports(source_code: str) -> dict[str, Any]:
@@ -227,6 +228,7 @@ def find_unused_imports(source_code: str) -> dict[str, Any]:
         "total_imports": str(len(imports)),
         "total_unused": str(len(unused)),
     }
+
 
 @adk_tool
 @strands_tool
@@ -393,6 +395,7 @@ def identify_anti_patterns(source_code: str) -> dict[str, Any]:
         "critical_count": str(critical_count),
         "high_count": str(high_count),
     }
+
 
 @adk_tool
 @strands_tool

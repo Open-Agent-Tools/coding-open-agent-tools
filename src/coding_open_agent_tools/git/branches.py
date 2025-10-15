@@ -64,6 +64,7 @@ def list_branches(repository_path: str) -> list[str]:
     except subprocess.CalledProcessError as e:
         raise GitError(f"Git command failed: {e.stderr}")
 
+
 @adk_tool
 @strands_tool
 def get_branch_info(repository_path: str, branch_name: str) -> dict[str, Any]:

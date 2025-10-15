@@ -96,6 +96,7 @@ def parse_shell_script(script_content: str) -> dict[str, Any]:
         "comment_count": str(comment_count),
     }
 
+
 @adk_tool
 @strands_tool
 def extract_shell_functions(script_content: str) -> list[dict[str, str]]:
@@ -180,6 +181,7 @@ def extract_shell_functions(script_content: str) -> list[dict[str, str]]:
         i += 1
 
     return functions
+
 
 @adk_tool
 @strands_tool

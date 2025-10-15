@@ -47,7 +47,10 @@ class TestAnalyzeShellSecurity:
         script = "wget --no-check-certificate https://example.com/file"
         issues = analyze_shell_security(script)
         assert len(issues) > 0
-        assert any("SSL" in issue["description"] or "insecure" in issue["description"].lower() for issue in issues)
+        assert any(
+            "SSL" in issue["description"] or "insecure" in issue["description"].lower()
+            for issue in issues
+        )
 
     def test_clean_script(self):
         """Test that clean script has no critical issues."""

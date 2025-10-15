@@ -113,6 +113,7 @@ def detect_unquoted_variables(script_content: str) -> list[dict[str, str]]:
 
     return issues
 
+
 @adk_tool
 @strands_tool
 def find_dangerous_commands(script_content: str) -> list[dict[str, str]]:
@@ -239,6 +240,7 @@ def find_dangerous_commands(script_content: str) -> list[dict[str, str]]:
                 )
 
     return findings
+
 
 @adk_tool
 @strands_tool

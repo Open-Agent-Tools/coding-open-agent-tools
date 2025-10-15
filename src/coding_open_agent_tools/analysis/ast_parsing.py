@@ -86,6 +86,7 @@ def parse_python_ast(file_path: str) -> dict[str, Any]:
         "line_count": line_count,
     }
 
+
 @adk_tool
 @strands_tool
 def extract_functions(file_path: str) -> list[dict[str, Any]]:
@@ -172,6 +173,7 @@ def extract_functions(file_path: str) -> list[dict[str, Any]]:
             )
 
     return functions
+
 
 @adk_tool
 @strands_tool
@@ -263,6 +265,7 @@ def extract_classes(file_path: str) -> list[dict[str, Any]]:
             )
 
     return classes
+
 
 @adk_tool
 @strands_tool

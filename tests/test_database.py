@@ -59,9 +59,7 @@ def sample_db(temp_db):
         temp_db,
         "CREATE TABLE users (id INTEGER PRIMARY KEY, name TEXT, age INTEGER)",
     )
-    execute_query(
-        temp_db, "INSERT INTO users (name, age) VALUES (?, ?)", ["Alice", 30]
-    )
+    execute_query(temp_db, "INSERT INTO users (name, age) VALUES (?, ?)", ["Alice", 30])
     execute_query(temp_db, "INSERT INTO users (name, age) VALUES (?, ?)", ["Bob", 25])
     return temp_db
 
@@ -279,7 +277,9 @@ def test_create_table_from_dict_success(temp_db):
     """Test table creation from dictionary."""
     create_sqlite_database(temp_db)
     result = create_table_from_dict(
-        temp_db, "products", {"id": "INTEGER PRIMARY KEY", "name": "TEXT", "price": "REAL"}
+        temp_db,
+        "products",
+        {"id": "INTEGER PRIMARY KEY", "name": "TEXT", "price": "REAL"},
     )
     assert result["status"] == "success"
     assert result["table_name"] == "products"
@@ -454,9 +454,7 @@ def test_validate_sql_query_types():
     assert validate_sql_query("INSERT INTO users VALUES (1)")["query_type"] == "INSERT"
     assert validate_sql_query("UPDATE users SET name = 'x'")["query_type"] == "UPDATE"
     assert validate_sql_query("DELETE FROM users")["query_type"] == "DELETE"
-    assert (
-        validate_sql_query("CREATE TABLE test (id INT)")["query_type"] == "CREATE"
-    )
+    assert validate_sql_query("CREATE TABLE test (id INT)")["query_type"] == "CREATE"
 
 
 # Test: build_select_query
@@ -498,9 +496,7 @@ def test_build_select_query_with_limit():
 
 def test_build_select_query_full():
     """Test SELECT query with all options."""
-    result = build_select_query(
-        "users", ["name", "age"], {"active": 1}, "name", 5
-    )
+    result = build_select_query("users", ["name", "age"], {"active": 1}, "name", 5)
     assert "SELECT name, age FROM users" in result["query"]
     assert "WHERE active = ?" in result["query"]
     assert "ORDER BY name" in result["query"]
@@ -554,9 +550,7 @@ def test_build_update_query_success():
 
 def test_build_update_query_multiple_fields():
     """Test UPDATE with multiple fields."""
-    result = build_update_query(
-        "users", {"name": "Alice", "age": 30}, {"id": 1}
-    )
+    result = build_update_query("users", {"name": "Alice", "age": 30}, {"id": 1})
     assert "SET" in result["query"]
     assert "name = ?" in result["query"]
     assert "age = ?" in result["query"]

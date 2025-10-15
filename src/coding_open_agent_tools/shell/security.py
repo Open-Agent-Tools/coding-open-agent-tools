@@ -155,6 +155,7 @@ def analyze_shell_security(script_content: str) -> list[dict[str, str]]:
 
     return issues
 
+
 @adk_tool
 @strands_tool
 def detect_shell_injection_risks(script_content: str) -> list[dict[str, str]]:
@@ -254,6 +255,7 @@ def detect_shell_injection_risks(script_content: str) -> list[dict[str, str]]:
                 )
 
     return risks
+
 
 @adk_tool
 @strands_tool
@@ -356,6 +358,7 @@ def scan_for_secrets_enhanced(content: str, use_detect_secrets: str) -> dict[str
         "patterns_checked": str(len(_SECRET_PATTERNS)),
         "has_secrets": "true" if enhanced_secrets else "false",
     }
+
 
 # Secret patterns for stdlib fallback (subset of common patterns)
 _SECRET_PATTERNS = {

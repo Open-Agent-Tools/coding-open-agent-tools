@@ -113,6 +113,7 @@ def get_git_status(repository_path: str) -> dict[str, Any]:
     except subprocess.CalledProcessError as e:
         raise GitError(f"Git command failed: {e.stderr}")
 
+
 @adk_tool
 @strands_tool
 def get_current_branch(repository_path: str) -> str:
@@ -158,6 +159,7 @@ def get_current_branch(repository_path: str) -> str:
 
     except subprocess.CalledProcessError as e:
         raise GitError(f"Git command failed: {e.stderr}")
+
 
 @adk_tool
 @strands_tool
