@@ -1,247 +1,65 @@
-# Shell Script Generation Module - Product Requirements
+# Shell Validation & Security Module - Product Requirements
 
 ## Module Overview
 
-The Shell Script Generation Module provides AI agents with comprehensive capabilities for creating, validating, and analyzing shell scripts. This module focuses on bash/shell script generation for deployment automation, CI/CD pipelines, system administration, and development workflows.
+The Shell Validation & Security Module provides AI agents with comprehensive capabilities for **validating, analyzing, and securing** shell scripts. This module focuses on deterministic operations that save agent tokens: syntax validation, security scanning, argument escaping, and script parsing.
+
+**Philosophy**: Agents excel at writing shell scripts with examples. This module prevents errors before execution, catches security issues deterministically, and handles tedious formatting tasks.
 
 ## Goals and Objectives
 
 ### Primary Goals
 
-1. **Safe Script Generation**: Create syntactically correct, secure shell scripts
-2. **Template Library**: Provide reusable templates for common patterns
-3. **Security First**: Built-in validation to prevent common security issues
-4. **Multi-Purpose**: Support various script types (deployment, CI/CD, systemd, cron)
+1. **Prevent Execution Failures**: Validate syntax before running scripts (saves retry loops)
+2. **Security First**: Detect injection risks, unquoted variables, dangerous commands
+3. **Safe Formatting**: Provide deterministic argument escaping and quoting
+4. **Parse Structure**: Extract functions, variables, commands from scripts
 
 ### Non-Goals
 
-- Interactive shell session management
-- Shell script execution (use subprocess from basic-open-agent-tools)
-- Real-time shell output parsing
-- SSH/remote execution capabilities
+- ❌ Full script generation (agents write scripts well with prompting)
+- ❌ Template systems (agents use examples effectively)
+- ❌ Script execution (use subprocess from basic-open-agent-tools)
+- ❌ Interactive shell session management
 
 ## User Stories
 
-### Story 1: Deployment Script Generation
-**As an** AI agent building deployment automation
-**I want to** generate deployment scripts with error handling and logging
-**So that** deployments are reliable and debuggable
+### Story 1: Syntax Validation Before Execution
+**As an** AI agent generating deployment scripts
+**I want to** validate shell syntax before execution
+**So that** I avoid retry loops from syntax errors
 
-### Story 2: CI/CD Pipeline Scripts
-**As an** agent creating CI/CD workflows
-**I want to** generate pipeline scripts with proper error handling
-**So that** build failures are caught and reported correctly
-
-### Story 3: Systemd Service Creation
-**As an** agent deploying services
-**I want to** generate systemd service files
-**So that** applications run as managed services
-
-### Story 4: Security Validation
-**As an** agent generating scripts
-**I want to** validate scripts for security issues
+### Story 2: Security Issue Detection
+**As an** agent creating automation scripts
+**I want to** detect security issues deterministically
 **So that** generated scripts don't contain vulnerabilities
 
-### Story 5: Cron Job Generation
-**As an** agent scheduling tasks
-**I want to** generate cron-compatible scripts
-**So that** tasks run reliably on schedule
+### Story 3: Safe Argument Escaping
+**As an** agent building shell commands
+**I want to** safely escape user input for shell use
+**So that** I prevent command injection
+
+### Story 4: Script Structure Extraction
+**As an** agent analyzing existing scripts
+**I want to** parse script structure (functions, variables, commands)
+**So that** I understand script composition without manual parsing
+
+### Story 5: Enhanced Secret Detection
+**As an** agent scanning scripts for sensitive data
+**I want to** detect hardcoded secrets using production-grade tools
+**So that** I catch API keys, tokens, and credentials before deployment
 
 ## Functional Requirements
 
-### FR1: Script Generation Functions
+### FR1: Validation Functions
 
-#### FR1.1: generate_bash_script
-```python
-def generate_bash_script(
-    commands: list[str],
-    variables: dict[str, str],
-    add_error_handling: bool,
-    add_logging: bool,
-    set_flags: list[str]
-) -> str:
-    """Generate bash script from command list.
-
-    Args:
-        commands: List of shell commands to execute
-        variables: Environment variables to set
-        add_error_handling: Include error handling (set -e, trap)
-        add_logging: Add logging statements
-        set_flags: Additional set flags (e.g., 'u' for unset vars, 'o pipefail')
-
-    Returns:
-        Complete bash script as string
-    """
-```
-
-**Input Validation**:
-- commands must be non-empty list of strings
-- variables keys must be valid shell variable names
-- set_flags must be valid bash flags
-
-**Output Format**:
-```bash
-#!/bin/bash
-set -euo pipefail
-
-# Variables
-APP_DIR="/app"
-BRANCH="main"
-
-# Error handling
-trap 'echo "Error on line $LINENO"' ERR
-
-# Commands
-echo "[$(date)] Starting deployment..."
-cd "$APP_DIR"
-git pull origin "$BRANCH"
-npm install
-npm run build
-
-echo "[$(date)] Deployment complete"
-```
-
-#### FR1.2: generate_shell_function
-```python
-def generate_shell_function(
-    function_name: str,
-    commands: list[str],
-    parameters: list[str],
-    description: str,
-    return_code_handling: bool
-) -> str:
-    """Generate reusable shell function.
-
-    Args:
-        function_name: Name of the function
-        commands: Commands in function body
-        parameters: Parameter names (accessible as $1, $2, etc.)
-        description: Function documentation
-        return_code_handling: Add return code validation
-
-    Returns:
-        Shell function definition as string
-    """
-```
-
-#### FR1.3: generate_systemd_service_script
-```python
-def generate_systemd_service_script(
-    service_name: str,
-    description: str,
-    exec_start: str,
-    working_directory: str,
-    user: str,
-    environment_vars: dict[str, str],
-    restart_policy: str
-) -> str:
-    """Generate systemd service unit file.
-
-    Args:
-        service_name: Name of the service
-        description: Service description
-        exec_start: Command to start service
-        working_directory: Working directory for service
-        user: User to run service as
-        environment_vars: Environment variables
-        restart_policy: Restart policy (always, on-failure, no)
-
-    Returns:
-        Systemd service file content
-    """
-```
-
-**Output Format**:
-```ini
-[Unit]
-Description=My Application Service
-After=network.target
-
-[Service]
-Type=simple
-User=appuser
-WorkingDirectory=/app
-Environment="NODE_ENV=production"
-Environment="PORT=3000"
-ExecStart=/usr/bin/node /app/server.js
-Restart=always
-RestartSec=10
-
-[Install]
-WantedBy=multi-user.target
-```
-
-#### FR1.4: generate_cron_job_script
-```python
-def generate_cron_job_script(
-    job_name: str,
-    command: str,
-    schedule: str,
-    log_output: bool,
-    mailto: str
-) -> str:
-    """Generate cron job entry with script.
-
-    Args:
-        job_name: Descriptive name for the job
-        command: Command to execute
-        schedule: Cron schedule expression
-        log_output: Redirect output to log file
-        mailto: Email address for output (empty string for none)
-
-    Returns:
-        Cron entry and wrapper script
-    """
-```
-
-#### FR1.5: generate_docker_entrypoint
-```python
-def generate_docker_entrypoint(
-    main_command: str,
-    pre_commands: list[str],
-    environment_validation: list[str],
-    signal_handling: bool
-) -> str:
-    """Generate Docker entrypoint.sh script.
-
-    Args:
-        main_command: Main application command
-        pre_commands: Setup commands before main
-        environment_validation: Required environment variables
-        signal_handling: Add signal handling for graceful shutdown
-
-    Returns:
-        Docker entrypoint script
-    """
-```
-
-#### FR1.6: generate_ci_pipeline_script
-```python
-def generate_ci_pipeline_script(
-    pipeline_type: str,
-    stages: list[dict[str, str]],
-    environment_vars: dict[str, str],
-    cache_config: dict[str, str]
-) -> str:
-    """Generate CI/CD pipeline script.
-
-    Args:
-        pipeline_type: Type of CI system (github-actions, gitlab-ci, jenkins)
-        stages: List of stage dicts with name, commands
-        environment_vars: Environment variables
-        cache_config: Cache configuration
-
-    Returns:
-        Pipeline configuration file content
-    """
-```
-
-### FR2: Validation Functions
-
-#### FR2.1: validate_shell_syntax
+#### FR1.1: validate_shell_syntax
 ```python
 def validate_shell_syntax(script_content: str, shell_type: str) -> dict[str, str]:
-    """Validate shell script syntax.
+    """Validate shell script syntax without execution.
+
+    Prevents execution failures by catching syntax errors early.
+    Saves agent tokens on retry loops.
 
     Args:
         script_content: Script content to validate
@@ -254,182 +72,359 @@ def validate_shell_syntax(script_content: str, shell_type: str) -> dict[str, str
         >>> result = validate_shell_syntax("echo 'test'", "bash")
         >>> result['is_valid']
         'true'
+        >>> result = validate_shell_syntax("echo 'missing quote", "bash")
+        >>> result['is_valid']
+        'false'
     """
 ```
 
-**Implementation**: Use `bash -n` for syntax checking
+**Implementation**: Use `bash -n` for syntax checking (no execution)
 
-#### FR2.2: check_shell_dependencies
+**Token Savings**: Prevents retry loops from syntax errors. Agents waste 100+ tokens regenerating scripts with simple syntax errors.
+
+#### FR1.2: check_shell_dependencies
 ```python
-def check_shell_dependencies(script_content: str) -> list[str]:
+def check_shell_dependencies(script_content: str) -> dict[str, str]:
     """Identify external commands required by script.
+
+    Deterministic parsing to detect missing dependencies before execution.
 
     Args:
         script_content: Script content to analyze
 
     Returns:
-        List of command names found in script
+        Dict with keys: commands (JSON list of command names),
+                       builtins (JSON list of bash builtins used)
+
+    Example:
+        >>> deps = check_shell_dependencies("git pull && npm install")
+        >>> json.loads(deps['commands'])
+        ['git', 'npm']
     """
 ```
 
 **Detection Strategy**:
 - Parse script for command invocations
-- Exclude bash built-ins (echo, cd, etc.)
-- Return external command names
+- Exclude bash built-ins (echo, cd, test, etc.)
+- Return external command names as JSON
 
-#### FR2.3: analyze_shell_security
+### FR2: Security Analysis Functions
+
+#### FR2.1: analyze_shell_security
 ```python
-def analyze_shell_security(script_content: str) -> list[dict[str, str]]:
-    """Analyze script for security issues.
+def analyze_shell_security(script_content: str) -> dict[str, str]:
+    """Analyze script for security issues using deterministic rules.
+
+    Catches common security anti-patterns that agents miss.
 
     Args:
         script_content: Script content to analyze
 
     Returns:
-        List of issue dicts with keys: severity, line, issue, recommendation
+        Dict with keys: issues (JSON list of issue dicts),
+                       severity_counts (JSON dict of severity: count)
+
+        Each issue dict has keys: severity, line, issue, recommendation
+
+    Example:
+        >>> analysis = analyze_shell_security('cd $APP_DIR')
+        >>> issues = json.loads(analysis['issues'])
+        >>> issues[0]['severity']
+        'high'
+        >>> issues[0]['issue']
+        'Unquoted variable expansion'
     """
 ```
 
-**Security Checks**:
-- Hardcoded credentials (passwords, API keys)
-- Unsafe variable expansion (`$VAR` vs `"$VAR"`)
-- Command injection risks
-- Missing input validation
-- Unsafe use of `eval`
-- Insecure temp file usage
-- Missing error handling (`set -e`)
+**Security Checks** (Deterministic Rules):
+- **Unquoted variables**: `$VAR` vs `"$VAR"` (high severity)
+- **Dangerous commands**: `eval`, `source`, `rm -rf` without guards (critical)
+- **Command injection risks**: Unsafe variable expansion in commands (critical)
+- **Missing error handling**: No `set -e` or equivalent (medium)
+- **Insecure temp files**: Predictable paths, missing cleanup (medium)
+- **Wildcard expansion**: Unquoted `*` in dangerous contexts (high)
 
-#### FR2.4: parse_shell_script
+**Rationale**: These are rule-based checks. Agents can write secure code but often miss edge cases. Deterministic scanning catches issues reliably.
+
+#### FR2.2: detect_unquoted_variables
 ```python
-def parse_shell_script(script_content: str) -> dict[str, str]:
-    """Extract script structure and components.
+def detect_unquoted_variables(script_content: str) -> dict[str, str]:
+    """Detect unquoted variable expansions.
+
+    Focused detector for the most common shell security issue.
 
     Args:
-        script_content: Script content to parse
+        script_content: Script content to analyze
 
     Returns:
-        Dict with keys: shebang, functions (JSON), variables (JSON),
-                       commands (JSON), set_flags
+        Dict with keys: violations (JSON list of dicts),
+                       safe_count (string of int),
+                       unsafe_count (string of int)
+
+        Each violation dict has keys: line, variable_name, context
+
+    Example:
+        >>> result = detect_unquoted_variables('cp $SRC $DEST')
+        >>> violations = json.loads(result['violations'])
+        >>> len(violations)
+        2
     """
 ```
 
-### FR3: Utility Functions
+#### FR2.3: find_dangerous_commands
+```python
+def find_dangerous_commands(script_content: str) -> dict[str, str]:
+    """Find potentially dangerous command patterns.
+
+    Deterministic detection of high-risk operations.
+
+    Args:
+        script_content: Script content to analyze
+
+    Returns:
+        Dict with keys: dangerous_commands (JSON list of dicts),
+                       total_count (string of int)
+
+        Each command dict has keys: line, command, risk_level, reason
+
+    Example:
+        >>> result = find_dangerous_commands('eval "$USER_INPUT"')
+        >>> cmds = json.loads(result['dangerous_commands'])
+        >>> cmds[0]['risk_level']
+        'critical'
+    """
+```
+
+**Dangerous Patterns**:
+- `eval` with variables (critical)
+- `rm -rf` without guards (high)
+- `chmod 777` (medium)
+- `curl | bash` (critical)
+- `source` with user input (high)
+
+#### FR2.4: scan_for_secrets_enhanced
+```python
+def scan_for_secrets_enhanced(
+    content: str,
+    use_detect_secrets: str  # "true" or "false" (ADK compliance)
+) -> dict[str, str]:
+    """Scan content for hardcoded secrets with optional detect-secrets integration.
+
+    Falls back to stdlib regex if detect-secrets not installed.
+
+    Args:
+        content: Content to scan for secrets
+        use_detect_secrets: Whether to use detect-secrets library ("true"/"false")
+
+    Returns:
+        Dict with keys: secrets (JSON list of secret dicts),
+                       method_used (string: "detect-secrets" or "stdlib"),
+                       total_count (string of int)
+
+        Each secret dict has keys: line, type, match, severity
+
+    Example:
+        >>> result = scan_for_secrets_enhanced(script, "true")
+        >>> secrets = json.loads(result['secrets'])
+        >>> result['method_used']
+        'detect-secrets'
+
+    Optional Dependency:
+        detect-secrets>=1.5.0 (pip install coding-open-agent-tools[enhanced-security])
+        Provides 1000+ patterns vs ~30 stdlib patterns
+    """
+```
+
+**Implementation**:
+- If `use_detect_secrets == "true"` and library available: Use detect-secrets
+- Otherwise: Fall back to stdlib regex patterns
+- Stdlib patterns: API keys, AWS keys, GitHub tokens, private keys, passwords
+
+**Rationale**: Production-grade secret detection as optional enhancement. Graceful degradation if not installed.
+
+### FR3: Formatting Functions
 
 #### FR3.1: escape_shell_argument
 ```python
 def escape_shell_argument(argument: str, quote_style: str) -> str:
     """Safely escape argument for shell use.
 
+    Deterministic formatting to prevent injection. Agents waste tokens
+    getting this right and often make mistakes.
+
     Args:
         argument: String to escape
         quote_style: Quoting style (single, double, none)
 
     Returns:
-        Escaped string safe for shell
+        Escaped string safe for shell use
+
+    Example:
+        >>> escape_shell_argument("user's file", "single")
+        "'user'\\''s file'"
+        >>> escape_shell_argument('echo "test"', "double")
+        '"echo \\"test\\""'
     """
 ```
 
 **Escaping Rules**:
-- Single quotes: Escape single quotes as '\''
-- Double quotes: Escape $, `, \, ", !
-- No quotes: Escape shell metacharacters
+- `single`: Escape single quotes as `'\''`
+- `double`: Escape `$`, `` ` ``, `\`, `"`, `!`
+- `none`: Escape all shell metacharacters
 
-#### FR3.2: add_shell_shebang
+**Token Savings**: Agents spend 50-100 tokens on escaping logic and often get it wrong. This is purely deterministic.
+
+#### FR3.2: normalize_shebang
 ```python
-def add_shell_shebang(script_content: str, shell_path: str) -> str:
-    """Add or update shebang line.
+def normalize_shebang(script_content: str, shell_path: str) -> str:
+    """Add or update shebang line to standard format.
+
+    Deterministic formatting for script headers.
 
     Args:
         script_content: Script content
-        shell_path: Path to shell interpreter
+        shell_path: Path to shell interpreter (e.g., "/bin/bash", "/usr/bin/env bash")
 
     Returns:
-        Script with shebang line
+        Script with normalized shebang line
+
+    Example:
+        >>> normalize_shebang("echo test", "/bin/bash")
+        '#!/bin/bash\\necho test'
     """
 ```
 
-#### FR3.3: set_script_permissions
+### FR4: Parsing Functions
+
+#### FR4.1: parse_shell_script
 ```python
-def set_script_permissions(file_path: str, permissions: str) -> str:
-    """Set file permissions for script.
+def parse_shell_script(script_content: str) -> dict[str, str]:
+    """Extract script structure and components.
+
+    Tedious parsing task that agents waste tokens on.
 
     Args:
-        file_path: Path to script file
-        permissions: Octal permissions string (e.g., '755', '644')
+        script_content: Script content to parse
 
     Returns:
-        Success message
+        Dict with keys: shebang (string),
+                       functions (JSON list of function dicts),
+                       variables (JSON list of variable dicts),
+                       commands (JSON list of command strings),
+                       set_flags (JSON list of flags),
+                       error_handling (string: "true"/"false")
 
-    Raises:
-        FileNotFoundError: If file doesn't exist
-        PermissionError: If cannot change permissions
+        Function dict keys: name, line, body
+        Variable dict keys: name, value, line
+
+    Example:
+        >>> result = parse_shell_script(script)
+        >>> functions = json.loads(result['functions'])
+        >>> functions[0]['name']
+        'deploy_app'
     """
 ```
 
-#### FR3.4: generate_shell_documentation
+**Extraction Strategy**:
+- Regex-based parsing for shell constructs
+- Identify function definitions
+- Extract variable assignments
+- Find set flags (`set -e`, `set -u`, etc.)
+- Detect error handling patterns
+
+**Token Savings**: Parsing shell scripts is tedious. Agents spend 200+ tokens on manual parsing. This is deterministic.
+
+#### FR4.2: extract_shell_functions
 ```python
-def generate_shell_documentation(
-    script_name: str,
-    description: str,
-    usage_examples: list[str],
-    parameters: list[dict[str, str]],
-    exit_codes: dict[str, str]
-) -> str:
-    """Generate script documentation header.
+def extract_shell_functions(script_content: str) -> dict[str, str]:
+    """Extract function definitions from shell script.
+
+    Focused parser for function extraction.
 
     Args:
-        script_name: Name of the script
-        description: Script description
-        usage_examples: List of usage examples
-        parameters: List of parameter dicts with name, description
-        exit_codes: Dict mapping codes to descriptions
+        script_content: Script content to parse
 
     Returns:
-        Documentation comment block
+        Dict with keys: functions (JSON list of function dicts),
+                       count (string of int)
+
+        Function dict keys: name, line_start, line_end, parameters_description
+
+    Example:
+        >>> result = extract_shell_functions(script)
+        >>> funcs = json.loads(result['functions'])
+        >>> funcs[0]['name']
+        'backup_database'
     """
 ```
 
-**Output Format**:
-```bash
-#!/bin/bash
-################################################################################
-# Script: deploy.sh
-# Description: Deploy application to production server
-#
-# Usage:
-#   ./deploy.sh <environment> <version>
-#
-# Parameters:
-#   environment - Target environment (staging, production)
-#   version     - Version tag to deploy
-#
-# Exit Codes:
-#   0 - Success
-#   1 - Invalid parameters
-#   2 - Deployment failed
-#
-# Examples:
-#   ./deploy.sh production v1.2.3
-#   ./deploy.sh staging latest
-################################################################################
+#### FR4.3: extract_shell_variables
+```python
+def extract_shell_variables(script_content: str) -> dict[str, str]:
+    """Extract variable assignments from shell script.
+
+    Focused parser for variable extraction.
+
+    Args:
+        script_content: Script content to parse
+
+    Returns:
+        Dict with keys: variables (JSON list of variable dicts),
+                       count (string of int)
+
+        Variable dict keys: name, value, line, is_exported
+
+    Example:
+        >>> result = extract_shell_variables("APP_DIR=/app\\nexport NODE_ENV=production")
+        >>> vars = json.loads(result['variables'])
+        >>> vars[0]['name']
+        'APP_DIR'
+    """
+```
+
+#### FR4.4: check_error_handling
+```python
+def check_error_handling(script_content: str) -> dict[str, str]:
+    """Analyze script's error handling mechanisms.
+
+    Deterministic check for error handling best practices.
+
+    Args:
+        script_content: Script content to analyze
+
+    Returns:
+        Dict with keys: has_set_e (string: "true"/"false"),
+                       has_set_u (string: "true"/"false"),
+                       has_pipefail (string: "true"/"false"),
+                       has_trap (string: "true"/"false"),
+                       score (string: 0-100),
+                       recommendations (JSON list of strings)
+
+    Example:
+        >>> result = check_error_handling("#!/bin/bash\\nset -euo pipefail")
+        >>> result['score']
+        '100'
+    """
 ```
 
 ## Non-Functional Requirements
 
 ### NFR1: Performance
-- Script generation: < 100ms for typical scripts (< 500 lines)
-- Validation: < 500ms for scripts up to 5000 lines
+- Syntax validation: < 500ms for scripts up to 5000 lines
 - Security analysis: < 1s for scripts up to 5000 lines
+- Argument escaping: < 1ms for typical strings
+- Script parsing: < 200ms for scripts up to 2000 lines
 
 ### NFR2: Compatibility
 - Support bash 3.2+ (macOS default)
 - Support bash 4.0+ (Linux default)
-- Detect and warn about version-specific features
+- Detect and report version-specific features
+- Work with sh, zsh (limited support)
 
 ### NFR3: Safety
-- Never execute generated scripts automatically
-- All file operations require explicit permission
-- Security analysis on all generated scripts
+- Never execute scripts
+- Read-only operations
+- No file modifications without explicit user action
 
 ### NFR4: Code Quality
 - 100% ruff compliance
@@ -440,147 +435,234 @@ def generate_shell_documentation(
 ## Dependencies
 
 ### Required
-- `basic-open-agent-tools` - File operations, text processing
-- Python stdlib: `os`, `re`, `subprocess`, `shlex`
+- Python stdlib: `re`, `subprocess`, `shlex`, `json`
+- `bash` binary (for syntax validation via `bash -n`)
 
 ### Optional
-- `shellcheck` (external tool) - Advanced syntax validation
-- `bash` - For syntax validation
+- `detect-secrets>=1.5.0` - Enhanced secret scanning (pip installable Python library)
+  - Install with: `pip install coding-open-agent-tools[enhanced-security]`
+  - Provides 1000+ secret patterns vs ~30 stdlib patterns
+  - Graceful fallback to stdlib if not installed
+- `shellcheck` (external tool) - Advanced linting (future enhancement)
+
+**Why detect-secrets**:
+- ✅ Python-native library (can import, not subprocess-only)
+- ✅ 10x better than stdlib (1000+ patterns vs ~30)
+- ✅ pip-installable (no external binaries)
+- ✅ Actively maintained (3.6k stars)
+- ✅ Production-grade (used by Yelp, others)
+- ✅ Graceful degradation to stdlib
+
+**Alternatives Considered**:
+- Gitleaks (Go binary, subprocess-only) ❌
+- TruffleHog (Go binary, subprocess-only) ❌
 
 ## Testing Strategy
 
 ### Unit Tests
-- Test each function independently
-- Mock file system operations
-- Test error handling paths
+- Test each validation function with valid/invalid inputs
+- Test security analysis catches known patterns
+- Test escaping prevents injection
+- Test parsing extracts correct structure
+- Mock subprocess calls to bash
 
 ### Integration Tests
 - Generate scripts and validate they work
-- Test script execution (in safe container)
-- Test interaction with basic-open-agent-tools
+- Test validation catches real syntax errors
+- Test security analysis on real vulnerable scripts
+- Test detect-secrets integration (if installed)
 
 ### Security Tests
-- Test security analysis catches known issues
-- Test escaping prevents injection
-- Test validation catches syntax errors
+- Test escaping with injection attempts
+- Test security analysis catches OWASP patterns
+- Test unquoted variable detection
+- Test dangerous command detection
+- Test secret detection (both stdlib and detect-secrets)
 
-### Validation Tests
-- Generate scripts and run through shellcheck
-- Execute generated scripts in container
-- Verify output matches expectations
+### Performance Tests
+- Benchmark validation on large scripts (5000+ lines)
+- Ensure sub-second performance
 
 ## Example Use Cases
 
-### Use Case 1: Generate Deployment Script
+### Use Case 1: Validate Before Execution
 ```python
 import coding_open_agent_tools as coat
 
-script = coat.generate_bash_script(
-    commands=[
-        "cd /app",
-        "git pull origin main",
-        "npm install --production",
-        "npm run build",
-        "pm2 restart app"
-    ],
-    variables={
-        "NODE_ENV": "production",
-        "APP_DIR": "/app"
-    },
-    add_error_handling=True,
-    add_logging=True,
-    set_flags=["u", "o pipefail"]
-)
+# Agent writes a deployment script (they're good at this)
+script = """#!/bin/bash
+set -euo pipefail
 
-# Validate before using
+APP_DIR=/app
+cd "$APP_DIR"
+git pull origin main
+npm install
+npm run build
+"""
+
+# Validate syntax (prevents execution failure)
 validation = coat.validate_shell_syntax(script, "bash")
 if validation['is_valid'] == 'true':
-    security = coat.analyze_shell_security(script)
-    if not security:
-        # Save script using basic tools
-        from basic_open_agent_tools import file_system
-        file_system.write_file_from_string(
-            file_path="/tmp/deploy.sh",
-            content=script,
-            skip_confirm=False
-        )
+    print("✓ Syntax valid")
+else:
+    print(f"✗ Syntax error: {validation['errors']}")
 ```
 
-### Use Case 2: Create Systemd Service
+**Token Savings**: Catches syntax errors before execution. Saves 100+ tokens on retry loops.
+
+### Use Case 2: Security Analysis
 ```python
-service = coat.generate_systemd_service_script(
-    service_name="myapp",
-    description="My Application Service",
-    exec_start="/usr/bin/node /app/server.js",
-    working_directory="/app",
-    user="appuser",
-    environment_vars={"NODE_ENV": "production", "PORT": "3000"},
-    restart_policy="always"
-)
+# Agent writes script with security issues
+script = """#!/bin/bash
+APP_DIR=/app
+cd $APP_DIR  # Unquoted variable!
+eval "$USER_INPUT"  # Dangerous!
+API_KEY="sk-1234567890abcdef"  # Hardcoded secret!
+"""
+
+# Security analysis (deterministic rule checking)
+issues = coat.analyze_shell_security(script)
+issues_list = json.loads(issues['issues'])
+
+for issue in issues_list:
+    print(f"{issue['severity']}: {issue['issue']} (line {issue['line']})")
+    print(f"  → {issue['recommendation']}")
+
+# Output:
+# high: Unquoted variable expansion (line 3)
+#   → Quote variable: cd "$APP_DIR"
+# critical: Use of eval with user input (line 4)
+#   → Avoid eval with untrusted input
+# critical: Hardcoded API key (line 5)
+#   → Use environment variables for secrets
 ```
 
-### Use Case 3: Generate CI Pipeline
+**Token Savings**: Agents miss security issues. Deterministic scanning is reliable and fast.
+
+### Use Case 3: Safe Argument Escaping
 ```python
-pipeline = coat.generate_ci_pipeline_script(
-    pipeline_type="github-actions",
-    stages=[
-        {
-            "name": "test",
-            "commands": "npm test"
-        },
-        {
-            "name": "build",
-            "commands": "npm run build"
-        },
-        {
-            "name": "deploy",
-            "commands": "./deploy.sh production"
-        }
-    ],
-    environment_vars={"NODE_VERSION": "18"},
-    cache_config={"paths": "node_modules"}
-)
+# Agent needs to build command with user input
+user_filename = "user's file (test).txt"
+
+# Safe escaping (deterministic formatting)
+safe_arg = coat.escape_shell_argument(user_filename, "single")
+command = f"cat {safe_arg}"
+
+print(command)
+# Output: cat 'user'\''s file (test).txt'
 ```
+
+**Token Savings**: Agents waste 50-100 tokens getting escaping right. This is instant and correct.
+
+### Use Case 4: Parse Script Structure
+```python
+# Parse existing script
+script = """#!/bin/bash
+set -euo pipefail
+
+deploy_app() {
+    local ENV=$1
+    echo "Deploying to $ENV"
+}
+
+APP_DIR=/app
+NODE_ENV=production
+
+deploy_app production
+"""
+
+result = coat.parse_shell_script(script)
+functions = json.loads(result['functions'])
+variables = json.loads(result['variables'])
+
+print(f"Found {len(functions)} functions, {len(variables)} variables")
+# Output: Found 1 functions, 2 variables
+```
+
+**Token Savings**: Parsing is tedious. Agents spend 200+ tokens on manual parsing.
+
+### Use Case 5: Enhanced Secret Detection
+```python
+# Scan with optional detect-secrets integration
+script = """#!/bin/bash
+AWS_SECRET_ACCESS_KEY="wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY"
+GITHUB_TOKEN="ghp_1234567890abcdefghijklmnopqrstuv"
+"""
+
+# Try detect-secrets first, fall back to stdlib
+result = coat.scan_for_secrets_enhanced(script, use_detect_secrets="true")
+secrets = json.loads(result['secrets'])
+
+print(f"Method: {result['method_used']}")
+print(f"Found {result['total_count']} secrets")
+
+for secret in secrets:
+    print(f"  Line {secret['line']}: {secret['type']} - {secret['severity']}")
+
+# Output with detect-secrets installed:
+# Method: detect-secrets
+# Found 2 secrets
+#   Line 2: AWS Secret Access Key - critical
+#   Line 3: GitHub Token - critical
+
+# Output without detect-secrets:
+# Method: stdlib
+# Found 2 secrets
+#   Line 2: AWS Key Pattern - critical
+#   Line 3: Token Pattern - high
+```
+
+**Token Savings**: Comprehensive secret detection without agent reasoning. Optional enhancement provides 10x better coverage.
 
 ## Success Metrics
 
 ### Functional Metrics
-- 15 functions implemented
-- All security checks pass
-- All validation functions work correctly
+- 13 functions implemented and tested
+- Validation catches 95%+ of syntax errors
+- Security analysis detects OWASP shell injection patterns
+- Escaping prevents 100% of test injection attempts
+- Parsing extracts structure correctly for 90%+ of scripts
+- Enhanced secret detection with detect-secrets (optional)
 
 ### Quality Metrics
 - 100% ruff compliance
 - 100% mypy compliance
 - 80%+ test coverage
-- Zero security vulnerabilities in generated scripts
+- All functions Google ADK compliant
 
-### Usage Metrics
-- Agent successfully generates working scripts
-- Generated scripts pass shellcheck validation
-- Scripts execute without errors in test environment
+### Token Savings Metrics
+- Validation prevents retry loops (100+ tokens saved per error)
+- Security analysis replaces agent reasoning (200+ tokens saved)
+- Escaping saves manual logic (50-100 tokens saved)
+- Parsing saves tedious extraction (200+ tokens saved)
+
+**Target**: 30-50% token reduction in shell-related workflows
 
 ## Open Questions
 
-1. Should we support PowerShell script generation?
-2. Do we need Windows batch file (.bat) support?
-3. Should we integrate with external validators (shellcheck)?
-4. How do we handle shell-specific features (bash vs zsh)?
-5. Should we provide script optimization recommendations?
+1. Should we support PowerShell validation (Windows)?
+2. Do we need zsh-specific validation?
+3. Should we integrate with shellcheck (external tool)?
+4. How deep should security analysis go (balance thoroughness vs performance)?
+5. Should we provide auto-fix suggestions (e.g., quote all variables)?
 
-## Future Enhancements (Post-v0.1.0)
+## Future Enhancements (Post-v0.2.0)
 
-1. **Advanced Templates**: Library of common script patterns
-2. **Script Optimization**: Analyze and suggest improvements
-3. **Multi-Shell Support**: Generate for sh, zsh, fish
-4. **Windows Support**: PowerShell and batch files
-5. **Integration Testing**: Automated execution validation
-6. **Performance Analysis**: Benchmark generated scripts
-7. **Interactive Mode**: Q&A to build scripts
+1. **ShellCheck Integration**: Optional advanced linting
+2. **Auto-Fix Suggestions**: Generate corrected versions
+3. **Performance Analysis**: Detect inefficient patterns
+4. **Multi-Shell Support**: Enhanced zsh, fish support
+5. **Custom Rule Engine**: User-defined security rules
+6. **Diff Analysis**: Compare script versions for security regressions
 
 ---
 
-**Document Version**: 1.0
+**Document Version**: 2.0 - Token Efficiency Focused
 **Last Updated**: 2025-10-14
-**Status**: Draft
+**Status**: Aligned with Project Philosophy
 **Owner**: Project Team
+
+## Version History
+
+- **2.0** (2025-10-14): Complete rewrite focused on validation/security/parsing (not generation)
+- **1.0** (2025-10-14): Initial draft (generation-focused, deprecated)

@@ -348,8 +348,477 @@ conflicts = coat.detect_dependency_conflicts(requirements_txt)
 
 ---
 
-### v1.0.0 - Community Release
+### v0.6.0 - HTTP/API Validation Module
 **Target**: Q1 2026
+**Status**: 📋 Future
+
+**Focus**: Validate API requests/responses (NOT build clients)
+
+**Features** (~12 functions):
+- **Validators**: `validate_json_schema()`, `check_rest_api_compliance()`, `validate_http_headers()`, `validate_http_method()`
+- **Parsers**: `parse_openapi_spec()`, `extract_api_endpoints()`, `parse_http_request()`, `parse_http_response()`
+- **Security Scanners**: `detect_api_security_issues()`, `check_cors_configuration()`, `validate_auth_headers()`
+- **Analyzers**: `check_rate_limit_headers()`, `analyze_api_versioning()`
+
+**Rationale**: Agents waste tokens on API validation logic. Parsing OpenAPI specs is tedious. Security checks are deterministic.
+
+---
+
+### v0.7.0 - Regex Validation & Testing Module
+**Target**: Q1 2026
+**Status**: 📋 Future
+
+**Focus**: Validate and test regex patterns (NOT generate them)
+
+**Features** (~8 functions):
+- **Validators**: `validate_regex_syntax()`, `check_regex_compatibility()`
+- **Testers**: `test_regex_matches()`, `benchmark_regex_performance()`
+- **Security Scanners**: `detect_catastrophic_backtracking()`, `check_regex_security()`
+- **Parsers**: `explain_regex_pattern()`, `extract_regex_groups()`
+
+**Rationale**: Agents write regexes but miss edge cases. Testing and validation is deterministic.
+
+---
+
+### v0.8.0 - Documentation Validation Module
+**Target**: Q2 2026
+**Status**: 📋 Future
+
+**Focus**: Validate and parse docs (NOT generate them)
+
+**Features** (~10 functions):
+- **Validators**: `validate_markdown_syntax()`, `validate_frontmatter()`, `check_accessibility()`
+- **Link Checkers**: `check_broken_links()`, `validate_anchor_links()`, `check_external_links()`
+- **Parsers**: `extract_code_blocks()`, `parse_table_of_contents()`, `parse_metadata()`
+- **Analyzers**: `check_heading_hierarchy()`, `analyze_readability()`
+
+**Rationale**: Agents write good docs. Validation catches broken links and accessibility issues.
+
+---
+
+### v0.9.0 - Dependency Analysis Module
+**Target**: Q2 2026
+**Status**: 📋 Future
+
+**Focus**: Analyze dependencies and detect conflicts
+
+**Features** (~12 functions):
+- **Parsers**: `parse_requirements_txt()`, `parse_package_json()`, `parse_poetry_lock()`, `parse_cargo_toml()`
+- **Validators**: `detect_version_conflicts()`, `check_security_advisories()`, `validate_semver()`
+- **Analyzers**: `identify_circular_dependencies()`, `calculate_dependency_tree()`, `find_unused_dependencies()`
+- **Scanners**: `check_outdated_dependencies()`, `detect_license_conflicts()`
+
+**Rationale**: Dependency resolution is deterministic. Agents struggle with complex graphs.
+
+---
+
+### v0.10.0 - Environment Variable Validation Module
+**Target**: Q2 2026
+**Status**: 📋 Future
+
+**Focus**: Validate env vars and .env files
+
+**Features** (~8 functions):
+- **Validators**: `validate_env_file_syntax()`, `check_required_variables()`, `validate_env_var_types()`
+- **Security Scanners**: `detect_env_var_conflicts()`, `scan_env_for_secrets()`
+- **Parsers**: `parse_env_file()`, `extract_env_var_references()`, `resolve_env_var_substitutions()`
+
+**Rationale**: Agents write .env files but miss validation. Security scanning is deterministic.
+
+---
+
+### v0.11.0 - Log Parsing & Analysis Module
+**Target**: Q3 2026
+**Status**: 📋 Future
+
+**Focus**: Parse logs into structured data
+
+**Features** (~10 functions):
+- **Parsers**: `parse_apache_logs()`, `parse_nginx_logs()`, `parse_application_logs()`, `parse_json_logs()`
+- **Extractors**: `extract_stack_traces()`, `extract_timestamps()`, `extract_log_levels()`
+- **Analyzers**: `detect_error_patterns()`, `identify_anomalies()`, `calculate_log_statistics()`
+
+**Rationale**: Log parsing is tedious for agents. Pattern extraction is deterministic.
+
+---
+
+### v0.12.0 - Container/Dockerfile Validation Module
+**Target**: Q3 2026
+**Status**: 📋 Future
+
+**Focus**: Validate Docker configs (NOT generate them)
+
+**Features** (~12 functions):
+- **Validators**: `validate_dockerfile_syntax()`, `validate_compose_file()`, `check_image_name_format()`
+- **Security Scanners**: `analyze_dockerfile_security()`, `scan_dockerfile_for_secrets()`, `check_base_image_security()`
+- **Analyzers**: `check_image_layers()`, `detect_dockerfile_anti_patterns()`, `analyze_build_cache_efficiency()`
+- **Parsers**: `parse_dockerfile()`, `extract_exposed_ports()`, `extract_env_vars()`
+
+**Rationale**: Agents write Dockerfiles. Validation catches security issues deterministically.
+
+---
+
+### v0.13.0 - Git Hook Validation Module
+**Target**: Q3 2026
+**Status**: 📋 Future
+
+**Focus**: Validate git hooks (NOT generate them)
+
+**Features** (~8 functions):
+- **Validators**: `validate_git_hook_syntax()`, `check_hook_permissions()`, `validate_hook_configuration()`
+- **Parsers**: `parse_git_hook_config()`, `extract_hook_dependencies()`
+- **Security Scanners**: `analyze_hook_security()`, `check_hook_execution_safety()`
+- **Testers**: `test_hook_execution()`, `validate_hook_compatibility()`
+
+**Rationale**: Git hooks are scripts. Apply same validation as shell module.
+
+---
+
+### v0.14.0 - CSV/TSV Data Validation Module
+**Target**: Q4 2026
+**Status**: 📋 Future
+
+**Focus**: Validate and parse tabular data
+
+**Features** (~10 functions):
+- **Validators**: `validate_csv_structure()`, `check_data_types()`, `validate_csv_encoding()`
+- **Parsers**: `parse_csv_headers()`, `detect_csv_delimiter()`, `parse_csv_metadata()`
+- **Security Scanners**: `sanitize_csv_injection()`, `check_csv_size_limits()`
+- **Analyzers**: `detect_malformed_rows()`, `analyze_column_statistics()`, `check_data_consistency()`
+
+**Rationale**: CSV parsing is tedious. Validation prevents injection attacks.
+
+---
+
+### v0.15.0 - License Compliance Module
+**Target**: Q4 2026
+**Status**: 📋 Future
+
+**Focus**: Detect and validate licenses
+
+**Features** (~10 functions):
+- **Detectors**: `detect_license_from_text()`, `scan_for_license_files()`, `identify_copyright_notices()`
+- **Validators**: `validate_spdx_identifier()`, `check_license_compatibility()`, `validate_copyright_format()`
+- **Parsers**: `extract_copyright_notices()`, `parse_license_text()`, `extract_license_metadata()`
+- **Analyzers**: `detect_license_conflicts()`, `analyze_license_coverage()`
+
+**Rationale**: License detection is pattern matching. Compatibility checking is rule-based.
+
+---
+
+### v0.16.0 - Database Schema Validation Module
+**Target**: Q1 2027
+**Status**: 📋 Future
+
+**Focus**: Validate schemas (NOT generate migrations)
+
+**Features** (~10 functions):
+- **Validators**: `validate_sql_schema()`, `check_column_naming_conventions()`, `validate_foreign_key_constraints()`
+- **Analyzers**: `detect_schema_anti_patterns()`, `analyze_index_efficiency()`, `detect_schema_drift()`
+- **Security Scanners**: `check_sql_injection_risks()`, `validate_permission_grants()`
+- **Parsers**: `parse_migration_files()`, `extract_table_relationships()`
+
+**Rationale**: Schema validation prevents runtime errors. Agents miss optimization patterns.
+
+---
+
+### v0.17.0 - Infrastructure-as-Code Validation Module
+**Target**: Q1 2027
+**Status**: 📋 Future
+
+**Focus**: Validate Terraform/CloudFormation (NOT generate IaC)
+
+**Features** (~12 functions):
+- **Validators**: `validate_terraform_syntax()`, `validate_cloudformation_template()`, `validate_provider_versions()`
+- **Security Scanners**: `analyze_iac_security()`, `scan_iac_for_secrets()`, `check_resource_exposure()`
+- **Parsers**: `parse_terraform_plan()`, `extract_resource_dependencies()`, `parse_terraform_state()`
+- **Analyzers**: `detect_iac_drift()`, `check_resource_naming()`, `analyze_cost_implications()`
+
+**Rationale**: IaC security is critical. Validation is deterministic. Complex parsing wastes agent tokens.
+
+---
+
+### v0.18.0 - Kubernetes/YAML Validation Module
+**Target**: Q2 2027
+**Status**: 📋 Future
+
+**Focus**: Validate K8s manifests (NOT generate them)
+
+**Features** (~12 functions):
+- **Validators**: `validate_k8s_manifest()`, `validate_label_selectors()`, `validate_service_mesh_config()`
+- **Security Scanners**: `analyze_k8s_security()`, `check_pod_security_policies()`, `detect_privileged_containers()`
+- **Analyzers**: `check_resource_quotas()`, `detect_k8s_anti_patterns()`, `analyze_network_policies()`
+- **Parsers**: `parse_helm_chart()`, `extract_k8s_resources()`, `parse_kustomize_config()`
+
+**Rationale**: K8s configs are complex. Security validation is deterministic. Agents miss edge cases.
+
+---
+
+### v0.19.0 - Network/Protocol Validation Module
+**Target**: Q2 2027
+**Status**: 📋 Future
+
+**Focus**: Validate network configs and protocols
+
+**Features** (~10 functions):
+- **Validators**: `validate_ip_address()`, `validate_cidr_notation()`, `check_port_number()`, `validate_dns_record()`
+- **Parsers**: `parse_network_headers()`, `parse_firewall_rules()`, `extract_ssl_certificate_info()`
+- **Analyzers**: `validate_url_format()`, `check_ssl_certificate()`, `analyze_network_topology()`
+
+**Rationale**: Network validation is rule-based. URL/IP parsing is tedious for agents.
+
+---
+
+### v0.20.0 - Authentication/Authorization Validation Module
+**Target**: Q2 2027
+**Status**: 📋 Future
+
+**Focus**: Validate auth configs (NOT implement auth)
+
+**Features** (~10 functions):
+- **Validators**: `validate_jwt_token()`, `check_oauth2_flow()`, `validate_api_key_format()`, `check_password_policy()`
+- **Parsers**: `parse_oidc_discovery()`, `validate_saml_assertion()`, `extract_jwt_claims()`
+- **Analyzers**: `analyze_rbac_config()`, `detect_auth_anti_patterns()`, `check_token_expiry()`
+
+**Rationale**: Auth validation is security-critical. Token parsing is complex. Agents miss security issues.
+
+---
+
+### v0.21.0 - Testing Framework Validation Module
+**Target**: Q3 2027
+**Status**: 📋 Future
+
+**Focus**: Validate test files (NOT generate tests)
+
+**Features** (~10 functions):
+- **Validators**: `validate_test_syntax()`, `check_test_coverage_requirements()`, `validate_test_naming()`
+- **Parsers**: `parse_test_results()`, `parse_test_fixtures()`, `extract_test_metadata()`
+- **Analyzers**: `detect_test_anti_patterns()`, `check_test_isolation()`, `analyze_test_performance()`
+- **Security**: `check_test_data_leakage()`
+
+**Rationale**: Test validation catches issues early. Agents write tests but miss best practices.
+
+---
+
+### v0.22.0 - Build System Validation Module
+**Target**: Q3 2027
+**Status**: 📋 Future
+
+**Focus**: Validate build configs (Make, Gradle, Maven, npm scripts)
+
+**Features** (~10 functions):
+- **Validators**: `validate_makefile_syntax()`, `validate_maven_pom()`, `check_build_reproducibility()`
+- **Parsers**: `parse_gradle_build()`, `parse_npm_scripts()`, `extract_build_dependencies()`
+- **Analyzers**: `detect_build_anti_patterns()`, `validate_artifact_naming()`, `analyze_build_caching()`
+- **Security**: `check_build_injection_risks()`
+
+**Rationale**: Build configs are complex. Validation prevents failures. Parsing is tedious.
+
+---
+
+### v0.23.0 - Accessibility (a11y) Validation Module
+**Target**: Q3 2027
+**Status**: 📋 Future
+
+**Focus**: Validate HTML/CSS for accessibility
+
+**Features** (~10 functions):
+- **Validators**: `validate_html_accessibility()`, `check_aria_attributes()`, `validate_form_labels()`, `validate_color_contrast()`
+- **Detectors**: `detect_missing_alt_text()`, `detect_semantic_html_issues()`, `check_keyboard_navigation()`
+- **Parsers**: `extract_accessibility_metadata()`, `parse_wcag_violations()`
+- **Analyzers**: `check_screen_reader_compatibility()`, `analyze_heading_structure()`
+
+**Rationale**: Accessibility is rule-based. Agents write HTML but miss a11y requirements.
+
+---
+
+### v0.24.0 - Cryptography Validation Module
+**Target**: Q4 2027
+**Status**: 📋 Future
+
+**Focus**: Validate crypto usage (NOT implement crypto)
+
+**Features** (~8 functions):
+- **Validators**: `validate_encryption_algorithm()`, `validate_key_length()`, `validate_certificate_chain()`
+- **Detectors**: `detect_weak_crypto()`, `detect_hardcoded_keys()`, `check_random_number_generation()`
+- **Analyzers**: `check_tls_configuration()`, `parse_crypto_standards()`
+
+**Rationale**: Crypto misuse is common. Detection is deterministic. Agents miss security nuances.
+
+---
+
+### v0.25.0 - Internationalization (i18n) Validation Module
+**Target**: Q4 2027
+**Status**: 📋 Future
+
+**Focus**: Validate i18n/l10n files and usage
+
+**Features** (~10 functions):
+- **Validators**: `validate_translation_files()`, `validate_locale_codes()`, `check_pluralization_rules()`, `validate_date_time_formats()`
+- **Detectors**: `detect_missing_translations()`, `detect_hardcoded_strings()`, `check_translation_interpolation()`
+- **Parsers**: `parse_translation_metadata()`, `extract_translation_keys()`, `parse_icu_messages()`
+
+**Rationale**: i18n validation catches missing translations. Parsing is tedious. Agents miss locale edge cases.
+
+---
+
+### v0.26.0 - JSON/YAML/TOML Parsing & Validation Module
+**Target**: Q1 2028
+**Status**: 📋 Future
+
+**Focus**: Universal config file validation
+
+**Features** (~12 functions):
+- **Validators**: `validate_json_syntax()`, `validate_yaml_syntax()`, `validate_toml_syntax()`, `validate_against_json_schema()`
+- **Parsers**: `parse_json_with_comments()`, `parse_nested_structures()`, `normalize_yaml_to_json()`
+- **Detectors**: `detect_duplicate_keys()`, `detect_yaml_security_issues()`, `detect_circular_references()`
+- **Analyzers**: `validate_config_references()`, `compare_config_files()`
+
+**Rationale**: Config files are everywhere. Validation prevents deployment failures. Parsing is tedious.
+
+---
+
+### v0.27.0 - Code Complexity & Metrics Module
+**Target**: Q1 2028
+**Status**: 📋 Future
+
+**Focus**: Measure code quality metrics (NOT refactor code)
+
+**Features** (~10 functions):
+- **Metrics**: `calculate_cyclomatic_complexity()`, `calculate_cognitive_complexity()`, `calculate_maintainability_index()`, `measure_code_churn()`
+- **Detectors**: `detect_god_classes()`, `detect_code_duplication()`, `analyze_function_length()`
+- **Analyzers**: `measure_coupling_cohesion()`, `calculate_technical_debt()`, `measure_comment_density()`
+
+**Rationale**: Metrics are deterministic. Agents need quality measurement. Prevents technical debt.
+
+---
+
+### v0.28.0 - REST API Endpoint Validation Module
+**Target**: Q1 2028
+**Status**: 📋 Future
+
+**Focus**: Validate REST API design (NOT implement APIs)
+
+**Features** (~12 functions):
+- **Validators**: `validate_rest_endpoint_naming()`, `validate_http_methods()`, `validate_pagination_parameters()`, `validate_status_codes()`
+- **Detectors**: `detect_rest_anti_patterns()`, `detect_inconsistent_responses()`, `detect_breaking_changes()`
+- **Analyzers**: `check_api_versioning()`, `validate_error_responses()`, `validate_cors_headers()`, `analyze_api_surface()`
+- **Security**: `check_rate_limiting_headers()`
+
+**Rationale**: REST design is often inconsistent. Validation is deterministic. Agents miss conventions.
+
+---
+
+### v0.29.0 - Security Headers & CORS Validation Module
+**Target**: Q2 2028
+**Status**: 📋 Future
+
+**Focus**: Validate security headers (NOT configure servers)
+
+**Features** (~10 functions):
+- **Validators**: `validate_csp_header()`, `check_cors_configuration()`, `validate_security_headers()`, `validate_cookie_attributes()`
+- **Detectors**: `detect_missing_security_headers()`, `detect_header_injection_risks()`
+- **Analyzers**: `check_tls_configuration()`, `validate_referrer_policy()`, `check_permissions_policy()`, `analyze_header_security_score()`
+
+**Rationale**: Security headers prevent attacks. Misconfiguration is common. Validation is rule-based.
+
+---
+
+### v0.30.0 - Data Validation & Sanitization Module
+**Target**: Q2 2028
+**Status**: 📋 Future
+
+**Focus**: Validate and sanitize user input (NOT process data)
+
+**Features** (~12 functions):
+- **Validators**: `validate_email_format()`, `validate_phone_number()`, `validate_credit_card()`, `validate_file_upload()`
+- **Sanitizers**: `sanitize_html_input()`, `sanitize_filename()`, `sanitize_command_injection()`
+- **Security**: `check_sql_injection_patterns()`, `validate_xss_patterns()`, `validate_url_safety()`, `check_unicode_security()`, `validate_json_size()`
+
+**Rationale**: Input validation is critical. Agents miss edge cases. Security is deterministic.
+
+---
+
+### v0.31.0 - TypeScript/JavaScript Validation Module
+**Target**: Q2 2028
+**Status**: 📋 Future
+
+**Focus**: Validate TS/JS code (NOT generate code)
+
+**Features** (~12 functions):
+- **Validators**: `validate_typescript_syntax()`, `validate_javascript_syntax()`, `validate_jsx_syntax()`, `validate_package_json()`
+- **Parsers**: `parse_tsconfig_json()`, `check_type_definitions()`, `parse_module_exports()`
+- **Detectors**: `detect_unused_imports()`, `detect_circular_dependencies()`, `detect_promise_anti_patterns()`
+- **Analyzers**: `check_eslint_config()`, `check_async_await_usage()`
+
+**Rationale**: JS/TS are ubiquitous. Validation prevents runtime errors. Agents miss tooling issues.
+
+---
+
+### v0.32.0 - Secrets Management Validation Module
+**Target**: Q3 2028
+**Status**: 📋 Future
+
+**Focus**: Validate secret handling (NOT store secrets)
+
+**Features** (~10 functions):
+- **Validators**: `validate_vault_config()`, `validate_aws_secrets_manager()`, `validate_encryption_at_rest()`, `validate_secret_naming()`
+- **Detectors**: `detect_plaintext_secrets()`, `detect_secret_sprawl()`
+- **Analyzers**: `check_secret_rotation_policies()`, `check_secret_access_patterns()`, `check_secret_expiry()`
+- **Parsers**: `parse_keyring_config()`
+
+**Rationale**: Secret management is critical. Misconfigurations cause breaches. Validation is deterministic.
+
+---
+
+### v0.33.0 - Performance Budget Validation Module
+**Target**: Q3 2028
+**Status**: 📋 Future
+
+**Focus**: Validate performance budgets (NOT optimize code)
+
+**Features** (~8 functions):
+- **Validators**: `validate_bundle_size()`, `validate_lighthouse_scores()`, `check_core_web_vitals()`, `validate_cdn_configuration()`
+- **Detectors**: `detect_render_blocking_resources()`, `check_image_optimization()`
+- **Analyzers**: `analyze_third_party_scripts()`, `check_font_loading_strategy()`
+
+**Rationale**: Performance budgets prevent bloat. Validation is measurable. Agents don't consider size.
+
+---
+
+### v0.34.0 - OpenAPI/Swagger Validation Module
+**Target**: Q3 2028
+**Status**: 📋 Future
+
+**Focus**: Validate API specifications (NOT generate specs)
+
+**Features** (~10 functions):
+- **Validators**: `validate_openapi_schema()`, `validate_swagger_schema()`, `validate_schema_references()`, `validate_example_responses()`
+- **Detectors**: `detect_api_breaking_changes()`, `detect_inconsistent_schemas()`
+- **Analyzers**: `check_api_security_definitions()`, `validate_path_parameters()`, `check_response_status_codes()`
+- **Parsers**: `parse_api_operations()`
+
+**Rationale**: OpenAPI is standard for API docs. Validation prevents documentation drift. Parsing is tedious.
+
+---
+
+### v0.35.0 - Linting Rule Validation Module
+**Target**: Q4 2028
+**Status**: 📋 Future
+
+**Focus**: Validate linter configs (NOT run linters)
+
+**Features** (~8 functions):
+- **Validators**: `validate_eslint_config()`, `validate_pylint_config()`, `validate_ruff_config()`, `validate_prettier_config()`
+- **Detectors**: `check_linter_rule_conflicts()`, `detect_deprecated_rules()`
+- **Parsers**: `parse_linter_ignore_patterns()`, `validate_custom_linter_rules()`
+
+**Rationale**: Linter configs are complex. Rule conflicts are common. Validation prevents CI failures.
+
+---
+
+### v1.0.0 - Community Release
+**Target**: Q1 2029
 **Status**: 📋 Future
 
 **Goals**:
@@ -365,12 +834,11 @@ conflicts = coat.detect_dependency_conflicts(requirements_txt)
 - Clear ROI: demonstrate token savings
 
 **Success Criteria**:
-- 75+ total functions (focused on validation/analysis, not generation)
-- 1000+ PyPI downloads/month
-- 100+ GitHub stars
-- Active community contributors
-- Documentation site with token-saving metrics
-- Integration examples for 5+ frameworks
+- 300+ total functions across 35 modules (focused on validation/analysis, not generation)
+- Comprehensive documentation with token-saving examples
+- Integration examples for major agent frameworks
+- Measurable 60-80% token reduction in development workflows
+- Active community contributions and feedback
 
 ---
 
@@ -568,24 +1036,19 @@ We actively seek community feedback! Please:
 
 ---
 
-## 📊 Metrics Dashboard
+## 📊 Quality Metrics
 
-**Current Stats** (v0.1.1):
+**Current** (v0.1.1):
 - Total Functions: 38
+- Total Modules: 4
 - Test Coverage: 82%
 - Code Quality: 100% (ruff + mypy)
-- GitHub Stars: TBD
-- PyPI Downloads: TBD
-- Active Contributors: 2
 
-**Target Stats** (v1.0.0):
-- Total Functions: 75+ (validation/analysis focused)
+**v1.0.0 Goals** (Q1 2029):
+- Total Functions: 300+ across 35 modules (validation/analysis focused)
 - Test Coverage: 90%+
 - Code Quality: 100% (ruff + mypy)
-- GitHub Stars: 100+
-- PyPI Downloads: 1000+/month from agent developers
-- Active Contributors: 10+
-- Measurable Token Savings: Document 30-50% reduction in retry loops
+- Measurable Token Savings: 60-80% reduction in development workflows
 
 ---
 
