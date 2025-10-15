@@ -214,11 +214,12 @@ formatted = coat.format_docstring(
 
 **Focus**: Local data storage and structured data management (pure stdlib)
 
-**Features** (~10 functions):
+**Features** (~16 functions):
 - **Database Operations**: `create_sqlite_database()`, `execute_query()`, `execute_many()`, `fetch_all()`, `fetch_one()`
 - **Schema Management**: `inspect_schema()`, `create_table_from_dict()`, `add_column()`, `create_index()`
-- **Safe Query Building**: `build_select_query()`, `build_insert_query()`, `escape_sql_identifier()`, `validate_sql_query()`
+- **Safe Query Building**: `build_select_query()`, `build_insert_query()`, `build_update_query()`, `build_delete_query()`, `escape_sql_identifier()`, `validate_sql_query()`
 - **Migration Helpers**: `export_to_json()`, `import_from_json()`, `backup_database()`
+- **Query Validation**: `validate_parameterized_query()`, `check_sql_injection_patterns()`
 
 **Rationale**:
 - Local data storage is essential for agent memory and state
@@ -270,8 +271,141 @@ results = coat.fetch_all(db_path, "SELECT * FROM tasks WHERE status = ?", ["pend
 
 ---
 
-### v0.4.0 - Configuration Validation Module
-**Priority**: Medium (Follows v0.3.x)
+### v0.4.0 - Git Enhancement Module
+**Priority**: High (Follows v0.3.x)
+**Status**: 🚧 Planned
+
+**Focus**: Comprehensive git operations beyond basic status/diff (validation, security, analysis)
+
+**Current Git Module** (9 functions - already implemented):
+- Status: `get_git_status()`, `get_current_branch()`, `get_git_diff()`
+- History: `get_git_log()`, `get_git_blame()`, `get_file_history()`, `get_file_at_commit()`
+- Branches: `list_branches()`, `get_branch_info()`
+
+**New Features** (~60+ functions across 10 subcategories):
+
+#### 1. Commit Message Validation (8 functions)
+- **Validators**: `validate_commit_message()`, `validate_conventional_commits()`, `validate_commit_signature()`, `validate_commit_message_length()`
+- **Parsers**: `parse_commit_message()`, `parse_conventional_commit()`, `extract_commit_type_scope()`
+- **Analyzers**: `analyze_commit_message_quality()`, `check_commit_message_links()`
+
+#### 2. Git Hooks Management (9 functions)
+- **Validators**: `validate_git_hook_syntax()`, `check_hook_permissions()`, `validate_hook_configuration()`, `validate_hook_compatibility()`
+- **Parsers**: `parse_git_hook_config()`, `extract_hook_dependencies()`
+- **Security**: `analyze_hook_security()`, `check_hook_execution_safety()`
+- **Testers**: `test_hook_execution()`
+
+#### 3. Git Configuration Analysis (6 functions)
+- **Validators**: `validate_git_config()`, `validate_gitignore_coverage()`, `validate_gitattributes()`
+- **Parsers**: `parse_gitconfig()`, `parse_gitignore()`, `parse_gitattributes()`
+- **Detectors**: `detect_gitignore_conflicts()`
+
+#### 4. Repository Health Checks (8 functions)
+- **Analyzers**: `detect_large_files()`, `analyze_branch_staleness()`, `check_repository_size()`, `analyze_commit_frequency()`
+- **Detectors**: `detect_binary_files()`, `check_lfs_usage()`, `detect_repo_bloat()`, `analyze_clone_performance()`
+
+#### 5. Merge Conflict Analysis (6 functions)
+- **Detectors**: `detect_merge_conflicts()`, `predict_merge_conflicts()`, `detect_conflicting_branches()`
+- **Parsers**: `parse_conflict_markers()`, `extract_conflict_sections()`
+- **Analyzers**: `analyze_conflict_complexity()`, `suggest_conflict_resolution_strategy()`
+
+#### 6. Git Security Auditing (8 functions)
+- **Scanners**: `scan_commit_history_for_secrets()`, `validate_commit_signatures()`, `detect_force_push_history()`, `audit_repository_permissions()`
+- **Validators**: `check_author_verification()`, `validate_gpg_signatures()`, `check_ssh_key_usage()`
+- **Analyzers**: `analyze_permission_changes()`, `detect_suspicious_commits()`
+
+#### 7. Submodule Management (5 functions)
+- **Parsers**: `parse_gitmodules()`, `extract_submodule_config()`
+- **Validators**: `validate_submodule_urls()`, `check_submodule_versions()`
+- **Analyzers**: `analyze_submodule_dependencies()`, `detect_submodule_drift()`
+
+#### 8. Git Workflow Validation (6 functions)
+- **Validators**: `validate_gitflow_compliance()`, `validate_trunk_based_workflow()`, `check_branch_naming_conventions()`, `validate_merge_strategy()`
+- **Analyzers**: `analyze_branching_model()`, `check_pr_readiness()`
+
+#### 9. Remote Repository Analysis (5 functions)
+- **Parsers**: `parse_remote_info()`, `extract_remote_urls()`, `parse_fetch_refspec()`
+- **Validators**: `check_remote_accessibility()`, `validate_push_permissions()`
+
+#### 10. Tag & Version Management (5 functions)
+- **Validators**: `validate_semantic_version_tags()`, `check_tag_format()`, `validate_version_progression()`
+- **Parsers**: `parse_tag_annotations()`, `extract_version_info()`
+- **Detectors**: `detect_tag_conflicts()`
+
+#### 11. Diff Analysis Enhancement (4 functions)
+- **Parsers**: `parse_diff_hunks()`, `extract_diff_statistics()`
+- **Analyzers**: `calculate_diff_complexity()`, `detect_whitespace_only_changes()`, `analyze_code_churn()`
+
+**Rationale**:
+- Git operations are ubiquitous in agent workflows
+- Commit message validation prevents CI failures (conventional commits, issue linking)
+- Merge conflict detection saves significant resolution time
+- Security scanning prevents credential leaks and unauthorized changes
+- Repository health checks prevent bloat and performance issues
+- Agents waste many tokens on git output parsing and validation
+- All operations are deterministic rule-based checks
+
+**Success Criteria**:
+- All 60+ functions implemented and tested
+- 80%+ test coverage
+- Commit message validation catches 95%+ of format violations
+- Security scanning detects exposed secrets across history
+- Conflict detection identifies merge issues before they occur
+- 100% ruff and mypy compliance
+- Zero external dependencies (pure stdlib + subprocess for git commands)
+
+**Example Usage**:
+```python
+import coding_open_agent_tools as coat
+
+# Validate commit message (prevents CI failures)
+validation = coat.validate_conventional_commits(
+    message="feat(api): add user authentication endpoint\n\nImplements JWT-based authentication",
+    require_body=True
+)
+# {'is_valid': 'true', 'type': 'feat', 'scope': 'api', 'breaking': 'false'}
+
+# Security audit (scan entire history for secrets)
+secrets = coat.scan_commit_history_for_secrets(
+    repo_path="/path/to/repo",
+    scan_depth=100
+)
+# [{'commit': 'abc123', 'file': 'config.py', 'line': 5, 'type': 'api_key', ...}]
+
+# Detect merge conflicts before attempting merge
+conflicts = coat.predict_merge_conflicts(
+    repo_path="/path/to/repo",
+    source_branch="feature/new-api",
+    target_branch="main"
+)
+# {'has_conflicts': 'true', 'conflicting_files': ['src/api.py', 'tests/test_api.py']}
+
+# Repository health check
+health = coat.check_repository_size(repo_path="/path/to/repo")
+# {'total_size_mb': '150', 'large_files': [...], 'recommendations': [...]}
+
+# Validate git hooks before commit
+hook_check = coat.validate_git_hook_syntax(
+    hook_path=".git/hooks/pre-commit",
+    shell_type="bash"
+)
+# {'is_valid': 'true', 'security_issues': [], 'permissions_ok': 'true'}
+```
+
+**Dependencies**:
+- Python stdlib: `subprocess`, `re`, `pathlib`, `json`
+- Git binary (must be installed and in PATH)
+
+**What We're NOT Building**:
+- ❌ Full git GUI/TUI (use existing tools)
+- ❌ Git workflow automation (agents handle this)
+- ❌ Repository hosting features (use GitHub/GitLab)
+- ❌ Advanced git operations (rebase interactive, cherry-pick) - agents do these well
+
+---
+
+### v0.5.0 - Configuration Validation Module
+**Priority**: Medium (Follows v0.4.0)
 **Status**: 📋 Future
 
 **Focus**: Config validation and security scanning (NOT generation)
@@ -317,8 +451,8 @@ conflicts = coat.detect_dependency_conflicts(requirements_txt)
 
 ---
 
-### v0.5.0 - Enhanced Code Analysis Module
-**Priority**: Medium (Follows v0.4.0)
+### v0.6.0 - Enhanced Code Analysis Module
+**Priority**: Medium (Follows v0.5.0)
 **Status**: 📋 Future
 
 **Focus**: Advanced deterministic analysis (double down on what works)
@@ -347,7 +481,7 @@ conflicts = coat.detect_dependency_conflicts(requirements_txt)
 
 ---
 
-### v0.6.0 - HTTP/API Validation Module
+### v0.7.0 - HTTP/API Validation Module
 **Priority**: Medium (Expansion phase after core modules)
 **Status**: 📋 Future
 
@@ -363,7 +497,7 @@ conflicts = coat.detect_dependency_conflicts(requirements_txt)
 
 ---
 
-### v0.7.0 - Regex Validation & Testing Module
+### v0.8.0 - Regex Validation & Testing Module
 **Priority**: Medium (Expansion phase)
 **Status**: 📋 Future
 
@@ -379,7 +513,7 @@ conflicts = coat.detect_dependency_conflicts(requirements_txt)
 
 ---
 
-### v0.8.0 - Documentation Validation Module
+### v0.9.0 - Documentation Validation Module
 **Priority**: Medium (Expansion phase)
 **Status**: 📋 Future
 
@@ -395,7 +529,7 @@ conflicts = coat.detect_dependency_conflicts(requirements_txt)
 
 ---
 
-### v0.9.0 - Dependency Analysis Module
+### v0.10.0 - Dependency Analysis Module
 **Priority**: High (Universal need, high token savings)
 **Status**: 📋 Future
 
@@ -411,7 +545,7 @@ conflicts = coat.detect_dependency_conflicts(requirements_txt)
 
 ---
 
-### v0.10.0 - Environment Variable Validation Module
+### v0.11.0 - Environment Variable Validation Module
 **Priority**: Medium (Expansion phase)
 **Status**: 📋 Future
 
@@ -426,7 +560,7 @@ conflicts = coat.detect_dependency_conflicts(requirements_txt)
 
 ---
 
-### v0.11.0 - Log Parsing & Analysis Module
+### v0.12.0 - Log Parsing & Analysis Module
 **Priority**: Medium (Later expansion phase)
 **Status**: 📋 Future
 
@@ -441,7 +575,7 @@ conflicts = coat.detect_dependency_conflicts(requirements_txt)
 
 ---
 
-### v0.12.0 - Container/Dockerfile Validation Module
+### v0.13.0 - Container/Dockerfile Validation Module
 **Priority**: Medium (Later expansion phase)
 **Status**: 📋 Future
 
@@ -454,22 +588,6 @@ conflicts = coat.detect_dependency_conflicts(requirements_txt)
 - **Parsers**: `parse_dockerfile()`, `extract_exposed_ports()`, `extract_env_vars()`
 
 **Rationale**: Agents write Dockerfiles. Validation catches security issues deterministically.
-
----
-
-### v0.13.0 - Git Hook Validation Module
-**Priority**: Medium (Later expansion phase)
-**Status**: 📋 Future
-
-**Focus**: Validate git hooks (NOT generate them)
-
-**Features** (~8 functions):
-- **Validators**: `validate_git_hook_syntax()`, `check_hook_permissions()`, `validate_hook_configuration()`
-- **Parsers**: `parse_git_hook_config()`, `extract_hook_dependencies()`
-- **Security Scanners**: `analyze_hook_security()`, `check_hook_execution_safety()`
-- **Testers**: `test_hook_execution()`, `validate_hook_compatibility()`
-
-**Rationale**: Git hooks are scripts. Apply same validation as shell module.
 
 ---
 
@@ -817,7 +935,7 @@ conflicts = coat.detect_dependency_conflicts(requirements_txt)
 ---
 
 ### v1.0.0 - Community Release
-**Priority**: Milestone (Follows completion of all 35 modules)
+**Priority**: Milestone (Follows completion of all 36 modules)
 **Status**: 📋 Future
 
 **Goals**:
@@ -833,7 +951,7 @@ conflicts = coat.detect_dependency_conflicts(requirements_txt)
 - Clear ROI: demonstrate token savings
 
 **Success Criteria**:
-- 300+ total functions across 35 modules (focused on validation/analysis, not generation)
+- 370+ total functions across 36 modules (focused on validation/analysis, not generation)
 - Comprehensive documentation with token-saving examples
 - Integration examples for major agent frameworks
 - Measurable 60-80% token reduction in development workflows
@@ -930,14 +1048,15 @@ See [CONTRIBUTING.md](../CONTRIBUTING.md) for detailed guidelines.
 
 ## 🎯 Strategic Priorities
 
-### Phase 1: Core Foundation (Shell, Python, SQLite)
-**Focus**: Prevent agent token waste on shell escaping, Python validation, and data storage
+### Phase 1: Core Foundation (Shell, Python, SQLite, Git)
+**Focus**: Prevent agent token waste on shell escaping, Python validation, data storage, and git operations
 - Validation catches errors before execution (saves retry loops)
-- Security scanning is deterministic (unquoted vars, eval, injection)
+- Security scanning is deterministic (unquoted vars, eval, injection, secrets in git history)
 - Argument escaping prevents common mistakes
 - Python validation prevents syntax/type errors
 - Parsing extracts signatures/docstrings (tedious for agents)
 - SQLite provides agent memory and structured data (zero dependencies)
+- Comprehensive git operations (commit validation, merge conflict detection, security auditing)
 
 ### Phase 2: Config & Security Expansion
 **Focus**: Deployment safety and deep code analysis
@@ -1069,7 +1188,7 @@ We actively seek community feedback! Please:
 - Code Quality: 100% (ruff + mypy)
 
 **v1.0.0 Goals**:
-- Total Functions: 300+ across 35 modules (validation/analysis focused)
+- Total Functions: 370+ across 36 modules (validation/analysis focused)
 - Test Coverage: 90%+
 - Code Quality: 100% (ruff + mypy)
 - Measurable Token Savings: 60-80% reduction in development workflows

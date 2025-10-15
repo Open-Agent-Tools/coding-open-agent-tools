@@ -134,15 +134,76 @@ def load_all_quality_tools() -> list[Callable[..., Any]]:
     ]
 
 
+def load_all_shell_tools() -> list[Callable[..., Any]]:
+    """Load all shell validation and analysis tools.
+
+    Returns:
+        List of 13 shell tool functions
+    """
+    from coding_open_agent_tools import shell
+
+    return [
+        # Validators
+        shell.validate_shell_syntax,
+        shell.check_shell_dependencies,
+        # Security
+        shell.analyze_shell_security,
+        shell.detect_shell_injection_risks,
+        shell.scan_for_secrets_enhanced,
+        # Formatters
+        shell.escape_shell_argument,
+        shell.normalize_shebang,
+        # Parsers
+        shell.parse_shell_script,
+        shell.extract_shell_functions,
+        shell.extract_shell_variables,
+        # Analyzers
+        shell.detect_unquoted_variables,
+        shell.find_dangerous_commands,
+        shell.check_error_handling,
+    ]
+
+
+def load_all_python_tools() -> list[Callable[..., Any]]:
+    """Load all Python validation and analysis tools.
+
+    Returns:
+        List of 15 Python tool functions
+    """
+    from coding_open_agent_tools import python
+
+    return [
+        # Validators
+        python.validate_python_syntax,
+        python.validate_type_hints,
+        python.validate_import_order,
+        python.check_adk_compliance,
+        # Extractors
+        python.parse_function_signature,
+        python.extract_docstring_info,
+        python.extract_type_annotations,
+        python.get_function_dependencies,
+        # Formatters
+        python.format_docstring,
+        python.sort_imports,
+        python.normalize_type_hints,
+        # Analyzers
+        python.detect_circular_imports,
+        python.find_unused_imports,
+        python.identify_anti_patterns,
+        python.check_test_coverage_gaps,
+    ]
+
+
 def load_all_tools() -> list[Callable[..., Any]]:
     """Load all available tools from all modules.
 
     Returns:
-        List of all 38 tool functions (analysis, git, profiling, quality)
+        List of all 66 tool functions (analysis, git, profiling, quality, shell, python)
 
     Example:
         >>> all_tools = load_all_tools()
-        >>> len(all_tools) == 38
+        >>> len(all_tools) == 66
         True
     """
     return merge_tool_lists(
@@ -150,4 +211,6 @@ def load_all_tools() -> list[Callable[..., Any]]:
         load_all_git_tools(),
         load_all_profiling_tools(),
         load_all_quality_tools(),
+        load_all_shell_tools(),
+        load_all_python_tools(),
     )

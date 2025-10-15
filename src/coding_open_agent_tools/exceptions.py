@@ -55,3 +55,9 @@ class GitError(CodingToolsError):
     """Raised when git operations fail."""
 
     pass
+
+
+class ToolExecutionError(CodingToolsError):
+    """Raised when a tool execution fails (e.g., missing dependencies, runtime errors)."""
+
+    pass
