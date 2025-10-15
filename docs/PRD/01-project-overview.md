@@ -310,8 +310,8 @@ if validation['is_valid'] == 'true':
 
 ### Adoption Metrics
 
-- PyPI downloads per month
-- GitHub stars and forks
+- PyPI downloads (growth indicator)
+- GitHub stars and forks (community interest)
 - Integration into agent frameworks
 
 ### Quality Metrics
@@ -345,29 +345,27 @@ if validation['is_valid'] == 'true':
 - ✅ Enable GitHub Discussions
 - ✅ Complete documentation infrastructure
 
-### 🚧 Milestone 2: Shell Module (v0.2.0) - PLANNED
-- Implement all shell generation functions (~15)
-- Add validation and security checks
-- Create template library
+### 🚧 Milestone 2: Shell Validation & Security (v0.2.0) - PLANNED
+**Priority**: High (Next after v0.1.1)
+- Implement shell validation functions (~13)
+- Add security scanning and checks
 - Full test coverage (80%+)
 - Documentation and examples
-- Target: Q1 2025
 
-### 🚧 Milestone 3: Codegen Module (v0.3.0) - PLANNED
-- Implement Python code generation functions (~18)
-- Add docstring generation (Google/NumPy/Sphinx)
-- Create test skeleton generation
-- Template library for common patterns
+### 🚧 Milestone 3: Python Validation & Analysis (v0.3.0) - PLANNED
+**Priority**: High (Follows v0.2.0)
+- Implement Python validation functions (~15)
+- Add docstring parsing (Google/NumPy/Sphinx)
+- Type hint validation and parsing
 - Documentation and examples
-- Target: Q2 2025
 
 ### 📋 Milestone 4: Community Release (v1.0.0) - FUTURE
+**Priority**: Milestone (Follows completion of all 35 modules)
 - Production-ready quality across all modules
 - Comprehensive documentation site
 - Example projects and tutorials
 - Integration guides for popular frameworks (Google ADK, Strands)
-- Community adoption milestones
-- Target: Q3 2025
+- Active community engagement
 
 ## Risks and Mitigations
 

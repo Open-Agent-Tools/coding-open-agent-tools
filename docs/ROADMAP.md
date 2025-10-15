@@ -1,9 +1,8 @@
 # Coding Open Agent Tools - Roadmap
 
 **Current Version**: v0.1.1
-**Last Updated**: 2025-10-14
 
-This document outlines the planned development roadmap for the Coding Open Agent Tools project.
+This document outlines the planned development roadmap for the Coding Open Agent Tools project. All milestones are sequenced by priority and dependency order, not time-based estimates.
 
 ## 🎯 Core Philosophy: Token Efficiency
 
@@ -66,10 +65,10 @@ This document outlines the planned development roadmap for the Coding Open Agent
 
 ---
 
-## 🗓️ Release Timeline
+## 🗺️ Development Milestones
 
 ### v0.2.0 - Shell Validation & Security Module
-**Target**: Q1 2025
+**Priority**: High (Next milestone after v0.1.1)
 **Status**: 🚧 Planned
 
 **Focus**: Validation and security analysis (NOT full script generation)
@@ -139,7 +138,7 @@ secrets = coat.scan_for_secrets_enhanced(script, use_detect_secrets=True)
 ---
 
 ### v0.3.0 - Python Validation & Analysis Module
-**Target**: Q2 2025
+**Priority**: High (Follows v0.2.0)
 **Status**: 🚧 Planned
 
 **Focus**: Validation, parsing, and formatting (NOT full code generation)
@@ -210,7 +209,7 @@ formatted = coat.format_docstring(
 ---
 
 ### v0.3.5 - SQLite Database Operations Module
-**Target**: Q2 2025 (alongside v0.3.0)
+**Priority**: High (Parallel with v0.3.0)
 **Status**: 🚧 Planned
 
 **Focus**: Local data storage and structured data management (pure stdlib)
@@ -272,7 +271,7 @@ results = coat.fetch_all(db_path, "SELECT * FROM tasks WHERE status = ?", ["pend
 ---
 
 ### v0.4.0 - Configuration Validation Module
-**Target**: Q3 2025
+**Priority**: Medium (Follows v0.3.x)
 **Status**: 📋 Future
 
 **Focus**: Config validation and security scanning (NOT generation)
@@ -319,7 +318,7 @@ conflicts = coat.detect_dependency_conflicts(requirements_txt)
 ---
 
 ### v0.5.0 - Enhanced Code Analysis Module
-**Target**: Q4 2025
+**Priority**: Medium (Follows v0.4.0)
 **Status**: 📋 Future
 
 **Focus**: Advanced deterministic analysis (double down on what works)
@@ -349,7 +348,7 @@ conflicts = coat.detect_dependency_conflicts(requirements_txt)
 ---
 
 ### v0.6.0 - HTTP/API Validation Module
-**Target**: Q1 2026
+**Priority**: Medium (Expansion phase after core modules)
 **Status**: 📋 Future
 
 **Focus**: Validate API requests/responses (NOT build clients)
@@ -365,7 +364,7 @@ conflicts = coat.detect_dependency_conflicts(requirements_txt)
 ---
 
 ### v0.7.0 - Regex Validation & Testing Module
-**Target**: Q1 2026
+**Priority**: Medium (Expansion phase)
 **Status**: 📋 Future
 
 **Focus**: Validate and test regex patterns (NOT generate them)
@@ -381,7 +380,7 @@ conflicts = coat.detect_dependency_conflicts(requirements_txt)
 ---
 
 ### v0.8.0 - Documentation Validation Module
-**Target**: Q2 2026
+**Priority**: Medium (Expansion phase)
 **Status**: 📋 Future
 
 **Focus**: Validate and parse docs (NOT generate them)
@@ -397,7 +396,7 @@ conflicts = coat.detect_dependency_conflicts(requirements_txt)
 ---
 
 ### v0.9.0 - Dependency Analysis Module
-**Target**: Q2 2026
+**Priority**: High (Universal need, high token savings)
 **Status**: 📋 Future
 
 **Focus**: Analyze dependencies and detect conflicts
@@ -413,7 +412,7 @@ conflicts = coat.detect_dependency_conflicts(requirements_txt)
 ---
 
 ### v0.10.0 - Environment Variable Validation Module
-**Target**: Q2 2026
+**Priority**: Medium (Expansion phase)
 **Status**: 📋 Future
 
 **Focus**: Validate env vars and .env files
@@ -428,7 +427,7 @@ conflicts = coat.detect_dependency_conflicts(requirements_txt)
 ---
 
 ### v0.11.0 - Log Parsing & Analysis Module
-**Target**: Q3 2026
+**Priority**: Medium (Later expansion phase)
 **Status**: 📋 Future
 
 **Focus**: Parse logs into structured data
@@ -443,7 +442,7 @@ conflicts = coat.detect_dependency_conflicts(requirements_txt)
 ---
 
 ### v0.12.0 - Container/Dockerfile Validation Module
-**Target**: Q3 2026
+**Priority**: Medium (Later expansion phase)
 **Status**: 📋 Future
 
 **Focus**: Validate Docker configs (NOT generate them)
@@ -459,7 +458,7 @@ conflicts = coat.detect_dependency_conflicts(requirements_txt)
 ---
 
 ### v0.13.0 - Git Hook Validation Module
-**Target**: Q3 2026
+**Priority**: Medium (Later expansion phase)
 **Status**: 📋 Future
 
 **Focus**: Validate git hooks (NOT generate them)
@@ -475,7 +474,7 @@ conflicts = coat.detect_dependency_conflicts(requirements_txt)
 ---
 
 ### v0.14.0 - CSV/TSV Data Validation Module
-**Target**: Q4 2026
+**Priority**: Medium (Later expansion phase)
 **Status**: 📋 Future
 
 **Focus**: Validate and parse tabular data
@@ -491,7 +490,7 @@ conflicts = coat.detect_dependency_conflicts(requirements_txt)
 ---
 
 ### v0.15.0 - License Compliance Module
-**Target**: Q4 2026
+**Priority**: Medium (Later expansion phase)
 **Status**: 📋 Future
 
 **Focus**: Detect and validate licenses
@@ -507,7 +506,7 @@ conflicts = coat.detect_dependency_conflicts(requirements_txt)
 ---
 
 ### v0.16.0 - Database Schema Validation Module
-**Target**: Q1 2027
+**Priority**: Medium (Later expansion phase)
 **Status**: 📋 Future
 
 **Focus**: Validate schemas (NOT generate migrations)
@@ -523,7 +522,7 @@ conflicts = coat.detect_dependency_conflicts(requirements_txt)
 ---
 
 ### v0.17.0 - Infrastructure-as-Code Validation Module
-**Target**: Q1 2027
+**Priority**: Medium (Later expansion phase)
 **Status**: 📋 Future
 
 **Focus**: Validate Terraform/CloudFormation (NOT generate IaC)
@@ -539,7 +538,7 @@ conflicts = coat.detect_dependency_conflicts(requirements_txt)
 ---
 
 ### v0.18.0 - Kubernetes/YAML Validation Module
-**Target**: Q2 2027
+**Priority**: Medium (Later expansion phase)
 **Status**: 📋 Future
 
 **Focus**: Validate K8s manifests (NOT generate them)
@@ -555,7 +554,7 @@ conflicts = coat.detect_dependency_conflicts(requirements_txt)
 ---
 
 ### v0.19.0 - Network/Protocol Validation Module
-**Target**: Q2 2027
+**Priority**: Medium (Later expansion phase)
 **Status**: 📋 Future
 
 **Focus**: Validate network configs and protocols
@@ -570,7 +569,7 @@ conflicts = coat.detect_dependency_conflicts(requirements_txt)
 ---
 
 ### v0.20.0 - Authentication/Authorization Validation Module
-**Target**: Q2 2027
+**Priority**: Medium (Later expansion phase)
 **Status**: 📋 Future
 
 **Focus**: Validate auth configs (NOT implement auth)
@@ -585,7 +584,7 @@ conflicts = coat.detect_dependency_conflicts(requirements_txt)
 ---
 
 ### v0.21.0 - Testing Framework Validation Module
-**Target**: Q3 2027
+**Priority**: Medium (Later expansion phase)
 **Status**: 📋 Future
 
 **Focus**: Validate test files (NOT generate tests)
@@ -601,7 +600,7 @@ conflicts = coat.detect_dependency_conflicts(requirements_txt)
 ---
 
 ### v0.22.0 - Build System Validation Module
-**Target**: Q3 2027
+**Priority**: Medium (Later expansion phase)
 **Status**: 📋 Future
 
 **Focus**: Validate build configs (Make, Gradle, Maven, npm scripts)
@@ -617,7 +616,7 @@ conflicts = coat.detect_dependency_conflicts(requirements_txt)
 ---
 
 ### v0.23.0 - Accessibility (a11y) Validation Module
-**Target**: Q3 2027
+**Priority**: Medium (Later expansion phase)
 **Status**: 📋 Future
 
 **Focus**: Validate HTML/CSS for accessibility
@@ -633,7 +632,7 @@ conflicts = coat.detect_dependency_conflicts(requirements_txt)
 ---
 
 ### v0.24.0 - Cryptography Validation Module
-**Target**: Q4 2027
+**Priority**: Medium (Later expansion phase)
 **Status**: 📋 Future
 
 **Focus**: Validate crypto usage (NOT implement crypto)
@@ -648,7 +647,7 @@ conflicts = coat.detect_dependency_conflicts(requirements_txt)
 ---
 
 ### v0.25.0 - Internationalization (i18n) Validation Module
-**Target**: Q4 2027
+**Priority**: Medium (Later expansion phase)
 **Status**: 📋 Future
 
 **Focus**: Validate i18n/l10n files and usage
@@ -663,7 +662,7 @@ conflicts = coat.detect_dependency_conflicts(requirements_txt)
 ---
 
 ### v0.26.0 - JSON/YAML/TOML Parsing & Validation Module
-**Target**: Q1 2028
+**Priority**: Medium (Later expansion phase)
 **Status**: 📋 Future
 
 **Focus**: Universal config file validation
@@ -679,7 +678,7 @@ conflicts = coat.detect_dependency_conflicts(requirements_txt)
 ---
 
 ### v0.27.0 - Code Complexity & Metrics Module
-**Target**: Q1 2028
+**Priority**: Medium (Later expansion phase)
 **Status**: 📋 Future
 
 **Focus**: Measure code quality metrics (NOT refactor code)
@@ -694,7 +693,7 @@ conflicts = coat.detect_dependency_conflicts(requirements_txt)
 ---
 
 ### v0.28.0 - REST API Endpoint Validation Module
-**Target**: Q1 2028
+**Priority**: Medium (Later expansion phase)
 **Status**: 📋 Future
 
 **Focus**: Validate REST API design (NOT implement APIs)
@@ -710,7 +709,7 @@ conflicts = coat.detect_dependency_conflicts(requirements_txt)
 ---
 
 ### v0.29.0 - Security Headers & CORS Validation Module
-**Target**: Q2 2028
+**Priority**: Medium (Later expansion phase)
 **Status**: 📋 Future
 
 **Focus**: Validate security headers (NOT configure servers)
@@ -725,7 +724,7 @@ conflicts = coat.detect_dependency_conflicts(requirements_txt)
 ---
 
 ### v0.30.0 - Data Validation & Sanitization Module
-**Target**: Q2 2028
+**Priority**: Medium (Later expansion phase)
 **Status**: 📋 Future
 
 **Focus**: Validate and sanitize user input (NOT process data)
@@ -740,7 +739,7 @@ conflicts = coat.detect_dependency_conflicts(requirements_txt)
 ---
 
 ### v0.31.0 - TypeScript/JavaScript Validation Module
-**Target**: Q2 2028
+**Priority**: Medium (Later expansion phase)
 **Status**: 📋 Future
 
 **Focus**: Validate TS/JS code (NOT generate code)
@@ -756,7 +755,7 @@ conflicts = coat.detect_dependency_conflicts(requirements_txt)
 ---
 
 ### v0.32.0 - Secrets Management Validation Module
-**Target**: Q3 2028
+**Priority**: Medium (Later expansion phase)
 **Status**: 📋 Future
 
 **Focus**: Validate secret handling (NOT store secrets)
@@ -772,7 +771,7 @@ conflicts = coat.detect_dependency_conflicts(requirements_txt)
 ---
 
 ### v0.33.0 - Performance Budget Validation Module
-**Target**: Q3 2028
+**Priority**: Medium (Later expansion phase)
 **Status**: 📋 Future
 
 **Focus**: Validate performance budgets (NOT optimize code)
@@ -787,7 +786,7 @@ conflicts = coat.detect_dependency_conflicts(requirements_txt)
 ---
 
 ### v0.34.0 - OpenAPI/Swagger Validation Module
-**Target**: Q3 2028
+**Priority**: Medium (Later expansion phase)
 **Status**: 📋 Future
 
 **Focus**: Validate API specifications (NOT generate specs)
@@ -803,7 +802,7 @@ conflicts = coat.detect_dependency_conflicts(requirements_txt)
 ---
 
 ### v0.35.0 - Linting Rule Validation Module
-**Target**: Q4 2028
+**Priority**: Medium (Later expansion phase)
 **Status**: 📋 Future
 
 **Focus**: Validate linter configs (NOT run linters)
@@ -818,7 +817,7 @@ conflicts = coat.detect_dependency_conflicts(requirements_txt)
 ---
 
 ### v1.0.0 - Community Release
-**Target**: Q1 2029
+**Priority**: Milestone (Follows completion of all 35 modules)
 **Status**: 📋 Future
 
 **Goals**:
@@ -867,10 +866,10 @@ conflicts = coat.detect_dependency_conflicts(requirements_txt)
 ## 📊 Success Metrics
 
 ### Adoption Metrics
-- **PyPI Downloads**: Target 1000/month by v1.0.0
-- **GitHub Stars**: Target 100 by v1.0.0
-- **Active Contributors**: Target 5+ regular contributors
-- **Integration Adoption**: Used in 5+ agent frameworks
+- **PyPI Downloads**: Growth indicator
+- **GitHub Stars**: Community interest indicator
+- **Active Contributors**: Community health indicator
+- **Integration Adoption**: Framework compatibility indicator
 
 ### Quality Metrics
 - **Test Coverage**: Maintain 80%+ across all modules
@@ -879,10 +878,10 @@ conflicts = coat.detect_dependency_conflicts(requirements_txt)
 - **Security**: Zero critical vulnerabilities
 
 ### Functional Metrics
-- **Total Functions**: Target 75+ by v1.0.0 (focused on validation/analysis)
+- **Total Functions**: Target 300+ by v1.0.0 (focused on validation/analysis)
 - **Token Savings**: Measurable reduction in retry loops and parsing overhead
 - **Error Prevention**: 95%+ syntax/security error detection rate
-- **Framework Integrations**: Target 5+ by v1.0.0 (Google ADK, Strands, LangChain, etc.)
+- **Framework Integrations**: Multiple framework compatibility (Google ADK, Strands, LangChain, etc.)
 
 ---
 
@@ -931,25 +930,50 @@ See [CONTRIBUTING.md](../CONTRIBUTING.md) for detailed guidelines.
 
 ## 🎯 Strategic Priorities
 
-### Phase 1 (Q1 2025): Shell Validation & Security
-**Focus**: Prevent agent token waste on shell escaping and security
+### Phase 1: Core Foundation (Shell, Python, SQLite)
+**Focus**: Prevent agent token waste on shell escaping, Python validation, and data storage
 - Validation catches errors before execution (saves retry loops)
 - Security scanning is deterministic (unquoted vars, eval, injection)
 - Argument escaping prevents common mistakes
-
-### Phase 2 (Q2 2025): Python Validation & SQLite Operations
-**Focus**: Validation, parsing, and local data storage
 - Python validation prevents syntax/type errors
 - Parsing extracts signatures/docstrings (tedious for agents)
 - SQLite provides agent memory and structured data (zero dependencies)
 
-### Phase 3 (Q3-Q4 2025): Config Validation & Advanced Analysis
+### Phase 2: Config & Security Expansion
 **Focus**: Deployment safety and deep code analysis
 - Config validation prevents deployment failures
 - Advanced security/performance scanning
 - Dependency and compliance checking
 
-### Phase 4 (Q1 2026): Community Release & Token Savings Documentation
+### Phase 3: Universal Modules (HTTP, Regex, Docs, Dependencies)
+**Focus**: High-impact cross-language validation
+- API and HTTP validation
+- Documentation parsing and link checking
+- Dependency analysis and conflict detection
+- Environment variable validation
+
+### Phase 4: Infrastructure & Data (Containers, K8s, IaC, Databases)
+**Focus**: Cloud infrastructure and data validation
+- Container and Kubernetes manifest validation
+- Infrastructure-as-Code security scanning
+- Database schema validation
+- CSV/TSV data validation
+
+### Phase 5: Advanced Validation (Security, Testing, Build Systems)
+**Focus**: Enterprise-grade validation capabilities
+- Security headers and CORS validation
+- Testing framework validation
+- Build system validation
+- Accessibility (a11y) validation
+
+### Phase 6: Modern Development (TypeScript, APIs, Performance)
+**Focus**: Modern web development validation
+- TypeScript/JavaScript validation
+- REST API and OpenAPI validation
+- Performance budget validation
+- Data validation and sanitization
+
+### Phase 7: Community Release & Documentation
 **Focus**: Demonstrate ROI and expand adoption
 - Documentation with token-saving metrics
 - Integration examples for major agent frameworks
@@ -1044,7 +1068,7 @@ We actively seek community feedback! Please:
 - Test Coverage: 82%
 - Code Quality: 100% (ruff + mypy)
 
-**v1.0.0 Goals** (Q1 2029):
+**v1.0.0 Goals**:
 - Total Functions: 300+ across 35 modules (validation/analysis focused)
 - Test Coverage: 90%+
 - Code Quality: 100% (ruff + mypy)
@@ -1055,9 +1079,9 @@ We actively seek community feedback! Please:
 **Maintainers**: @jwesleye, @unseriousai
 **Organization**: [Open Agent Tools](https://github.com/Open-Agent-Tools)
 **License**: MIT
-**Roadmap Version**: 2.0 - Token Efficiency Focused
+**Roadmap Version**: 3.0 - Priority-Based Sequencing
 **Status**: Active Development
-**Next Milestone**: v0.2.0 - Shell Validation & Security (Q1 2025)
+**Next Milestone**: v0.2.0 - Shell Validation & Security
 
 ---
 
