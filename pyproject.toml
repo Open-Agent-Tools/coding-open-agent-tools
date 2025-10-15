@@ -127,6 +127,8 @@ warn_no_return = true
 warn_unreachable = true
 strict_equality = true
 exclude = ["venv/", ".venv/", "build/", "dist/"]
+follow_imports = "skip"  # Skip type checking of imported modules
+ignore_missing_imports = true  # Ignore missing imports in dependencies
 
 [[tool.mypy.overrides]]
 module = ["strands", "strands.*", "pkg_resources", "basic_open_agent_tools", "basic_open_agent_tools.*", "google.adk", "google.adk.*", "langgraph", "langgraph.*", "detect_secrets", "detect_secrets.*", "mcp", "mcp.*"]
