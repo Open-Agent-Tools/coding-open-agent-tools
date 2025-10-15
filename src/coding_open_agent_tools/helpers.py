@@ -199,7 +199,7 @@ def load_all_database_tools() -> list[Callable[..., Any]]:
     """Load all SQLite database operation tools.
 
     Returns:
-        List of 16 database tool functions
+        List of 18 database tool functions
     """
     from coding_open_agent_tools import database
 
