@@ -1,6 +1,6 @@
 # Coding Open Agent Tools - TODO
 
-**Current Version**: v0.3.4 (in release)
+**Current Version**: v0.4.1
 **Last Updated**: 2025-10-15
 
 ## ✅ Completed Phases
@@ -44,19 +44,20 @@
 - [x] Deprecated @adk_tool decorator (non-existent import)
 - [x] Updated to @strands_tool only (Google ADK uses standard callables)
 
-### Current Status (v0.3.5)
+### Current Status (v0.4.1) ✅ RELEASED
 - **Total Functions**: 154 across 7 modules
 - **Total Tests**: 570 passing
 - **Code Coverage**: 50% overall
 - **Code Quality**: 100% ruff and mypy --strict compliance
 - **Modules**: analysis (14), git (79), profiling (8), quality (7), shell (13), python (15), database (18)
 - **Decorator Pattern**: @strands_tool only (ADK works with standard callables)
+- **Published**: PyPI package available
 
 ---
 
 ## 🚀 Upcoming Modules (Roadmap v3.0)
 
-### v0.4.0 - Configuration Validation Module (10 functions)
+### v0.5.0 - Configuration Validation Module (10 functions)
 **Priority**: High
 
 - [ ] Validators: YAML/TOML/JSON syntax, schema validation, CI config
@@ -185,7 +186,7 @@ coding-open-agent-tools/
 
 ---
 
-**Document Version**: 3.4
-**Status**: Active Development
-**Next Milestone**: v0.4.0 Release (Configuration Validation Module)
+**Document Version**: 3.5
+**Status**: Active Development - v0.4.1 Released
+**Next Milestone**: v0.5.0 Release (Configuration Validation Module)
 **Future**: See ROADMAP.md for complete 36-module plan through v1.0.0

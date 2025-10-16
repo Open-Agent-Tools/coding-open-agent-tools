@@ -8,8 +8,49 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Planned
-- Git enhancement module with 60+ functions (v0.3.1)
-- Configuration validation module (v0.4.0)
+- Configuration validation module (v0.5.0)
+
+## [0.4.1] - 2025-10-15
+
+### Added
+- **Git Enhancement Module** (70 new functions added to git module):
+  - **Commit Management** (8 functions): `validate_commit_message`, `parse_commit_message`, `analyze_commit_quality`, `check_conventional_commits`, `suggest_commit_message`, `validate_commit_signature`, `analyze_commit_size`, `check_commit_author`
+  - **Git Hooks** (9 functions): `validate_hook_syntax`, `list_git_hooks`, `check_hook_executable`, `analyze_hook_security`, `test_hook_execution`, `get_hook_output`, `check_hook_dependencies`, `validate_hook_shebang`, `suggest_hook_improvements`
+  - **Configuration** (6 functions): `parse_git_config`, `validate_gitignore`, `analyze_gitattributes`, `check_git_lfs_config`, `validate_git_config_section`, `suggest_config_improvements`
+  - **Repository Health** (8 functions): `analyze_repository_size`, `find_large_files`, `check_branch_staleness`, `analyze_commit_frequency`, `check_repository_activity`, `detect_abandoned_branches`, `analyze_contributor_activity`, `suggest_repository_cleanup`
+  - **Merge Conflicts** (6 functions): `detect_merge_conflicts`, `parse_conflict_markers`, `analyze_conflict_complexity`, `suggest_conflict_resolution`, `check_merge_in_progress`, `predict_merge_conflicts`
+  - **Security Auditing** (8 functions): `scan_history_for_secrets`, `check_sensitive_files`, `validate_gpg_signatures`, `check_force_push_protection`, `analyze_file_permissions`, `check_signed_tags`, `detect_security_issues`, `audit_commit_authors`
+  - **Submodules** (5 functions): `list_submodules`, `parse_gitmodules`, `validate_submodule_urls`, `check_submodule_status`, `analyze_submodule_updates`
+  - **Workflow Validation** (6 functions): `validate_gitflow_workflow`, `validate_trunk_based_workflow`, `validate_branch_naming`, `check_protected_branches`, `analyze_merge_strategy`, `validate_commit_frequency`
+  - **Remote Analysis** (5 functions): `list_remotes`, `parse_remote_url`, `validate_remote_url`, `check_remote_accessibility`, `analyze_push_pull_config`
+  - **Tags & Versioning** (5 functions): `list_tags`, `parse_tag_version`, `validate_semantic_version`, `check_version_consistency`, `suggest_next_version`
+  - **Diff Analysis** (4 functions): `analyze_diff_stats`, `calculate_code_churn`, `get_file_diff`, `find_largest_changes`
+
+### Changed
+- **BREAKING**: Deprecated `@adk_tool` decorator
+  - Removed all `@adk_tool` decorator usage (159 instances)
+  - Updated to use only `@strands_tool` decorator
+  - Google ADK works with standard callables (no special decorator needed)
+  - Updated `_decorators.py` to remove adk_tool import attempt
+
+### Updated
+- Git module: 9 → 79 functions (70 new functions added)
+- Total tools: 84 → 154 functions across 7 modules
+- Module breakdown: analysis (14), git (79), profiling (8), quality (7), shell (13), python (15), database (18)
+- Helper functions updated with new counts
+- Documentation updated (README.md, TODO.md, CLAUDE.md)
+
+### Testing
+- All 570 tests passing
+- Code coverage: 50% overall
+- 100% ruff compliance maintained
+- 100% mypy --strict compliance maintained
+
+### Documentation
+- Updated README.md with new tool counts and git module highlights
+- Updated TODO.md with Phase 7 completion status
+- Updated CLAUDE.md with correct decorator requirements
+- Updated helpers.py docstrings with accurate counts
 
 ## [0.3.0] - 2025-10-15
 
