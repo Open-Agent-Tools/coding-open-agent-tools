@@ -268,7 +268,7 @@ def get_file_diff(
         - lines_added: Number of lines added
         - lines_removed: Number of lines removed
         - diff_summary: Summary of changes
-        - diff_preview: First 20 lines of diff
+        - diff_preview: First 50 lines of diff
 
     Raises:
         TypeError: If parameters are not strings
@@ -338,9 +338,9 @@ def get_file_diff(
             if line.startswith("-") and not line.startswith("---")
         )
 
-        # Get preview (first 20 lines)
+        # Get preview (first 50 lines)
         diff_lines = diff_output.split("\n")
-        preview = "\n".join(diff_lines[:20])
+        preview = "\n".join(diff_lines[:50])
 
         summary = f"+{lines_added}/-{lines_removed} lines in {file_path}"
 

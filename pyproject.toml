@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta:__legacy__"
 
 [project]
 name = "coding-open-agent-tools"
-version = "0.4.1"  # Git Enhancement Module + @adk_tool deprecation
+version = "0.4.2"  # Enhanced diff preview (20 → 50 lines)
 description = "Advanced code generation and shell scripting toolkit for AI agents, complementing basic-open-agent-tools with development-focused capabilities."
 readme = "README.md"
 requires-python = ">=3.9"
