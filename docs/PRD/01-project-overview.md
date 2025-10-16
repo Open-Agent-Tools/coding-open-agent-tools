@@ -87,97 +87,98 @@ This project will:
 4. **Extract Metadata**: Pull function signatures, imports, complexity from code
 5. **Format Validation**: Check docstrings, imports, argument escaping against rules
 
-## Current Status (v0.1.1)
+## Current Status (v0.4.1)
 
-### ✅ Completed: Migrated Developer Tools (v0.1.0-beta)
+### ✅ Completed: 154 Functions Across 7 Modules
 
-The project has successfully migrated **38 developer-focused tools** from basic-open-agent-tools:
+The project has grown from 38 to **154 developer-focused tools** across 7 modules:
 
-1. **Analysis Module** (14 functions) - ✅ Released
+1. **Analysis Module** (14 functions) - ✅ Released (v0.1.0)
    - AST parsing and code structure analysis
    - Cyclomatic complexity calculation
    - Import management and organization
    - Secret detection and security scanning
 
-2. **Git Module** (9 functions) - ✅ Released
-   - Repository status and diff operations
-   - Commit history and blame analysis
-   - Branch management
-   - File history tracking
+2. **Git Module** (79 functions) - ✅ Released (v0.1.0, Enhanced v0.4.1)
+   - **Original 9 functions**: Repository status, diff operations, commit history, blame analysis, branch management, file history tracking
+   - **70 new functions (v0.4.1)**: Commit message validation (conventional commits), git hooks management, configuration analysis, repository health checks, merge conflict detection, security auditing (secrets in history), submodule management, workflow validation, remote analysis, tags & versioning, diff analysis
 
-3. **Profiling Module** (8 functions) - ✅ Released
+3. **Profiling Module** (8 functions) - ✅ Released (v0.1.0)
    - Performance profiling and benchmarking
    - Memory usage analysis
    - Memory leak detection
    - Implementation comparison
 
-4. **Quality Module** (7 functions) - ✅ Released
+4. **Quality Module** (7 functions) - ✅ Released (v0.1.0)
    - Static analysis tool output parsers (ruff, mypy, pytest)
    - Issue filtering and prioritization
    - Code quality summarization
 
+5. **Shell Validation Module** (13 functions) - ✅ Released (v0.2.0)
+   - Shell syntax validation, dependency checking
+   - Security analysis and injection risk detection
+   - Argument escaping and shebang normalization
+   - Shell script parsing, function/variable extraction
+   - Unquoted variable detection, dangerous command identification
+   - Enhanced secret scanning with optional detect-secrets
+
+6. **Python Validation Module** (15 functions) - ✅ Released (v0.2.0)
+   - Python syntax and type hint validation
+   - Import order validation and ADK compliance checking
+   - Function signature and docstring parsing
+   - Type annotation extraction and dependency tracking
+   - Docstring formatting and import sorting
+   - Circular import detection, unused import identification
+
+7. **Database Operations Module** (18 functions) - ✅ Released (v0.3.0)
+   - SQLite database operations (create, execute, fetch)
+   - Schema management and inspection
+   - Safe query building (prevents SQL injection)
+   - JSON import/export and database backup
+   - Pure stdlib implementation (zero dependencies)
+
 **Project Health:**
-- 170 tests passing with 82% coverage
-- 100% ruff and mypy compliance
+- 570 tests passing with 50% coverage
+- 100% ruff and mypy --strict compliance
 - Published to PyPI with trusted publishing
 - Full GitHub infrastructure and automation
+- Decorator pattern: @strands_tool only (Google ADK compatible)
 
-### 🚧 Planned Modules (Refocused on Token Efficiency)
+### 🚧 Next Planned Modules
 
-#### Phase 1: Shell Validation & Security (v0.2.0)
+#### Phase 2: Configuration & Enhanced Analysis (v0.5.0+)
 
-1. **Shell Validation Module** (~13 functions) - 🚧 Planned
-   - **Validators**: Bash syntax checking, dependency detection
-   - **Security Scanners**: Unquoted variables, eval usage, enhanced secret detection (detect-secrets)
-   - **Formatters**: Argument escaping, shebang normalization
-   - **Parsers**: Extract functions, variables, commands from scripts
-   - **Optional Dependency**: `detect-secrets>=1.5.0` for comprehensive secret scanning
-   - See: `02-shell-module-prd.md` (to be updated)
-
-**Rationale**: Agents waste tokens getting shell escaping right and miss security issues. Validation prevents execution failures. detect-secrets provides production-grade secret detection as optional enhancement.
-
-#### Phase 2: Python Validation & Analysis (v0.3.0)
-
-2. **Python Validation Module** (~15 functions) - 🚧 Planned
-   - **Validators**: Enhanced syntax validation, type hint checking, import order
-   - **Extractors**: Function signatures, docstring parsing, type annotations
-   - **Formatters**: Docstring formatting (Google/NumPy/Sphinx), import sorting
-   - **Analyzers**: ADK compliance checking, anti-pattern detection
-   - See: `03-codegen-module-prd.md` (to be updated)
-
-**Rationale**: Parsing and validation are deterministic. Skip generation—agents handle that well.
-
-#### Phase 3: Configuration Validation (v0.4.0)
-
-3. **Config Validation Module** (~10 functions) - 📋 Future
-   - **Validators**: YAML/TOML/JSON syntax, schema validation
-   - **Security Scanners**: Exposed secrets in configs (detect-secrets), insecure settings
-   - **Analyzers**: Dependency conflict detection, compatibility checks
-   - **Parsers**: Extract structured data from CI/CD configs
+1. **Config Validation Module** (~10 functions) - 🚧 Next Milestone (v0.5.0)
+   - **Validators**: YAML/TOML/JSON syntax, schema validation, CI config validity
+   - **Security Scanners**: Exposed secrets in configs (detect-secrets), insecure settings, exposed ports
+   - **Analyzers**: Dependency conflict detection, version constraints, compatibility checks
    - **Optional Dependency**: `detect-secrets>=1.5.0` for comprehensive secret scanning
 
 **Rationale**: Config validation prevents deployment failures. detect-secrets provides production-grade secret detection. Agents already write good configs with examples.
 
-#### Phase 4: Enhanced Code Analysis (v0.5.0)
+2. **Enhanced Code Analysis Module** (~12 functions) - 📋 Future (v0.6.0)
+   - **Dependency analyzers**: Circular imports, unused dependencies, import cycles
+   - **Security scanners**: SQL injection patterns, XSS vulnerabilities, hardcoded credentials
+   - **Performance detectors**: O(n²) loops, memory leak patterns, blocking I/O
+   - **Compliance checkers**: GDPR patterns, accessibility requirements, license violations
 
-4. **Advanced Analysis Module** (~12 functions) - 📋 Future
-   - **Dependency analyzers**: Circular imports, unused dependencies
-   - **Security scanners**: SQL injection patterns, XSS vulnerabilities
-   - **Performance detectors**: O(n²) loops, memory leaks, anti-patterns
-   - **Compliance checkers**: GDPR patterns, accessibility requirements
+**Rationale**: Deep static analysis saves agent tokens. All operations are deterministic rule-based checks.
+
+See [ROADMAP.md](../ROADMAP.md) for complete 36-module plan through v1.0.0.
 
 ## Technical Architecture
 
-### Package Structure (Current)
+### Package Structure (Current - v0.4.1)
 
 ```
 coding-open-agent-tools/
 ├── src/
 │   └── coding_open_agent_tools/
-│       ├── __init__.py          # Package initialization, version
+│       ├── __init__.py          # Package initialization, version (v0.4.1)
 │       ├── helpers.py            # Tool loading functions (load_all_*)
 │       ├── exceptions.py         # Custom exceptions
 │       ├── types.py              # Type definitions
+│       ├── _decorators.py        # @strands_tool decorator (optional)
 │       ├── analysis/             # ✅ Code analysis (14 functions)
 │       │   ├── __init__.py
 │       │   ├── ast_parsing.py    # AST parsing utilities
@@ -185,11 +186,22 @@ coding-open-agent-tools/
 │       │   ├── imports.py        # Import management
 │       │   ├── secrets.py        # Secret detection
 │       │   └── patterns.py       # Secret patterns
-│       ├── git/                  # ✅ Git operations (9 functions)
+│       ├── git/                  # ✅ Git operations (79 functions - ENHANCED v0.4.1)
 │       │   ├── __init__.py
-│       │   ├── status.py         # Status and diff operations
-│       │   ├── history.py        # Log, blame, file history
-│       │   └── branches.py       # Branch management
+│       │   ├── status.py         # Status and diff operations (original)
+│       │   ├── history.py        # Log, blame, file history (original)
+│       │   ├── branches.py       # Branch management (original)
+│       │   ├── commits.py        # Commit message validation (NEW v0.4.1)
+│       │   ├── hooks.py          # Git hooks management (NEW v0.4.1)
+│       │   ├── config.py         # Configuration analysis (NEW v0.4.1)
+│       │   ├── health.py         # Repository health (NEW v0.4.1)
+│       │   ├── conflicts.py      # Merge conflict detection (NEW v0.4.1)
+│       │   ├── security.py       # Security auditing (NEW v0.4.1)
+│       │   ├── submodules.py     # Submodule management (NEW v0.4.1)
+│       │   ├── workflows.py      # Workflow validation (NEW v0.4.1)
+│       │   ├── remotes.py        # Remote analysis (NEW v0.4.1)
+│       │   ├── tags.py           # Tags & versioning (NEW v0.4.1)
+│       │   └── diffs.py          # Diff analysis (NEW v0.4.1)
 │       ├── profiling/            # ✅ Performance profiling (8 functions)
 │       │   ├── __init__.py
 │       │   ├── performance.py    # Performance profiling
@@ -199,16 +211,36 @@ coding-open-agent-tools/
 │       │   ├── __init__.py
 │       │   ├── parsers.py        # Tool output parsers
 │       │   └── analysis.py       # Issue analysis
-│       ├── shell/                # 🚧 Shell script generation (planned)
-│       └── codegen/              # 🚧 Python code generation (planned)
+│       ├── shell/                # ✅ Shell validation (13 functions) - v0.2.0
+│       │   ├── __init__.py
+│       │   ├── validators.py     # Syntax and security validation
+│       │   ├── formatters.py     # Argument escaping, quoting
+│       │   ├── parsers.py        # Script parsing
+│       │   └── analyzers.py      # Security analysis
+│       ├── python/               # ✅ Python validation (15 functions) - v0.2.0
+│       │   ├── __init__.py
+│       │   ├── validators.py     # Syntax and type validation
+│       │   ├── extractors.py     # Signature and docstring parsing
+│       │   ├── formatters.py     # Docstring and import formatting
+│       │   └── analyzers.py      # Circular imports, anti-patterns
+│       └── database/             # ✅ SQLite operations (18 functions) - v0.3.0
+│           ├── __init__.py
+│           ├── operations.py     # Create, execute, fetch operations
+│           ├── schema.py         # Schema inspection and management
+│           ├── query_builders.py # Safe query construction
+│           └── utils.py          # JSON import/export, backup
 ├── tests/
-│   ├── analysis/                 # ✅ 170 tests, 82% coverage
+│   ├── analysis/                 # ✅ 570 tests total, 50% coverage
 │   ├── git/
 │   ├── profiling/
-│   └── quality/
+│   ├── quality/
+│   ├── shell/
+│   ├── python/
+│   └── database/
 ├── docs/
 │   ├── PRD/                      # Product requirements
-│   └── examples/                 # Usage examples (planned)
+│   ├── ROADMAP.md                # 36-module roadmap
+│   └── MODULE_SUMMARY.md         # Complete module plan
 ├── .github/                      # ✅ GitHub infrastructure
 │   ├── workflows/                # CI/CD, publishing, automation
 │   ├── ISSUE_TEMPLATE/           # Issue templates
@@ -223,35 +255,54 @@ coding-open-agent-tools/
 └── README.md                     # ✅ Project documentation
 ```
 
-### Integration Pattern (Current)
+### Integration Pattern (Current - v0.4.1)
 
 ```python
 import coding_open_agent_tools as coat
 
-# Option 1: Load all 38 tools at once
-all_tools = coat.load_all_tools()
+# Option 1: Load all 154 tools at once
+all_tools = coat.load_all_tools()  # 154 functions
 
 # Option 2: Load specific modules
-analysis_tools = coat.load_all_analysis_tools()  # 14 functions
-git_tools = coat.load_all_git_tools()            # 9 functions
+analysis_tools = coat.load_all_analysis_tools()    # 14 functions
+git_tools = coat.load_all_git_tools()              # 79 functions (ENHANCED!)
 profiling_tools = coat.load_all_profiling_tools()  # 8 functions
-quality_tools = coat.load_all_quality_tools()    # 7 functions
+quality_tools = coat.load_all_quality_tools()      # 7 functions
+shell_tools = coat.load_all_shell_tools()          # 13 functions
+python_tools = coat.load_all_python_tools()        # 15 functions
+database_tools = coat.load_all_database_tools()    # 18 functions
 
 # Option 3: Use specific functions directly
-from coding_open_agent_tools import analysis, git, profiling, quality
+from coding_open_agent_tools import analysis, git, shell, python, database
 
+# Code analysis
 complexity = analysis.calculate_complexity("/path/to/file.py")
-status = git.get_git_status("/path/to/repo")
-profile = profiling.profile_function("/path/to/module.py", "function_name", '{"arg": "value"}')
-issues = quality.parse_ruff_json(ruff_output)
 
-# Use with agent frameworks
+# Git operations (original + 70 new functions)
+status = git.get_git_status("/path/to/repo")
+commit_validation = git.validate_commit_message("feat(api): add endpoint")
+conflicts = git.detect_merge_conflicts("/path/to/repo")
+secrets = git.scan_history_for_secrets("/path/to/repo", "10")
+
+# Shell validation
+shell_check = shell.validate_shell_syntax("#!/bin/bash\necho 'test'", "bash")
+safe_arg = shell.escape_shell_argument("user input", "double")
+
+# Python validation
+py_check = python.validate_python_syntax("def foo(): pass")
+signature = python.parse_function_signature("def bar(x: int) -> str: return str(x)")
+
+# Database operations
+db_path = database.create_sqlite_database("/tmp/agent.db")
+schema = database.inspect_schema(db_path)
+
+# Use with agent frameworks (Google ADK, Strands, etc.)
 from google.adk.agents import Agent
 
 agent = Agent(
-    tools=all_tools,
-    name="CodeAnalyzer",
-    instruction="Analyze code quality and performance"
+    tools=all_tools,  # 154 functions
+    name="CodeValidator",
+    instruction="Validate code, analyze git repos, and manage data"
 )
 ```
 
@@ -337,7 +388,7 @@ if validation['is_valid'] == 'true':
 - ✅ Achieve 170 tests with 82% coverage
 - ✅ Publish to PyPI with trusted publishing
 
-### ✅ Milestone 1.1: GitHub Infrastructure (v0.1.1) - COMPLETED
+### ✅ Milestone 2: GitHub Infrastructure (v0.1.1) - COMPLETED
 - ✅ Add issue and PR templates
 - ✅ Configure CODEOWNERS and dependabot
 - ✅ Set up automation workflows (stale, greet, labeler)
@@ -345,27 +396,48 @@ if validation['is_valid'] == 'true':
 - ✅ Enable GitHub Discussions
 - ✅ Complete documentation infrastructure
 
-### 🚧 Milestone 2: Shell Validation & Security (v0.2.0) - PLANNED
-**Priority**: High (Next after v0.1.1)
-- Implement shell validation functions (~13)
-- Add security scanning and checks
-- Full test coverage (80%+)
+### ✅ Milestone 3: Shell & Python Modules (v0.2.0) - COMPLETED
+- ✅ Implement shell validation functions (13)
+- ✅ Implement Python validation functions (15)
+- ✅ Add security scanning with optional detect-secrets
+- ✅ Full test coverage (86%)
+- ✅ 451 tests passing
+- ✅ Documentation and examples
+
+### ✅ Milestone 4: Database Operations (v0.3.0) - COMPLETED
+- ✅ Implement SQLite database operations (18 functions)
+- ✅ Pure stdlib implementation (zero dependencies)
+- ✅ Safe query building (SQL injection prevention)
+- ✅ 532 tests passing, 85% coverage
+- ✅ Documentation and examples
+
+### ✅ Milestone 5: Git Enhancement Module (v0.4.1) - COMPLETED
+- ✅ Implement 70 new git functions across 11 subcategories
+- ✅ Commit message validation (conventional commits)
+- ✅ Git hooks management and security
+- ✅ Repository health and conflict detection
+- ✅ Security auditing (secrets in history)
+- ✅ Deprecated @adk_tool decorator
+- ✅ 570 tests passing, 50% coverage
+- ✅ Documentation and examples
+
+### 🚧 Milestone 6: Configuration Validation (v0.5.0) - NEXT
+**Priority**: High (Next after v0.4.1)
+- Implement config validation functions (~10)
+- YAML/TOML/JSON syntax validation
+- Security scanning for secrets in configs
+- Dependency conflict detection
 - Documentation and examples
 
-### 🚧 Milestone 3: Python Validation & Analysis (v0.3.0) - PLANNED
-**Priority**: High (Follows v0.2.0)
-- Implement Python validation functions (~15)
-- Add docstring parsing (Google/NumPy/Sphinx)
-- Type hint validation and parsing
-- Documentation and examples
-
-### 📋 Milestone 4: Community Release (v1.0.0) - FUTURE
-**Priority**: Milestone (Follows completion of all 35 modules)
+### 📋 Milestone 7: Community Release (v1.0.0) - FUTURE
+**Priority**: Milestone (Follows completion of all 36 modules)
+- 370+ functions across 36 modules
 - Production-ready quality across all modules
 - Comprehensive documentation site
 - Example projects and tutorials
-- Integration guides for popular frameworks (Google ADK, Strands)
+- Integration guides for popular frameworks (Google ADK, Strands, LangChain)
 - Active community engagement
+- Measurable 60-80% token reduction in workflows
 
 ## Risks and Mitigations
 
@@ -412,13 +484,14 @@ MIT License (same as basic-open-agent-tools)
 
 ---
 
-**Document Version**: 3.0
-**Last Updated**: 2025-10-14
-**Status**: Active - v0.1.1 Released
+**Document Version**: 4.0
+**Last Updated**: 2025-10-15
+**Status**: Active - v0.4.1 Released
 **Owner**: Project Team
 
 ## Version History
 
+- **4.0** (2025-10-15): Updated for v0.4.1 release with Git Enhancement Module (154 functions, 7 modules, 570 tests)
 - **3.0** (2025-10-14): Refocused on token-efficiency and deterministic operations; updated vision, planned modules, use cases
 - **2.0** (2025-10-14): Updated with v0.1.1 status, actual module structure, corrected tool counts (38 not 39), added roadmap
 - **1.0** (2025-10-14): Initial draft with planned structure

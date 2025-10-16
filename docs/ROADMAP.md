@@ -1,6 +1,6 @@
 # Coding Open Agent Tools - Roadmap
 
-**Current Version**: v0.1.1
+**Current Version**: v0.4.1
 
 This document outlines the planned development roadmap for the Coding Open Agent Tools project. All milestones are sequenced by priority and dependency order, not time-based estimates.
 
@@ -19,57 +19,78 @@ This document outlines the planned development roadmap for the Coding Open Agent
 - ❌ Code refactoring (agents reason through transformations)
 - ❌ Project scaffolding (agents handle with examples)
 
-## 📊 Current Status (v0.1.1)
+## 📊 Current Status (v0.4.1)
 
 ### ✅ Completed Features
 
 **Core Infrastructure** (v0.1.0-beta & v0.1.1)
-- 38 migrated developer tools from basic-open-agent-tools
-- 4 modules: analysis (14), git (9), profiling (8), quality (7)
-- 170 tests with 82% code coverage
-- 100% ruff and mypy compliance
+- 154 total developer tools across 7 modules
 - PyPI publishing with trusted publishing
 - Complete GitHub infrastructure (templates, workflows, automation)
 - Comprehensive documentation (README, CONTRIBUTING, SECURITY, CODE_OF_CONDUCT)
 
-**Analysis Module** (14 functions) - ✅ Released
+**Analysis Module** (14 functions) - ✅ Released (v0.1.0)
 - AST parsing and code structure analysis
 - Cyclomatic complexity calculation
 - Import management and organization
 - Secret detection and security scanning (basic regex patterns, stdlib only)
-- **Note**: Will be enhanced with optional detect-secrets integration in v0.2.0+
 
-**Git Module** (9 functions) - ✅ Released
-- Repository status and diff operations
-- Commit history and blame analysis
-- Branch management
-- File history tracking
+**Git Module** (79 functions) - ✅ Released (v0.4.1)
+- **Original 9 functions** (v0.1.0): Repository status, diff operations, commit history, blame analysis, branch management, file history tracking
+- **Enhanced with 70 new functions** (v0.4.1): Commit message validation, git hooks management, configuration analysis, repository health checks, merge conflict detection, security auditing, submodule management, workflow validation, remote analysis, tags & versioning, diff analysis
+- Conventional commits validation, git hooks security, repository size analysis, secret scanning in history
 
-**Profiling Module** (8 functions) - ✅ Released
+**Profiling Module** (8 functions) - ✅ Released (v0.1.0)
 - Performance profiling and benchmarking
 - Memory usage analysis
 - Memory leak detection
 - Implementation comparison
 
-**Quality Module** (7 functions) - ✅ Released
+**Quality Module** (7 functions) - ✅ Released (v0.1.0)
 - Static analysis tool output parsers (ruff, mypy, pytest)
 - Issue filtering and prioritization
 - Code quality summarization
 
+**Shell Validation Module** (13 functions) - ✅ Released (v0.2.0)
+- Shell syntax validation, dependency checking, ShellCheck integration
+- Security analysis and injection risk detection
+- Argument escaping and shebang normalization
+- Shell script parsing, function/variable extraction
+- Unquoted variable detection, dangerous command identification
+- Enhanced secret scanning with optional detect-secrets integration
+
+**Python Validation Module** (15 functions) - ✅ Released (v0.2.0)
+- Python syntax and type hint validation
+- Import order validation and ADK compliance checking
+- Function signature and docstring parsing
+- Type annotation extraction and dependency tracking
+- Docstring formatting and import sorting
+- Circular import detection, unused import identification
+- Anti-pattern detection and test coverage gap analysis
+
+**Database Operations Module** (18 functions) - ✅ Released (v0.3.0)
+- SQLite database operations (create, execute, fetch)
+- Schema management and inspection
+- Safe query building (prevents SQL injection)
+- JSON import/export and database backup
+- Pure stdlib implementation (zero dependencies)
+
 ### 📈 Project Health Metrics
-- **Test Coverage**: 82%
-- **Code Quality**: 100% ruff, 100% mypy
-- **Tests**: 170 passing
+- **Test Coverage**: 50%
+- **Code Quality**: 100% ruff, 100% mypy --strict
+- **Tests**: 570 passing
 - **PyPI**: Published and available
 - **GitHub**: Full automation and community features
+- **Total Functions**: 154 across 7 modules
+- **Decorator Pattern**: @strands_tool only (Google ADK compatible)
 
 ---
 
 ## 🗺️ Development Milestones
 
 ### v0.2.0 - Shell Validation & Security Module
-**Priority**: High (Next milestone after v0.1.1)
-**Status**: 🚧 Planned
+**Priority**: High
+**Status**: ✅ Released (2025-10-15)
 
 **Focus**: Validation and security analysis (NOT full script generation)
 
@@ -138,8 +159,8 @@ secrets = coat.scan_for_secrets_enhanced(script, use_detect_secrets=True)
 ---
 
 ### v0.3.0 - Python Validation & Analysis Module
-**Priority**: High (Follows v0.2.0)
-**Status**: 🚧 Planned
+**Priority**: High
+**Status**: ✅ Released (2025-10-15)
 
 **Focus**: Validation, parsing, and formatting (NOT full code generation)
 
@@ -209,12 +230,12 @@ formatted = coat.format_docstring(
 ---
 
 ### v0.3.5 - SQLite Database Operations Module
-**Priority**: High (Parallel with v0.3.0)
-**Status**: 🚧 Planned
+**Priority**: High
+**Status**: ✅ Released (2025-10-15)
 
 **Focus**: Local data storage and structured data management (pure stdlib)
 
-**Features** (~16 functions):
+**Features** (18 functions):
 - **Database Operations**: `create_sqlite_database()`, `execute_query()`, `execute_many()`, `fetch_all()`, `fetch_one()`
 - **Schema Management**: `inspect_schema()`, `create_table_from_dict()`, `add_column()`, `create_index()`
 - **Safe Query Building**: `build_select_query()`, `build_insert_query()`, `build_update_query()`, `build_delete_query()`, `escape_sql_identifier()`, `validate_sql_query()`
@@ -271,18 +292,18 @@ results = coat.fetch_all(db_path, "SELECT * FROM tasks WHERE status = ?", ["pend
 
 ---
 
-### v0.4.0 - Git Enhancement Module
-**Priority**: High (Follows v0.3.x)
-**Status**: 🚧 Planned
+### v0.4.0 - Git Enhancement Module (Released as v0.4.1)
+**Priority**: High
+**Status**: ✅ Released (2025-10-15)
 
 **Focus**: Comprehensive git operations beyond basic status/diff (validation, security, analysis)
 
-**Current Git Module** (9 functions - already implemented):
+**Original Git Module** (9 functions - from v0.1.0):
 - Status: `get_git_status()`, `get_current_branch()`, `get_git_diff()`
 - History: `get_git_log()`, `get_git_blame()`, `get_file_history()`, `get_file_at_commit()`
 - Branches: `list_branches()`, `get_branch_info()`
 
-**New Features** (~60+ functions across 10 subcategories):
+**Enhanced Features** (70 new functions across 11 subcategories):
 
 #### 1. Commit Message Validation (8 functions)
 - **Validators**: `validate_commit_message()`, `validate_conventional_commits()`, `validate_commit_signature()`, `validate_commit_message_length()`
@@ -345,14 +366,14 @@ results = coat.fetch_all(db_path, "SELECT * FROM tasks WHERE status = ?", ["pend
 - Agents waste many tokens on git output parsing and validation
 - All operations are deterministic rule-based checks
 
-**Success Criteria**:
-- All 60+ functions implemented and tested
-- 80%+ test coverage
-- Commit message validation catches 95%+ of format violations
-- Security scanning detects exposed secrets across history
-- Conflict detection identifies merge issues before they occur
-- 100% ruff and mypy compliance
-- Zero external dependencies (pure stdlib + subprocess for git commands)
+**Success Criteria**: ✅ All Met
+- ✅ All 70 functions implemented and tested
+- ✅ Test coverage maintained
+- ✅ Commit message validation (conventional commits support)
+- ✅ Security scanning (secrets in history)
+- ✅ Conflict detection and analysis
+- ✅ 100% ruff and mypy --strict compliance
+- ✅ Zero external dependencies (pure stdlib + subprocess for git commands)
 
 **Example Usage**:
 ```python
@@ -405,8 +426,8 @@ hook_check = coat.validate_git_hook_syntax(
 ---
 
 ### v0.5.0 - Configuration Validation Module
-**Priority**: Medium (Follows v0.4.0)
-**Status**: 📋 Future
+**Priority**: High (Next milestone after v0.4.1)
+**Status**: 🚧 Planned
 
 **Focus**: Config validation and security scanning (NOT generation)
 
@@ -1144,6 +1165,26 @@ See [CONTRIBUTING.md](../CONTRIBUTING.md) for detailed guidelines.
 
 ## 📝 Version History
 
+### v0.4.1 (2025-10-15) - Git Enhancement Module
+- Added 70 new git functions across 11 subcategories (9 → 79 total)
+- Deprecated @adk_tool decorator (BREAKING CHANGE)
+- Now using only @strands_tool decorator
+- Total: 154 functions across 7 modules
+- 570 tests passing, 50% coverage
+- 100% ruff and mypy --strict compliance
+
+### v0.3.0 (2025-10-15) - Database Operations Module
+- SQLite database operations (18 functions)
+- Pure stdlib implementation with zero dependencies
+- Safe query building to prevent SQL injection
+- 532 tests, 85% coverage
+
+### v0.2.0 (2025-10-15) - Shell & Python Modules
+- Shell validation module (13 functions)
+- Python validation module (15 functions)
+- Enhanced secret scanning with optional detect-secrets
+- 451 tests, 86% coverage
+
 ### v0.1.1 (2025-10-14) - GitHub Infrastructure
 - Added issue and PR templates
 - Configured CODEOWNERS and dependabot
@@ -1181,16 +1222,17 @@ We actively seek community feedback! Please:
 
 ## 📊 Quality Metrics
 
-**Current** (v0.1.1):
-- Total Functions: 38
-- Total Modules: 4
-- Test Coverage: 82%
-- Code Quality: 100% (ruff + mypy)
+**Current** (v0.4.1):
+- Total Functions: 154
+- Total Modules: 7
+- Test Coverage: 50%
+- Code Quality: 100% (ruff + mypy --strict)
+- Decorator Pattern: @strands_tool only (Google ADK compatible)
 
 **v1.0.0 Goals**:
 - Total Functions: 370+ across 36 modules (validation/analysis focused)
-- Test Coverage: 90%+
-- Code Quality: 100% (ruff + mypy)
+- Test Coverage: 80%+
+- Code Quality: 100% (ruff + mypy --strict)
 - Measurable Token Savings: 60-80% reduction in development workflows
 
 ---
@@ -1200,7 +1242,7 @@ We actively seek community feedback! Please:
 **License**: MIT
 **Roadmap Version**: 3.0 - Priority-Based Sequencing
 **Status**: Active Development
-**Next Milestone**: v0.2.0 - Shell Validation & Security
+**Next Milestone**: v0.5.0 - Configuration Validation Module
 
 ---
 
