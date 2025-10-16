@@ -23,17 +23,16 @@ This project provides **parsing, validation, and analysis tools** that save agen
 
 ✅ **v0.1.0-beta Released** - First beta with 39 migrated developer-focused tools from basic-open-agent-tools.
 
-**What's Available Now:**
+**What's Available Now (154 Total Functions):**
 - ✅ Analysis Module (14 functions) - AST parsing, complexity analysis, imports, secrets
-- ✅ Git Module (9 functions) - Read-only git operations
+- ✅ **Git Module (79 functions)** - Comprehensive git operations (status, history, commits, branches, tags, hooks, workflows, security, and more)
 - ✅ Profiling Module (8 functions) - Performance and memory profiling
 - ✅ Quality Module (7 functions) - Static analysis parsers
 - ✅ Shell Module (13 functions) - Shell validation, security scanning, escaping
 - ✅ Python Module (15 functions) - Syntax validation, type checking, import analysis
-- ✅ **Database Module (16 functions)** - SQLite operations, safe query building, migration helpers
+- ✅ **Database Module (18 functions)** - SQLite operations, safe query building, schema inspection
 
 **Coming Next (Focused on Validation, NOT Generation):**
-- 🚧 Git enhancement module (v0.3.1) - 60+ additional git operations
 - 🚧 Config validation module (v0.4.0) - YAML/TOML/JSON validation, secret scanning
 
 See [docs/ROADMAP.md](./docs/ROADMAP.md) and [docs/PRD](./docs/PRD/) for detailed plans.
@@ -244,14 +243,17 @@ pip install coding-open-agent-tools==0.1.0-beta
 ```python
 import coding_open_agent_tools as coat
 
-# Load all 38 functions
+# Load all 154 functions
 all_tools = coat.load_all_tools()
 
 # Or load by category
 analysis_tools = coat.load_all_analysis_tools()  # 14 functions
-git_tools = coat.load_all_git_tools()            # 9 functions
+git_tools = coat.load_all_git_tools()            # 79 functions
 profiling_tools = coat.load_all_profiling_tools()  # 8 functions
 quality_tools = coat.load_all_quality_tools()    # 7 functions
+shell_tools = coat.load_all_shell_tools()        # 13 functions
+python_tools = coat.load_all_python_tools()      # 15 functions
+database_tools = coat.load_all_database_tools()  # 18 functions
 
 # Use with any agent framework
 from google.adk.agents import Agent

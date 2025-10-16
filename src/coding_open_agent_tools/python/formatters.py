@@ -10,11 +10,10 @@ import ast
 import re
 from typing import Any
 
-from coding_open_agent_tools._decorators import adk_tool, strands_tool
+from coding_open_agent_tools._decorators import strands_tool
 from coding_open_agent_tools.types import STDLIB_MODULES
 
 
-@adk_tool
 @strands_tool
 def format_docstring(docstring: str, style: str, line_length: str) -> dict[str, str]:
     """Format a docstring to conform to a specific style guide.
@@ -170,7 +169,6 @@ def format_docstring(docstring: str, style: str, line_length: str) -> dict[str, 
     }
 
 
-@adk_tool
 @strands_tool
 def sort_imports(source_code: str) -> dict[str, Any]:
     """Sort and group imports according to PEP 8 conventions.
@@ -319,7 +317,6 @@ def sort_imports(source_code: str) -> dict[str, Any]:
     }
 
 
-@adk_tool
 @strands_tool
 def normalize_type_hints(source_code: str) -> dict[str, Any]:
     """Normalize type hints to use modern syntax (PEP 585, PEP 604).

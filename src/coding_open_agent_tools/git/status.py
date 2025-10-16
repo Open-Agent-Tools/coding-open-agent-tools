@@ -8,11 +8,10 @@ import os
 import subprocess
 from typing import Any
 
-from coding_open_agent_tools._decorators import adk_tool, strands_tool
+from coding_open_agent_tools._decorators import strands_tool
 from coding_open_agent_tools.exceptions import GitError
 
 
-@adk_tool
 @strands_tool
 def get_git_status(repository_path: str) -> dict[str, Any]:
     """Get current git repository status.
@@ -114,7 +113,6 @@ def get_git_status(repository_path: str) -> dict[str, Any]:
         raise GitError(f"Git command failed: {e.stderr}")
 
 
-@adk_tool
 @strands_tool
 def get_current_branch(repository_path: str) -> str:
     """Get current git branch name.
@@ -161,7 +159,6 @@ def get_current_branch(repository_path: str) -> str:
         raise GitError(f"Git command failed: {e.stderr}")
 
 
-@adk_tool
 @strands_tool
 def get_git_diff(repository_path: str, file_path: str) -> str:
     """Get git diff for a specific file.

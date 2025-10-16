@@ -7,11 +7,10 @@ into structured formats that agents can use for analysis.
 import json
 from typing import Any
 
-from coding_open_agent_tools._decorators import adk_tool, strands_tool
+from coding_open_agent_tools._decorators import strands_tool
 from coding_open_agent_tools.exceptions import StaticAnalysisError
 
 
-@adk_tool
 @strands_tool
 def parse_ruff_json(json_output: str) -> list[dict[str, Any]]:
     """Parse ruff JSON output into structured format.
@@ -71,7 +70,6 @@ def parse_ruff_json(json_output: str) -> list[dict[str, Any]]:
     return issues
 
 
-@adk_tool
 @strands_tool
 def parse_mypy_json(json_output: str) -> list[dict[str, Any]]:
     """Parse mypy JSON output into structured format.
@@ -132,7 +130,6 @@ def parse_mypy_json(json_output: str) -> list[dict[str, Any]]:
     return errors
 
 
-@adk_tool
 @strands_tool
 def parse_pytest_json(json_output: str) -> dict[str, Any]:
     """Parse pytest JSON report into structured format.
@@ -198,7 +195,6 @@ def parse_pytest_json(json_output: str) -> dict[str, Any]:
     }
 
 
-@adk_tool
 @strands_tool
 def summarize_static_analysis(ruff_json: str, mypy_json: str) -> dict[str, Any]:
     """Combine multiple tool outputs into comprehensive summary.

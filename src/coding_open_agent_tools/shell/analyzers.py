@@ -7,10 +7,9 @@ These are tedious checks that agents often miss.
 
 import re
 
-from coding_open_agent_tools._decorators import adk_tool, strands_tool
+from coding_open_agent_tools._decorators import strands_tool
 
 
-@adk_tool
 @strands_tool
 def detect_unquoted_variables(script_content: str) -> list[dict[str, str]]:
     """Detect unquoted variable expansions that could cause word splitting.
@@ -114,7 +113,6 @@ def detect_unquoted_variables(script_content: str) -> list[dict[str, str]]:
     return issues
 
 
-@adk_tool
 @strands_tool
 def find_dangerous_commands(script_content: str) -> list[dict[str, str]]:
     """Find potentially dangerous command patterns in shell script.
@@ -242,7 +240,6 @@ def find_dangerous_commands(script_content: str) -> list[dict[str, str]]:
     return findings
 
 
-@adk_tool
 @strands_tool
 def check_error_handling(script_content: str) -> dict[str, str]:
     """Check if shell script has proper error handling.

@@ -8,11 +8,10 @@ import os
 import subprocess
 from typing import Any
 
-from coding_open_agent_tools._decorators import adk_tool, strands_tool
+from coding_open_agent_tools._decorators import strands_tool
 from coding_open_agent_tools.exceptions import GitError
 
 
-@adk_tool
 @strands_tool
 def list_branches(repository_path: str) -> list[str]:
     """List all branches in a git repository.
@@ -65,7 +64,6 @@ def list_branches(repository_path: str) -> list[str]:
         raise GitError(f"Git command failed: {e.stderr}")
 
 
-@adk_tool
 @strands_tool
 def get_branch_info(repository_path: str, branch_name: str) -> dict[str, Any]:
     """Get detailed information about a specific branch.

@@ -10,10 +10,9 @@ from __future__ import annotations
 import re
 from typing import Any
 
-from coding_open_agent_tools._decorators import adk_tool, strands_tool
+from coding_open_agent_tools._decorators import strands_tool
 
 
-@adk_tool
 @strands_tool
 def escape_sql_identifier(identifier: str) -> str:
     """Escape a SQL identifier (table/column name) for safe use.
@@ -52,7 +51,6 @@ def escape_sql_identifier(identifier: str) -> str:
     return identifier
 
 
-@adk_tool
 @strands_tool
 def validate_sql_query(query: str) -> dict[str, Any]:
     """Validate a SQL query for safety and correctness.
@@ -122,7 +120,6 @@ def validate_sql_query(query: str) -> dict[str, Any]:
     }
 
 
-@adk_tool
 @strands_tool
 def build_select_query(
     table_name: str,
@@ -195,7 +192,6 @@ def build_select_query(
     }
 
 
-@adk_tool
 @strands_tool
 def build_insert_query(
     table_name: str, columns: list[str], values: list[Any]
@@ -250,7 +246,6 @@ def build_insert_query(
     }
 
 
-@adk_tool
 @strands_tool
 def build_update_query(
     table_name: str,
@@ -317,7 +312,6 @@ def build_update_query(
     }
 
 
-@adk_tool
 @strands_tool
 def build_delete_query(
     table_name: str, where_conditions: dict[str, Any] | None = None

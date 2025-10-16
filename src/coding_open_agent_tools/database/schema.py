@@ -10,10 +10,9 @@ import sqlite3
 from pathlib import Path
 from typing import Any
 
-from coding_open_agent_tools._decorators import adk_tool, strands_tool
+from coding_open_agent_tools._decorators import strands_tool
 
 
-@adk_tool
 @strands_tool
 def inspect_schema(db_path: str) -> dict[str, Any]:
     """Inspect database schema and return structured information.
@@ -110,7 +109,6 @@ def inspect_schema(db_path: str) -> dict[str, Any]:
         conn.close()
 
 
-@adk_tool
 @strands_tool
 def create_table_from_dict(
     db_path: str, table_name: str, columns: dict[str, str]
@@ -187,7 +185,6 @@ def create_table_from_dict(
         conn.close()
 
 
-@adk_tool
 @strands_tool
 def add_column(
     db_path: str, table_name: str, column_name: str, column_type: str
@@ -266,7 +263,6 @@ def add_column(
         conn.close()
 
 
-@adk_tool
 @strands_tool
 def create_index(
     db_path: str, table_name: str, column_names: list[str], index_name: str = ""

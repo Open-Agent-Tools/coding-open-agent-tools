@@ -10,11 +10,10 @@ import sys
 import tracemalloc
 from typing import Any
 
-from coding_open_agent_tools._decorators import adk_tool, strands_tool
+from coding_open_agent_tools._decorators import strands_tool
 from coding_open_agent_tools.exceptions import ProfilingError
 
 
-@adk_tool
 @strands_tool
 def measure_memory_usage(
     file_path: str, function_name: str, args_json: str
@@ -127,7 +126,6 @@ def measure_memory_usage(
     }
 
 
-@adk_tool
 @strands_tool
 def detect_memory_leaks(
     file_path: str, function_name: str, args_json: str, iterations: int
@@ -261,7 +259,6 @@ def detect_memory_leaks(
     return results
 
 
-@adk_tool
 @strands_tool
 def get_memory_snapshot(file_path: str) -> dict[str, Any]:
     """Take a memory snapshot during script execution.

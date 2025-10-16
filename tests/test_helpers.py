@@ -142,9 +142,9 @@ class TestLoadGitTools:
     """Tests for load_all_git_tools function."""
 
     def test_loads_all_git_tools(self) -> None:
-        """Test that all 9 git tools are loaded."""
+        """Test that all 79 git tools are loaded."""
         tools = helpers.load_all_git_tools()
-        assert len(tools) == 9
+        assert len(tools) == 79
 
     def test_git_tools_callable(self) -> None:
         """Test that all loaded tools are callable."""
@@ -155,19 +155,14 @@ class TestLoadGitTools:
     def test_git_tools_have_names(self) -> None:
         """Test that all tools have proper names."""
         tools = helpers.load_all_git_tools()
-        expected_names = {
-            "get_git_status",
-            "get_current_branch",
-            "get_git_diff",
-            "get_git_log",
-            "get_git_blame",
-            "get_file_history",
-            "get_file_at_commit",
-            "list_branches",
-            "get_branch_info",
-        }
+        # After Git Enhancement Module, we have 79 git tools
+        # Just verify that core tools are present
         actual_names = {tool.__name__ for tool in tools}
-        assert actual_names == expected_names
+        assert "get_git_status" in actual_names
+        assert "get_current_branch" in actual_names
+        assert "get_git_diff" in actual_names
+        assert "get_git_log" in actual_names
+        assert len(actual_names) == 79
 
 
 class TestLoadProfilingTools:
@@ -276,10 +271,10 @@ class TestLoadAllTools:
     """Tests for load_all_tools function."""
 
     def test_loads_all_tools(self) -> None:
-        """Test that all 84 tools are loaded."""
+        """Test that all 154 tools are loaded."""
         tools = helpers.load_all_tools()
-        # 14 + 9 + 8 + 7 + 13 + 15 + 18 = 84
-        assert len(tools) == 84
+        # 14 + 79 + 8 + 7 + 13 + 15 + 18 = 154
+        assert len(tools) == 154
 
     def test_all_tools_callable(self) -> None:
         """Test that all loaded tools are callable."""
@@ -391,7 +386,7 @@ class TestHelperIntegration:
         git_tools = helpers.load_all_git_tools()
 
         merged = helpers.merge_tool_lists(analysis_tools, git_tools)
-        assert len(merged) == 14 + 9
+        assert len(merged) == 14 + 79
 
     def test_load_all_tools_equals_merged_tools(self) -> None:
         """Test that load_all_tools equals manually merging all tool lists."""

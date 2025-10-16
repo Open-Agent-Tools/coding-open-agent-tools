@@ -10,12 +10,11 @@ import shutil
 import subprocess
 from typing import Any
 
-from coding_open_agent_tools._decorators import adk_tool, strands_tool
+from coding_open_agent_tools._decorators import strands_tool
 
 from ..exceptions import ToolExecutionError
 
 
-@adk_tool
 @strands_tool
 def validate_shell_syntax(script_content: str, shell_type: str) -> dict[str, str]:
     """Validate shell script syntax using shell's built-in syntax checker.
@@ -109,7 +108,6 @@ def validate_shell_syntax(script_content: str, shell_type: str) -> dict[str, str
         raise ToolExecutionError(f"Failed to validate shell syntax: {e}") from e
 
 
-@adk_tool
 @strands_tool
 def check_shell_dependencies(script_content: str) -> dict[str, Any]:
     """Check which external commands/tools are used in a shell script.

@@ -87,11 +87,11 @@ def load_all_git_tools() -> list[Callable[..., Any]]:
     """Load all git tools as a list of callable functions.
 
     Returns:
-        List of 9 git tool functions
+        List of 79 git tool functions
 
     Example:
         >>> git_tools = load_all_git_tools()
-        >>> len(git_tools) == 9
+        >>> len(git_tools) == 79
         True
     """
     from coding_open_agent_tools import git
@@ -216,18 +216,18 @@ def load_all_tools() -> list[Callable[..., Any]]:
     implemented modules.
 
     Returns:
-        List of all 84 tool functions from all modules (automatically deduplicated)
+        List of all 154 tool functions from all modules (automatically deduplicated)
 
     Example:
         >>> all_tools = load_all_tools()
-        >>> len(all_tools) == 84
+        >>> len(all_tools) == 154
         True
         >>> # Use with agent frameworks
         >>> # agent = Agent(tools=load_all_tools())
     """
     return merge_tool_lists(
         load_all_analysis_tools(),  # 14 functions
-        load_all_git_tools(),  # 9 functions
+        load_all_git_tools(),  # 79 functions
         load_all_profiling_tools(),  # 8 functions
         load_all_quality_tools(),  # 7 functions
         load_all_shell_tools(),  # 13 functions

@@ -120,7 +120,7 @@ def process_file(file_path: Path) -> bool:
 
     # Add centralized decorator import
     import_lines.append(
-        "from coding_open_agent_tools._decorators import adk_tool, strands_tool"
+        "from coding_open_agent_tools._decorators import strands_tool"
     )
 
     # Insert the new imports

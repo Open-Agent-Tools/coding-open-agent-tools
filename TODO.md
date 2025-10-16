@@ -32,37 +32,32 @@
 - [x] 570 total tests, 86% coverage maintained
 - [x] Fixed Pydantic validation issues in helper functions
 
-### Current Status (v0.3.4)
-- **Total Functions**: 84 across 7 modules
+### Phase 7: Git Enhancement Module (v0.3.5) - ✅ COMPLETED
+- [x] **Git Enhancement Module** (70 functions added to git module)
+- [x] 11 subcategories: commits, hooks, config, health, conflicts, security, submodules, workflows, remotes, tags, diffs
+- [x] Commit message validation with conventional commits
+- [x] Git hooks management and testing
+- [x] Repository health analysis (large files, staleness)
+- [x] Security auditing (secrets, signatures)
+- [x] Workflow validation (gitflow, trunk-based)
+- [x] 570 total tests passing
+- [x] Deprecated @adk_tool decorator (non-existent import)
+- [x] Updated to @strands_tool only (Google ADK uses standard callables)
+
+### Current Status (v0.3.5)
+- **Total Functions**: 154 across 7 modules
 - **Total Tests**: 570 passing
-- **Code Coverage**: 86% (exceeds 80% target)
+- **Code Coverage**: 50% overall
 - **Code Quality**: 100% ruff and mypy --strict compliance
-- **Modules**: analysis, git, profiling, quality, shell, python, database
+- **Modules**: analysis (14), git (79), profiling (8), quality (7), shell (13), python (15), database (18)
+- **Decorator Pattern**: @strands_tool only (ADK works with standard callables)
 
 ---
 
 ## 🚀 Upcoming Modules (Roadmap v3.0)
 
-### v0.4.0 - Git Enhancement Module (60+ functions)
-**Priority**: High - Comprehensive git operations
-
-11 subcategories:
-1. Commit Message Validation (8): conventional commits, signatures, quality analysis
-2. Git Hooks Management (9): syntax validation, security scanning, execution testing
-3. Git Configuration (6): parse configs, validate gitignore/attributes
-4. Repository Health (8): large files, branch staleness, size analysis
-5. Merge Conflict Analysis (6): detect/predict conflicts, parse markers
-6. Security Auditing (8): scan history for secrets, validate signatures
-7. Submodule Management (5): parse .gitmodules, validate URLs
-8. Workflow Validation (6): gitflow/trunk-based compliance
-9. Remote Analysis (5): parse remotes, validate accessibility
-10. Tag & Version Management (5): semantic versioning validation
-11. Diff Analysis (4): parse hunks, complexity calculation
-
-**Rationale**: Git operations ubiquitous in agent workflows, prevents retry loops
-
-### v0.4.5 - Configuration Validation Module (10 functions)
-**Priority**: Medium
+### v0.4.0 - Configuration Validation Module (10 functions)
+**Priority**: High
 
 - [ ] Validators: YAML/TOML/JSON syntax, schema validation, CI config
 - [ ] Security: scan for secrets (detect-secrets), insecure settings
@@ -156,7 +151,7 @@ coding-open-agent-tools/
 ├── src/coding_open_agent_tools/
 │   ├── __init__.py (exports all modules)
 │   ├── analysis/ (14 functions)
-│   ├── git/ (9 functions)
+│   ├── git/ (79 functions - ENHANCED)
 │   ├── profiling/ (8 functions)
 │   ├── quality/ (7 functions)
 │   ├── shell/ (13 functions)
@@ -164,8 +159,9 @@ coding-open-agent-tools/
 │   ├── database/ (18 functions)
 │   ├── helpers.py (tool loading utilities)
 │   ├── exceptions.py (common exceptions)
+│   ├── _decorators.py (@strands_tool decorator)
 │   └── types.py (shared types)
-├── tests/ (570 tests, 86% coverage)
+├── tests/ (570 tests, 50% coverage)
 ├── docs/ (ROADMAP, MODULE_SUMMARY, PRD)
 └── [config files]
 ```
@@ -189,7 +185,7 @@ coding-open-agent-tools/
 
 ---
 
-**Document Version**: 3.3
+**Document Version**: 3.4
 **Status**: Active Development
-**Next Milestone**: v0.4.0 Release (Git Enhancement Module)
+**Next Milestone**: v0.4.0 Release (Configuration Validation Module)
 **Future**: See ROADMAP.md for complete 36-module plan through v1.0.0

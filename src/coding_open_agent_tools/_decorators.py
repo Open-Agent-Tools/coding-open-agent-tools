@@ -5,12 +5,11 @@ When frameworks are not installed, no-op decorators are used as fallbacks,
 allowing the package to work without any required framework dependencies.
 
 Supported Frameworks:
-- Google ADK: @adk_tool decorator
 - Strands: @strands_tool decorator
 - LangGraph: No decorator needed (works with standard callables)
+- Google ADK: No decorator needed (works with standard callables)
 
-All 84 agent tools use both @adk_tool and @strands_tool decorators
-for maximum framework compatibility.
+All agent tools use @strands_tool decorator for Strands framework compatibility.
 """
 
 from typing import Any, Callable
@@ -25,14 +24,4 @@ except ImportError:
         return func
 
 
-# Try to import Google ADK tool decorator
-try:
-    from google.adk.tools import tool as adk_tool
-except ImportError:
-    # Create a no-op decorator if google-adk is not installed
-    def adk_tool(func: Callable[..., Any]) -> Callable[..., Any]:  # type: ignore[misc]
-        """No-op decorator fallback when google-adk is not installed."""
-        return func
-
-
-__all__ = ["strands_tool", "adk_tool"]
+__all__ = ["strands_tool"]

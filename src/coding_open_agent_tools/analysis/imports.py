@@ -7,12 +7,11 @@ statements for code quality and consistency.
 import ast
 from typing import Any
 
-from coding_open_agent_tools._decorators import adk_tool, strands_tool
+from coding_open_agent_tools._decorators import strands_tool
 from coding_open_agent_tools.exceptions import CodeAnalysisError
 from coding_open_agent_tools.types import STDLIB_MODULES
 
 
-@adk_tool
 @strands_tool
 def find_unused_imports(file_path: str) -> list[str]:
     """Identify imports that are not used in the file.
@@ -87,7 +86,6 @@ def find_unused_imports(file_path: str) -> list[str]:
     return unused
 
 
-@adk_tool
 @strands_tool
 def organize_imports(file_path: str) -> str:
     """Sort and organize imports according to PEP 8 conventions.
@@ -193,7 +191,6 @@ def organize_imports(file_path: str) -> str:
     return "\n\n".join(result_parts)
 
 
-@adk_tool
 @strands_tool
 def validate_import_order(file_path: str) -> dict[str, Any]:
     """Check if imports follow PEP 8 ordering conventions.

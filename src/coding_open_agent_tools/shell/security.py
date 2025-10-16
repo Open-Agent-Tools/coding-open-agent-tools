@@ -8,10 +8,9 @@ with optional detect-secrets integration.
 import re
 from typing import Any
 
-from coding_open_agent_tools._decorators import adk_tool, strands_tool
+from coding_open_agent_tools._decorators import strands_tool
 
 
-@adk_tool
 @strands_tool
 def analyze_shell_security(script_content: str) -> list[dict[str, str]]:
     """Analyze shell script for security issues using deterministic rules.
@@ -156,7 +155,6 @@ def analyze_shell_security(script_content: str) -> list[dict[str, str]]:
     return issues
 
 
-@adk_tool
 @strands_tool
 def detect_shell_injection_risks(script_content: str) -> list[dict[str, str]]:
     """Detect potential shell injection vulnerabilities.
@@ -257,7 +255,6 @@ def detect_shell_injection_risks(script_content: str) -> list[dict[str, str]]:
     return risks
 
 
-@adk_tool
 @strands_tool
 def scan_for_secrets_enhanced(content: str, use_detect_secrets: str) -> dict[str, Any]:
     """Scan for secrets with optional detect-secrets integration.

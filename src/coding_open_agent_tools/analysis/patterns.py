@@ -4,7 +4,7 @@ This module contains regex patterns for detecting various types of secrets
 and credentials in source code.
 """
 
-from coding_open_agent_tools._decorators import adk_tool, strands_tool
+from coding_open_agent_tools._decorators import strands_tool
 
 # Secret pattern definitions with severity levels
 SECRET_PATTERNS: list[dict[str, str]] = [
@@ -179,7 +179,6 @@ SECRET_PATTERNS: list[dict[str, str]] = [
 ]
 
 
-@adk_tool
 @strands_tool
 def get_all_patterns() -> list[dict[str, str]]:
     """Get all secret patterns.
@@ -190,7 +189,6 @@ def get_all_patterns() -> list[dict[str, str]]:
     return SECRET_PATTERNS.copy()
 
 
-@adk_tool
 @strands_tool
 def get_patterns_by_severity(severity: str) -> list[dict[str, str]]:
     """Get secret patterns filtered by severity level.
@@ -210,7 +208,6 @@ def get_patterns_by_severity(severity: str) -> list[dict[str, str]]:
     return [p for p in SECRET_PATTERNS if p["severity"] == severity]
 
 
-@adk_tool
 @strands_tool
 def get_high_severity_patterns() -> list[dict[str, str]]:
     """Get only high severity secret patterns.

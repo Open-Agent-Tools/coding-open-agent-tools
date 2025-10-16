@@ -98,7 +98,7 @@ def process_file(file_path: Path) -> bool:
                 # We're past imports, insert decorator import before this line
                 cleaned_lines.append("")
                 cleaned_lines.append(
-                    "from coding_open_agent_tools._decorators import adk_tool, strands_tool"
+                    "from coding_open_agent_tools._decorators import strands_tool"
                 )
                 decorator_import_added = True
 
@@ -112,7 +112,7 @@ def process_file(file_path: Path) -> bool:
                 cleaned_lines.insert(i + 1, "")
                 cleaned_lines.insert(
                     i + 2,
-                    "from coding_open_agent_tools._decorators import adk_tool, strands_tool",
+                    "from coding_open_agent_tools._decorators import strands_tool",
                 )
                 break
 

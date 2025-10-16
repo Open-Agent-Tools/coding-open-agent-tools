@@ -7,11 +7,10 @@ McCabe cyclomatic complexity and other code quality indicators.
 import ast
 from typing import Any
 
-from coding_open_agent_tools._decorators import adk_tool, strands_tool
+from coding_open_agent_tools._decorators import strands_tool
 from coding_open_agent_tools.exceptions import CodeAnalysisError
 
 
-@adk_tool
 @strands_tool
 def calculate_complexity(file_path: str) -> dict[str, Any]:
     """Calculate McCabe cyclomatic complexity for all functions in a file.
@@ -94,7 +93,6 @@ def calculate_complexity(file_path: str) -> dict[str, Any]:
     }
 
 
-@adk_tool
 @strands_tool
 def calculate_function_complexity(file_path: str, function_name: str) -> int:
     """Calculate McCabe cyclomatic complexity for a specific function.
@@ -151,7 +149,6 @@ def calculate_function_complexity(file_path: str, function_name: str) -> int:
     raise CodeAnalysisError(f"Function '{function_name}' not found in {file_path}")
 
 
-@adk_tool
 @strands_tool
 def get_code_metrics(file_path: str) -> dict[str, Any]:
     """Get comprehensive code metrics for a Python file.
@@ -242,7 +239,6 @@ def get_code_metrics(file_path: str) -> dict[str, Any]:
     }
 
 
-@adk_tool
 @strands_tool
 def identify_complex_functions(file_path: str, threshold: int) -> list[dict[str, Any]]:
     """Identify functions exceeding a complexity threshold.

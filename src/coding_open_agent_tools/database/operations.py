@@ -11,10 +11,9 @@ import sqlite3
 from pathlib import Path
 from typing import Any
 
-from coding_open_agent_tools._decorators import adk_tool, strands_tool
+from coding_open_agent_tools._decorators import strands_tool
 
 
-@adk_tool
 @strands_tool
 def create_sqlite_database(db_path: str) -> dict[str, str]:
     """Create a new SQLite database file.
@@ -72,7 +71,6 @@ def create_sqlite_database(db_path: str) -> dict[str, str]:
     }
 
 
-@adk_tool
 @strands_tool
 def execute_query(
     db_path: str, query: str, parameters: list[Any] | None = None
@@ -129,7 +127,6 @@ def execute_query(
         conn.close()
 
 
-@adk_tool
 @strands_tool
 def execute_many(
     db_path: str, query: str, parameters_list: list[list[Any]]
@@ -188,7 +185,6 @@ def execute_many(
         conn.close()
 
 
-@adk_tool
 @strands_tool
 def fetch_all(
     db_path: str, query: str, parameters: list[Any] | None = None
@@ -250,7 +246,6 @@ def fetch_all(
         conn.close()
 
 
-@adk_tool
 @strands_tool
 def fetch_one(
     db_path: str, query: str, parameters: list[Any] | None = None

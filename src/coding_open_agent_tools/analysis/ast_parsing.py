@@ -7,12 +7,11 @@ source files using the Abstract Syntax Tree (AST).
 import ast
 from typing import Any
 
-from coding_open_agent_tools._decorators import adk_tool, strands_tool
+from coding_open_agent_tools._decorators import strands_tool
 from coding_open_agent_tools.exceptions import CodeAnalysisError
 from coding_open_agent_tools.types import STDLIB_MODULES
 
 
-@adk_tool
 @strands_tool
 def parse_python_ast(file_path: str) -> dict[str, Any]:
     """Parse a Python file and extract complete AST structure.
@@ -88,7 +87,6 @@ def parse_python_ast(file_path: str) -> dict[str, Any]:
     }
 
 
-@adk_tool
 @strands_tool
 def extract_functions(file_path: str) -> list[dict[str, Any]]:
     """Extract all function definitions from a Python file.
@@ -176,7 +174,6 @@ def extract_functions(file_path: str) -> list[dict[str, Any]]:
     return functions
 
 
-@adk_tool
 @strands_tool
 def extract_classes(file_path: str) -> list[dict[str, Any]]:
     """Extract all class definitions from a Python file.
@@ -268,7 +265,6 @@ def extract_classes(file_path: str) -> list[dict[str, Any]]:
     return classes
 
 
-@adk_tool
 @strands_tool
 def extract_imports(file_path: str) -> dict[str, list[str]]:
     """Extract all import statements from a Python file.

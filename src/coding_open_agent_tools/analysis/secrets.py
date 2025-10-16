@@ -9,12 +9,11 @@ import re
 from re import Pattern
 from typing import Any
 
-from coding_open_agent_tools._decorators import adk_tool, strands_tool
+from coding_open_agent_tools._decorators import strands_tool
 from coding_open_agent_tools.analysis.patterns import get_all_patterns
 from coding_open_agent_tools.exceptions import CodeAnalysisError
 
 
-@adk_tool
 @strands_tool
 def scan_for_secrets(file_path: str) -> list[dict[str, Any]]:
     """Scan a Python file for hardcoded secrets and credentials.
@@ -98,7 +97,6 @@ def scan_for_secrets(file_path: str) -> list[dict[str, Any]]:
     return findings
 
 
-@adk_tool
 @strands_tool
 def scan_directory_for_secrets(directory_path: str) -> list[dict[str, Any]]:
     """Recursively scan a directory for hardcoded secrets.
@@ -170,7 +168,6 @@ def scan_directory_for_secrets(directory_path: str) -> list[dict[str, Any]]:
     return all_findings
 
 
-@adk_tool
 @strands_tool
 def validate_secret_patterns(content: str, patterns: list[str]) -> list[dict[str, Any]]:
     """Check content against custom secret patterns.

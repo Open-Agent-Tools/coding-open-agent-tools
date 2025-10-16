@@ -1,4 +1,4 @@
-from coding_open_agent_tools._decorators import adk_tool, strands_tool
+from coding_open_agent_tools._decorators import strands_tool
 
 """Shell script formatting and escaping functions.
 
@@ -8,7 +8,6 @@ tokens by handling tedious escaping rules correctly.
 """
 
 
-@adk_tool
 @strands_tool
 def escape_shell_argument(argument: str, quote_style: str) -> str:
     """Safely escape an argument for use in shell commands.
@@ -68,7 +67,6 @@ def escape_shell_argument(argument: str, quote_style: str) -> str:
         return f'"{escaped}"'
 
 
-@adk_tool
 @strands_tool
 def normalize_shebang(shebang_line: str, shell_type: str) -> str:
     """Normalize shebang line to use proper interpreter path.

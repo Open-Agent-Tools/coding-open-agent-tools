@@ -6,10 +6,9 @@ static analysis tools to help agents focus on the most important problems.
 
 from typing import Any
 
-from coding_open_agent_tools._decorators import adk_tool, strands_tool
+from coding_open_agent_tools._decorators import strands_tool
 
 
-@adk_tool
 @strands_tool
 def filter_issues_by_severity(
     issues: list[dict[str, Any]], severity: str
@@ -54,7 +53,6 @@ def filter_issues_by_severity(
     return filtered
 
 
-@adk_tool
 @strands_tool
 def group_issues_by_file(
     issues: list[dict[str, Any]],
@@ -99,7 +97,6 @@ def group_issues_by_file(
     return grouped
 
 
-@adk_tool
 @strands_tool
 def prioritize_issues(issues: list[dict[str, Any]]) -> list[dict[str, Any]]:
     """Sort issues by priority based on severity and frequency.

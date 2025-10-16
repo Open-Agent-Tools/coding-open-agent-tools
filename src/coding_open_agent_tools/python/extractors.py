@@ -11,10 +11,9 @@ import ast
 import re
 from typing import Any
 
-from coding_open_agent_tools._decorators import adk_tool, strands_tool
+from coding_open_agent_tools._decorators import strands_tool
 
 
-@adk_tool
 @strands_tool
 def parse_function_signature(source_code: str, function_name: str) -> dict[str, Any]:
     """Extract function signature components from Python code.
@@ -107,7 +106,6 @@ def parse_function_signature(source_code: str, function_name: str) -> dict[str, 
     }
 
 
-@adk_tool
 @strands_tool
 def extract_docstring_info(source_code: str, function_name: str) -> dict[str, Any]:
     """Extract structured information from a function's docstring.
@@ -276,7 +274,6 @@ def extract_docstring_info(source_code: str, function_name: str) -> dict[str, An
     }
 
 
-@adk_tool
 @strands_tool
 def extract_type_annotations(source_code: str) -> dict[str, Any]:
     """Extract all type annotations from Python source code.
@@ -361,7 +358,6 @@ def extract_type_annotations(source_code: str) -> dict[str, Any]:
     }
 
 
-@adk_tool
 @strands_tool
 def get_function_dependencies(source_code: str, function_name: str) -> dict[str, Any]:
     """Analyze function dependencies (calls, imports, global variables used).

@@ -11,11 +11,10 @@ import ast
 import re
 from typing import Any
 
-from coding_open_agent_tools._decorators import adk_tool, strands_tool
+from coding_open_agent_tools._decorators import strands_tool
 from coding_open_agent_tools.types import STDLIB_MODULES
 
 
-@adk_tool
 @strands_tool
 def validate_python_syntax(source_code: str) -> dict[str, str]:
     """Validate Python source code syntax using AST parsing.
@@ -70,7 +69,6 @@ def validate_python_syntax(source_code: str) -> dict[str, str]:
         }
 
 
-@adk_tool
 @strands_tool
 def validate_type_hints(source_code: str) -> dict[str, Any]:
     """Validate type hints for correctness and consistency.
@@ -197,7 +195,6 @@ def validate_type_hints(source_code: str) -> dict[str, Any]:
     }
 
 
-@adk_tool
 @strands_tool
 def validate_import_order(source_code: str) -> dict[str, Any]:
     """Validate that imports follow PEP 8 ordering conventions.
@@ -334,7 +331,6 @@ def validate_import_order(source_code: str) -> dict[str, Any]:
     }
 
 
-@adk_tool
 @strands_tool
 def check_adk_compliance(source_code: str, function_name: str) -> dict[str, Any]:
     """Check if a function follows Google ADK compliance standards.

@@ -10,11 +10,10 @@ import statistics
 import time
 from typing import Any
 
-from coding_open_agent_tools._decorators import adk_tool, strands_tool
+from coding_open_agent_tools._decorators import strands_tool
 from coding_open_agent_tools.exceptions import ProfilingError
 
 
-@adk_tool
 @strands_tool
 def benchmark_execution(
     file_path: str, function_name: str, args_json: str, iterations: int
@@ -122,7 +121,6 @@ def benchmark_execution(
     }
 
 
-@adk_tool
 @strands_tool
 def compare_implementations(
     file_path1: str,

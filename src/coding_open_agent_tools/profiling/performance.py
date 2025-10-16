@@ -11,11 +11,10 @@ import pstats
 import sys
 from typing import Any
 
-from coding_open_agent_tools._decorators import adk_tool, strands_tool
+from coding_open_agent_tools._decorators import strands_tool
 from coding_open_agent_tools.exceptions import ProfilingError
 
 
-@adk_tool
 @strands_tool
 def profile_function(
     file_path: str, function_name: str, args_json: str
@@ -123,7 +122,6 @@ def profile_function(
     }
 
 
-@adk_tool
 @strands_tool
 def profile_script(file_path: str) -> dict[str, Any]:
     """Profile entire script execution.
@@ -210,7 +208,6 @@ def profile_script(file_path: str) -> dict[str, Any]:
     }
 
 
-@adk_tool
 @strands_tool
 def get_hotspots(profile_data: str) -> list[dict[str, Any]]:
     """Parse cProfile output for performance hotspots.

@@ -8,11 +8,10 @@ import os
 import subprocess
 from typing import Any
 
-from coding_open_agent_tools._decorators import adk_tool, strands_tool
+from coding_open_agent_tools._decorators import strands_tool
 from coding_open_agent_tools.exceptions import GitError
 
 
-@adk_tool
 @strands_tool
 def get_git_log(repository_path: str, max_count: int) -> list[dict[str, Any]]:
     """Get git commit history.
@@ -126,7 +125,6 @@ def get_git_log(repository_path: str, max_count: int) -> list[dict[str, Any]]:
         raise GitError(f"Git command failed: {e.stderr}")
 
 
-@adk_tool
 @strands_tool
 def get_git_blame(repository_path: str, file_path: str) -> list[dict[str, Any]]:
     """Get line-by-line blame information for a file.
@@ -237,7 +235,6 @@ def get_git_blame(repository_path: str, file_path: str) -> list[dict[str, Any]]:
         raise GitError(f"Git command failed: {e.stderr}")
 
 
-@adk_tool
 @strands_tool
 def get_file_history(repository_path: str, file_path: str) -> list[dict[str, Any]]:
     """Get commit history for a specific file.
@@ -347,7 +344,6 @@ def get_file_history(repository_path: str, file_path: str) -> list[dict[str, Any
         raise GitError(f"Git command failed: {e.stderr}")
 
 
-@adk_tool
 @strands_tool
 def get_file_at_commit(repository_path: str, file_path: str, commit_hash: str) -> str:
     """Get file contents at a specific commit.

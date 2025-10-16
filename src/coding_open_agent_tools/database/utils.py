@@ -10,12 +10,11 @@ import json
 import shutil
 from pathlib import Path
 
-from coding_open_agent_tools._decorators import adk_tool, strands_tool
+from coding_open_agent_tools._decorators import strands_tool
 
 from .operations import execute_many, fetch_all
 
 
-@adk_tool
 @strands_tool
 def export_to_json(db_path: str, table_name: str, output_file: str) -> dict[str, str]:
     """Export table data to a JSON file.
@@ -85,7 +84,6 @@ def export_to_json(db_path: str, table_name: str, output_file: str) -> dict[str,
     }
 
 
-@adk_tool
 @strands_tool
 def import_from_json(
     db_path: str, table_name: str, json_file: str, clear_table: str = "false"
@@ -201,7 +199,6 @@ def import_from_json(
     }
 
 
-@adk_tool
 @strands_tool
 def backup_database(db_path: str, backup_path: str) -> dict[str, str]:
     """Create a backup copy of the database.
