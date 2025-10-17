@@ -1,7 +1,7 @@
 # Coding Open Agent Tools - TODO
 
-**Current Version**: v0.4.1
-**Last Updated**: 2025-10-15
+**Current Version**: v0.4.3
+**Last Updated**: 2025-10-17
 
 ## ✅ Completed Phases
 
@@ -44,7 +44,7 @@
 - [x] Deprecated @adk_tool decorator (non-existent import)
 - [x] Updated to @strands_tool only (Google ADK uses standard callables)
 
-### Current Status (v0.4.1) ✅ RELEASED
+### Current Status (v0.4.3) ✅ RELEASED
 - **Total Functions**: 154 across 7 modules
 - **Total Tests**: 570 passing
 - **Code Coverage**: 50% overall
@@ -186,7 +186,7 @@ coding-open-agent-tools/
 
 ---
 
-**Document Version**: 3.5
-**Status**: Active Development - v0.4.1 Released
+**Document Version**: 3.6
+**Status**: Active Development - v0.4.3 Released
 **Next Milestone**: v0.5.0 Release (Configuration Validation Module)
 **Future**: See ROADMAP.md for complete 36-module plan through v1.0.0

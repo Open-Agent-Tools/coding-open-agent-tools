@@ -19,11 +19,13 @@ This project provides **parsing, validation, and analysis tools** that save agen
 - ❌ Code refactoring (agents reason through transformations)
 - ❌ Project scaffolding (agents use examples effectively)
 
-## 🆕 What's New in v0.4.2
+## 🆕 What's New in v0.4.3
 
-🔍 **Enhanced Diff Previews**: Expanded diff preview from 20 to 50 lines for better context in confirmations
+📚 **Helper Function Documentation**: Added comprehensive documentation for all 11 helper functions with usage examples and `__all__` export
 
 ### Recent Updates
+
+**v0.4.2** - Enhanced diff preview from 20 to 50 lines for better context
 
 **v0.4.0** - Added database module with SQLite operations and safe query building
 
@@ -324,7 +326,7 @@ print(f"Modified files: {len(status['modified'])}")
 
 ## Development Status
 
-**Current Version**: v0.4.2
+**Current Version**: v0.4.3
 **Status**: Active Development
 **Focus**: Code validation and analysis tools for AI agents
 
@@ -356,5 +358,5 @@ MIT License (same as basic-open-agent-tools)
 
 ---
 
-**Version**: v0.4.2
+**Version**: v0.4.3
 **Last Updated**: 2025-10-17
