@@ -1,6 +1,5 @@
 """Tests for helper functions."""
 
-
 from coding_open_agent_tools import helpers
 
 

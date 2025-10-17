@@ -19,21 +19,39 @@ This project provides **parsing, validation, and analysis tools** that save agen
 - ❌ Code refactoring (agents reason through transformations)
 - ❌ Project scaffolding (agents use examples effectively)
 
-## Project Status
+## 🆕 What's New in v0.4.2
 
-✅ **v0.1.0-beta Released** - First beta with 39 migrated developer-focused tools from basic-open-agent-tools.
+🔍 **Enhanced Diff Previews**: Expanded diff preview from 20 to 50 lines for better context in confirmations
 
-**What's Available Now (154 Total Functions):**
-- ✅ Analysis Module (14 functions) - AST parsing, complexity analysis, imports, secrets
-- ✅ **Git Module (79 functions)** - Comprehensive git operations (status, history, commits, branches, tags, hooks, workflows, security, and more)
-- ✅ Profiling Module (8 functions) - Performance and memory profiling
-- ✅ Quality Module (7 functions) - Static analysis parsers
-- ✅ Shell Module (13 functions) - Shell validation, security scanning, escaping
-- ✅ Python Module (15 functions) - Syntax validation, type checking, import analysis
-- ✅ **Database Module (18 functions)** - SQLite operations, safe query building, schema inspection
+### Recent Updates
 
-**Coming Next (Focused on Validation, NOT Generation):**
-- 🚧 Config validation module (v0.4.0) - YAML/TOML/JSON validation, secret scanning
+**v0.4.0** - Added database module with SQLite operations and safe query building
+
+**v0.3.0** - Python module for syntax validation, type checking, and import analysis
+
+**v0.2.0** - Shell module with validation, security scanning, and escaping utilities
+
+**v0.1.0-beta** - Initial release with 39 migrated developer-focused tools from basic-open-agent-tools
+
+## Available Tools
+
+**7 modules** with **154 total functions** — all with `@strands_tool` decorator and Google ADK compatible signatures.
+
+### 📊 Complete Module Breakdown
+
+| Module | Functions | Description |
+|--------|-----------|-------------|
+| **Code Analysis** | | |
+| `git` | 79 | Repository operations, history, commits, branches, tags, hooks, workflows |
+| `python` | 15 | Syntax validation, type checking, import analysis, AST parsing |
+| `analysis` | 14 | Code complexity, AST parsing, import tracking, secret detection |
+| **Data & Storage** | | |
+| `database` | 18 | SQLite operations, safe query building, schema inspection |
+| **Development Tools** | | |
+| `shell` | 13 | Shell validation, security scanning, argument escaping |
+| `profiling` | 8 | Performance profiling, memory analysis, execution timing |
+| `quality` | 7 | Static analysis parsers, linting tool integration |
+| **TOTAL** | **154** | |
 
 See [docs/ROADMAP.md](./docs/ROADMAP.md) and [docs/PRD](./docs/PRD/) for detailed plans.
 
@@ -47,7 +65,7 @@ See [docs/ROADMAP.md](./docs/ROADMAP.md) and [docs/PRD](./docs/PRD/) for detaile
 - Document format handling (PDF, Word, Excel, PowerPoint, etc.)
 - System utilities and network operations
 - General-purpose, low-level operations
-- 200+ foundational agent tools
+- 326 foundational agent tools across 21 modules
 
 **coding-open-agent-tools** (Development Layer):
 - Code generation and scaffolding
@@ -67,61 +85,46 @@ coding-open-agent-tools (this project)
 
 This project will **depend on** `basic-open-agent-tools` for file operations, text processing, and other foundational capabilities, while providing specialized code generation features.
 
-## Planned Modules (v0.1.0)
+## Key Features
 
-### 1. Shell Script Generation Module (~15 functions)
-Generate, validate, and analyze shell scripts for deployment, CI/CD, and system administration:
+### Shell Module (13 functions)
+Validate and analyze shell scripts for security and correctness:
 
-- **Generation**: Bash scripts, systemd services, cron jobs, Docker entrypoints, CI pipelines
-- **Validation**: Syntax checking, dependency analysis, security scanning
-- **Utilities**: Argument escaping, permission handling, documentation generation
+- **Validation**: Syntax checking, shell type detection (bash/zsh/sh)
+- **Security**: Security scanning for dangerous patterns, command injection risks
+- **Utilities**: Argument escaping, quote handling, path validation
 
 **Example**:
 ```python
 import coding_open_agent_tools as coat
 
-script = coat.generate_bash_script(
-    commands=["cd /app", "git pull", "npm install", "npm run build"],
-    variables={"NODE_ENV": "production"},
-    add_error_handling=True,
-    add_logging=True,
-    set_flags=["u", "o pipefail"]
-)
+# Validate shell syntax
+validation = coat.shell.validate_shell_syntax("#!/bin/bash\necho 'Hello'", "bash")
+print(f"Valid: {validation['is_valid']}")
 
-# Validate before using
-validation = coat.validate_shell_syntax(script, "bash")
-security = coat.analyze_shell_security(script)
+# Security analysis
+security = coat.shell.analyze_shell_security(script_content)
+print(f"Issues found: {len(security['issues'])}")
 ```
 
-### 2. Python Code Generation Module (~18 functions)
-Generate high-quality Python code with type hints, docstrings, and tests:
+### Python Module (15 functions)
+Validate Python code and analyze imports:
 
-- **Functions**: Sync/async functions, lambdas with full type annotations
-- **Classes**: Regular classes, dataclasses, Pydantic models, exceptions
-- **Documentation**: Google/NumPy/Sphinx docstrings, module headers
-- **Tests**: Pytest skeletons, fixtures, test classes
-- **Projects**: Complete project scaffolding, pyproject.toml, README, .gitignore
+- **Validation**: Syntax checking, AST parsing, type hint extraction
+- **Analysis**: Import tracking, dependency analysis, function/class detection
+- **Type Checking**: Extract and validate type annotations
 
 **Example**:
 ```python
 import coding_open_agent_tools as coat
 
-func = coat.generate_python_function(
-    name="process_data",
-    parameters=[
-        {"name": "data", "type": "list[dict[str, str]]", "description": "Input data"},
-        {"name": "operation", "type": "str", "description": "Operation type"}
-    ],
-    return_type="dict[str, str]",
-    description="Process data with specified operation",
-    docstring_style="google",
-    add_type_checking=True,
-    add_error_handling=True,
-    raises=[
-        {"type": "TypeError", "description": "If parameters are wrong type"},
-        {"type": "ValueError", "description": "If operation is not supported"}
-    ]
-)
+# Validate Python syntax
+result = coat.python.validate_python_syntax("def hello(): return 'world'")
+print(f"Valid: {result['is_valid']}")
+
+# Analyze imports
+imports = coat.python.extract_imports(code_content)
+print(f"Found {len(imports)} import statements")
 ```
 
 ## Design Philosophy
@@ -227,13 +230,16 @@ os.environ['BYPASS_TOOL_CONSENT'] = 'true'
 ## Installation
 
 ```bash
-# Install latest beta from source
+# Install from PyPI
+pip install coding-open-agent-tools
+
+# Or with UV
+uv add coding-open-agent-tools
+
+# Install from source for development
 git clone https://github.com/Open-Agent-Tools/coding-open-agent-tools.git
 cd coding-open-agent-tools
 pip install -e ".[dev]"
-
-# Or install specific version (when published to PyPI)
-pip install coding-open-agent-tools==0.1.0-beta
 
 # This will automatically install basic-open-agent-tools as a dependency
 ```
@@ -279,12 +285,9 @@ print(f"Modified files: {len(status['modified'])}")
 
 ## Development Status
 
-**Current Phase**: Planning and Requirements
-**Next Steps**:
-1. Initialize repository structure
-2. Set up development environment
-3. Implement Shell Script Generation Module (v0.1.0)
-4. Implement Python Code Generation Module (v0.2.0)
+**Current Version**: v0.4.2
+**Status**: Active Development
+**Focus**: Code validation and analysis tools for AI agents
 
 ## Quality Standards
 
@@ -314,6 +317,5 @@ MIT License (same as basic-open-agent-tools)
 
 ---
 
-**Status**: 🚧 Planning Phase
-**Version**: 0.0.0 (not yet released)
-**Last Updated**: 2025-10-14
+**Version**: v0.4.2
+**Last Updated**: 2025-10-17
