@@ -7,6 +7,20 @@ different modules, making it easy to integrate with agent frameworks.
 import inspect
 from typing import Any, Callable, Union
 
+__all__ = [
+    "merge_tool_lists",
+    "load_all_analysis_tools",
+    "load_all_git_tools",
+    "load_all_profiling_tools",
+    "load_all_quality_tools",
+    "load_all_shell_tools",
+    "load_all_python_tools",
+    "load_all_database_tools",
+    "load_all_tools",
+    "get_tool_info",
+    "list_all_available_tools",
+]
+
 
 def merge_tool_lists(
     *args: Union[list[Callable[..., Any]], Callable[..., Any]],

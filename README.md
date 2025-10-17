@@ -244,6 +244,27 @@ pip install -e ".[dev]"
 # This will automatically install basic-open-agent-tools as a dependency
 ```
 
+## Helper Functions
+
+The package provides 11 helper functions for tool management and introspection:
+
+### Tool Loading Functions
+
+- **`load_all_tools()`** - Load all 154 functions from all modules
+- **`load_all_analysis_tools()`** - Load 14 code analysis functions
+- **`load_all_git_tools()`** - Load 79 git operation functions
+- **`load_all_profiling_tools()`** - Load 8 profiling functions
+- **`load_all_quality_tools()`** - Load 7 static analysis functions
+- **`load_all_shell_tools()`** - Load 13 shell validation functions
+- **`load_all_python_tools()`** - Load 15 Python validation functions
+- **`load_all_database_tools()`** - Load 18 SQLite operation functions
+
+### Tool Management Functions
+
+- **`merge_tool_lists(*args)`** - Merge multiple tool lists and individual functions with automatic deduplication
+- **`get_tool_info(tool)`** - Inspect a tool's name, docstring, signature, and parameters
+- **`list_all_available_tools()`** - Get all tools organized by category with metadata
+
 ## Quick Start
 
 ```python
@@ -260,6 +281,24 @@ quality_tools = coat.load_all_quality_tools()    # 7 functions
 shell_tools = coat.load_all_shell_tools()        # 13 functions
 python_tools = coat.load_all_python_tools()      # 15 functions
 database_tools = coat.load_all_database_tools()  # 18 functions
+
+# Merge custom tools with built-in tools
+def my_custom_tool(x: str) -> dict[str, str]:
+    return {"result": x}
+
+combined_tools = coat.merge_tool_lists(
+    coat.load_all_analysis_tools(),
+    coat.load_all_git_tools(),
+    my_custom_tool  # Add individual functions
+)
+
+# Inspect tool information
+tool_info = coat.get_tool_info(my_custom_tool)
+print(f"Tool: {tool_info['name']}, Params: {tool_info['parameters']}")
+
+# List all available tools by category
+all_available = coat.list_all_available_tools()
+print(f"Categories: {list(all_available.keys())}")
 
 # Use with any agent framework
 from google.adk.agents import Agent
