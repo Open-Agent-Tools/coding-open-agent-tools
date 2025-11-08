@@ -8,7 +8,57 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Planned
-- Configuration validation module (v0.6.0)
+- Advanced Analysis Module (security, performance, compliance scanning)
+
+## [0.9.0] - 2025-11-08
+
+### Added
+- **Config Module Expansion** (19 new functions, 28 total in config module):
+  - **.env File Support** (5 functions in config/env.py):
+    - `parse_env_file()` - Parse .env content into dictionary with comment/quote handling
+    - `validate_env_file()` - Validate .env syntax, check variable names, detect errors/warnings
+    - `extract_env_variable()` - Extract specific variable value from .env content
+    - `merge_env_files()` - Merge two .env files with precedence handling
+    - `substitute_env_variables()` - Expand ${VAR} and $VAR references in templates
+
+  - **Config Extraction** (6 functions in config/extraction.py):
+    - `extract_yaml_value()` - Extract value from YAML using dot notation (e.g., "database.host")
+    - `extract_toml_value()` - Extract value from TOML using dot notation path
+    - `extract_json_value()` - Extract value from JSON using dot notation path
+    - `merge_yaml_files()` - Deep merge two YAML files with nested dictionary merging
+    - `merge_toml_files()` - Deep merge two TOML files with table merging
+    - `interpolate_config_variables()` - Expand ${VAR} references in config content
+
+  - **Common Config Formats** (5 functions in config/formats.py):
+    - `parse_ini_file()` - Parse INI/CFG files into nested dictionary
+    - `validate_ini_syntax()` - Validate INI file syntax and structure
+    - `parse_properties_file()` - Parse Java .properties files with continuations/escapes
+    - `validate_xml_syntax()` - Validate XML configuration file syntax
+    - `parse_xml_value()` - Extract value from XML using XPath-like syntax
+
+  - **Security & Best Practices** (3 functions in config/best_practices.py):
+    - `check_gitignore_security()` - Comprehensive .gitignore security pattern scanning
+    - `detect_exposed_config_files()` - Find configs in web-accessible directories
+    - `validate_config_permissions()` - Check file permissions for sensitive configs
+
+### Changed
+- **Config module**: Expanded from 9 to 28 functions (+19 new tools)
+- **Total tools**: 267 → 286 functions across all modules (+19)
+- Updated `helpers.py` with correct config function count (28)
+- Enhanced gitignore security checking (replaced `check_env_in_gitignore` with comprehensive `check_gitignore_security`)
+
+### Testing
+- Added 148 comprehensive tests for new config functions across 4 new test files
+- Total tests: 1096 → 1244 passing (+148 tests)
+- Config module tests: 26 → 174 tests
+- All new tools maintain 80%+ coverage target
+- 100% ruff compliance maintained
+- 100% mypy --strict compliance maintained
+
+### Documentation
+- Updated helpers.py with config module documentation
+- Updated README.md with config module expansion details
+- Created comprehensive module documentation for env, extraction, formats, best_practices
 
 ## [0.5.0] - 2025-11-07
 

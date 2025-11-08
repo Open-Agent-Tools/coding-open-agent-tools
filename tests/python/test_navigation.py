@@ -518,7 +518,7 @@ class TestExtractPythonPublicApi:
 
     def test_module_with_all(self):
         """Test extraction when __all__ is defined."""
-        code = '''
+        code = """
 __all__ = ["public_func", "PublicClass"]
 
 def public_func():
@@ -529,7 +529,7 @@ def _private_func():
 
 class PublicClass:
     pass
-'''
+"""
         result = extract_python_public_api(code)
         assert result["has_all_defined"] == "true"
         all_contents = json.loads(result["all_contents"])

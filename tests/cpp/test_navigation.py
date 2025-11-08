@@ -763,7 +763,9 @@ public:
         return "";
     }
 };"""
-        with pytest.raises(ValueError, match="Method 'setName' not found in class 'Person'"):
+        with pytest.raises(
+            ValueError, match="Method 'setName' not found in class 'Person'"
+        ):
             get_cpp_specific_function_line_numbers(code, "Person", "setName")
 
 

@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta:__legacy__"
 
 [project]
 name = "coding-open-agent-tools"
-version = "0.8.0"  # Minor: Configuration validation module (9 tools), YAML/TOML/JSON validation, secret scanning
+version = "0.9.0"  # Minor: Config module expansion (28 tools), .env/INI/properties/XML support, security best practices
 description = "Advanced code generation and shell scripting toolkit for AI agents, complementing basic-open-agent-tools with development-focused capabilities."
 readme = "README.md"
 requires-python = ">=3.9"

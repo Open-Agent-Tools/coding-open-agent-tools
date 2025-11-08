@@ -119,9 +119,7 @@ def process_file(file_path: Path) -> bool:
         import_lines.append("")
 
     # Add centralized decorator import
-    import_lines.append(
-        "from coding_open_agent_tools._decorators import strands_tool"
-    )
+    import_lines.append("from coding_open_agent_tools._decorators import strands_tool")
 
     # Insert the new imports
     lines.insert(insert_index, "\n".join(import_lines))

@@ -156,7 +156,9 @@ class TestValidateJSONSchema:
 
     def test_invalid_use_jsonschema_value(self) -> None:
         """Test that invalid use_jsonschema value raises ValueError."""
-        with pytest.raises(ValueError, match='use_jsonschema must be "true" or "false"'):
+        with pytest.raises(
+            ValueError, match='use_jsonschema must be "true" or "false"'
+        ):
             validate_json_schema('{"a": 1}', '{"type": "object"}', "maybe")  # type: ignore[arg-type]
 
 

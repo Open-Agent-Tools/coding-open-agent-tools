@@ -19,24 +19,21 @@ This project provides **parsing, validation, and analysis tools** that save agen
 - ❌ Code refactoring (agents reason through transformations)
 - ❌ Project scaffolding (agents use examples effectively)
 
-## 🆕 What's New in v0.5.0
+## 🆕 What's New in v0.9.0
 
-🚀 **Python Navigation Complete**: Added 7 advanced navigation functions (70-90% token reduction):
-- Extract function bodies without full file reads
-- Analyze function dependencies (what does it call?)
-- Impact analysis (where is function used?)
-- Target specific methods in classes
-- Class hierarchy and inheritance analysis
-- Find all definitions by decorator (@tool, @property, etc.)
-- Extract class docstrings
+🔧 **Configuration Module Expansion**: Comprehensive config file tooling (+19 new functions, 28 total):
+- **.env file support** - Parse, validate, merge, and substitute environment variables
+- **Config extraction** - Extract values from YAML/TOML/JSON using dot notation paths
+- **Common formats** - Parse INI, Java properties, and XML configuration files
+- **Security best practices** - Gitignore security scanning, exposed file detection, permission validation
 
 ### Previous Updates
+
+**v0.5.0** - Python Navigation Complete: Added 7 advanced navigation functions (70-90% token reduction)
 
 **v0.4.4** - Python Navigation Tools: Added 10 token-saving navigation functions for line numbers, overviews, and signatures
 
 **v0.4.3** - Helper Function Documentation: Added comprehensive documentation for all 11 helper functions with usage examples and `__all__` export
-
-### Recent Updates
 
 **v0.4.2** - Enhanced diff preview from 20 to 50 lines for better context
 
@@ -50,9 +47,9 @@ This project provides **parsing, validation, and analysis tools** that save agen
 
 ## Available Tools
 
-**7 modules** with **171 total functions** — all with `@strands_tool` decorator and Google ADK compatible signatures.
+**8 core modules** with **199 functions** + **7 language-specific modules** with **87 functions** = **286 total functions** — all with `@strands_tool` decorator and Google ADK compatible signatures.
 
-### 📊 Complete Module Breakdown
+### 📊 Core Module Breakdown
 
 | Module | Functions | Description |
 |--------|-----------|-------------|
@@ -60,13 +57,18 @@ This project provides **parsing, validation, and analysis tools** that save agen
 | `git` | 79 | Repository operations, history, commits, branches, tags, hooks, workflows |
 | `python` | 32 | **Navigation (17 tools!)**, syntax validation, type checking, import analysis, AST parsing |
 | `analysis` | 14 | Code complexity, AST parsing, import tracking, secret detection |
-| **Data & Storage** | | |
+| **Configuration & Data** | | |
+| `config` | 28 | **.env/INI/properties/XML parsing**, YAML/TOML/JSON extraction, security scanning |
 | `database` | 18 | SQLite operations, safe query building, schema inspection |
 | **Development Tools** | | |
 | `shell` | 13 | Shell validation, security scanning, argument escaping |
 | `profiling` | 8 | Performance profiling, memory analysis, execution timing |
 | `quality` | 7 | Static analysis parsers, linting tool integration |
-| **TOTAL** | **171** | |
+| **CORE TOTAL** | **199** | |
+
+**Language-Specific Modules**: JavaScript/TypeScript (17), Java (17), Go (17), Rust (17), C++ (17), C# (17), Ruby (17) = **87 functions**
+
+**GRAND TOTAL**: **286 functions**
 
 See [docs/ROADMAP.md](./docs/ROADMAP.md) and [docs/PRD](./docs/PRD/) for detailed plans.
 
@@ -265,8 +267,9 @@ The package provides 11 helper functions for tool management and introspection:
 
 ### Tool Loading Functions
 
-- **`load_all_tools()`** - Load all 171 functions from all modules
+- **`load_all_tools()`** - Load all 286 functions from all modules (core + language-specific)
 - **`load_all_analysis_tools()`** - Load 14 code analysis functions
+- **`load_all_config_tools()`** - Load 28 configuration validation and parsing functions
 - **`load_all_git_tools()`** - Load 79 git operation functions
 - **`load_all_profiling_tools()`** - Load 8 profiling functions
 - **`load_all_quality_tools()`** - Load 7 static analysis functions
@@ -285,11 +288,12 @@ The package provides 11 helper functions for tool management and introspection:
 ```python
 import coding_open_agent_tools as coat
 
-# Load all 171 functions
+# Load all 286 functions (core + language-specific)
 all_tools = coat.load_all_tools()
 
 # Or load by category
 analysis_tools = coat.load_all_analysis_tools()  # 14 functions
+config_tools = coat.load_all_config_tools()      # 28 functions (NEW in v0.9.0!)
 git_tools = coat.load_all_git_tools()            # 79 functions
 profiling_tools = coat.load_all_profiling_tools()  # 8 functions
 quality_tools = coat.load_all_quality_tools()    # 7 functions
@@ -346,13 +350,28 @@ print(f"Functions: {overview['function_names']}")
 # Get line numbers for targeted reading (90-95% token savings)
 lines = python.get_python_function_line_numbers(source_code, "process_data")
 # Then use: Read(file_path="module.py", offset=int(lines['start_line']), limit=int(lines['end_line'])-int(lines['start_line']))
+
+# Example: Config file operations (NEW in v0.9.0)
+from coding_open_agent_tools import config
+
+# Parse and validate .env files
+env_result = config.parse_env_file(".env content here")
+print(f"Variables: {env_result['variable_count']}")
+
+# Extract specific values from YAML using dot notation
+yaml_value = config.extract_yaml_value(yaml_content, "database.host")
+print(f"Database host: {yaml_value['value']}")
+
+# Security: Check gitignore for missing patterns
+security = config.check_gitignore_security(gitignore_content)
+print(f"Security status: {security['is_secure']}")
 ```
 
 ## Development Status
 
-**Current Version**: v0.5.0
+**Current Version**: v0.9.0
 **Status**: Active Development
-**Focus**: Token-efficient code navigation and analysis tools for AI agents
+**Focus**: Comprehensive configuration file tooling and token-efficient code analysis for AI agents
 
 ## Quality Standards
 
@@ -382,5 +401,5 @@ MIT License (same as basic-open-agent-tools)
 
 ---
 
-**Version**: v0.5.0
-**Last Updated**: 2025-11-07
+**Version**: v0.9.0
+**Last Updated**: 2025-11-08

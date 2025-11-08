@@ -32,7 +32,10 @@ class TestScanConfigForSecrets:
         result = scan_config_for_secrets(config, "false")
         assert result["secrets_found"] == "true"
         assert int(result["secret_count"]) > 0
-        assert "aws" in result["secret_types"].lower() or "key" in result["secret_types"].lower()
+        assert (
+            "aws" in result["secret_types"].lower()
+            or "key" in result["secret_types"].lower()
+        )
 
     def test_api_key_detected(self) -> None:
         """Test detection of API key."""
@@ -100,7 +103,9 @@ class TestScanConfigForSecrets:
 
     def test_invalid_use_detect_secrets_value(self) -> None:
         """Test that invalid use_detect_secrets value raises ValueError."""
-        with pytest.raises(ValueError, match='use_detect_secrets must be "true" or "false"'):
+        with pytest.raises(
+            ValueError, match='use_detect_secrets must be "true" or "false"'
+        ):
             scan_config_for_secrets("test", "maybe")  # type: ignore[arg-type]
 
 

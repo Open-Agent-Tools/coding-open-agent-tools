@@ -270,12 +270,12 @@ class TestLoadAllTools:
     """Tests for load_all_tools function."""
 
     def test_loads_all_tools(self) -> None:
-        """Test that all 267 tools are loaded."""
+        """Test that all 286 tools are loaded."""
         tools = helpers.load_all_tools()
-        # Core: 14 + 9 + 79 + 8 + 7 + 13 + 32 + 18 = 180
+        # Core: 14 + 28 + 79 + 8 + 7 + 13 + 32 + 18 = 199
         # Languages: 17 * 7 = 119 (JS, Java, Go, Rust, C++, C#, Ruby - but Python counted in core as 32)
-        # Total: 180 + 119 - 32 + 32 = 267 (14+9+79+8+7+13+32+18+17*7)
-        assert len(tools) == 267
+        # Total: 199 + 119 - 32 + 32 = 286 (14+28+79+8+7+13+32+18+17*7)
+        assert len(tools) == 286
 
     def test_all_tools_callable(self) -> None:
         """Test that all loaded tools are callable."""
@@ -365,13 +365,13 @@ class TestListAllAvailableTools:
     def test_list_all_available_tools_values_are_lists(self) -> None:
         """Test that each category contains a list."""
         tools = helpers.list_all_available_tools()
-        for category, tool_list in tools.items():
+        for _category, tool_list in tools.items():
             assert isinstance(tool_list, list)
 
     def test_list_all_available_tools_items_are_dicts(self) -> None:
         """Test that each tool info is a dictionary."""
         tools = helpers.list_all_available_tools()
-        for category, tool_list in tools.items():
+        for _category, tool_list in tools.items():
             for tool_info in tool_list:
                 assert isinstance(tool_info, dict)
                 assert "name" in tool_info

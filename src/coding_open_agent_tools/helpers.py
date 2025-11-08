@@ -117,14 +117,14 @@ def load_all_analysis_tools() -> list[Callable[..., Any]]:
 
 
 def load_all_config_tools() -> list[Callable[..., Any]]:
-    """Load all configuration validation tools as a list of callable functions.
+    """Load all configuration validation and manipulation tools as a list of callable functions.
 
     Returns:
-        List of 9 config validation tool functions
+        List of 28 config tool functions (validation, .env, extraction, formats, security)
 
     Example:
         >>> config_tools = load_all_config_tools()
-        >>> len(config_tools) == 9
+        >>> len(config_tools) == 28
         True
     """
     from coding_open_agent_tools import config
@@ -270,18 +270,18 @@ def load_all_tools() -> list[Callable[..., Any]]:
     implemented modules.
 
     Returns:
-        List of all 267 unique tool functions from all modules (automatically deduplicated)
+        List of all 286 unique tool functions from all modules (automatically deduplicated)
 
     Example:
         >>> all_tools = load_all_tools()
-        >>> len(all_tools) == 267
+        >>> len(all_tools) == 286
         True
         >>> # Use with agent frameworks
         >>> # agent = Agent(tools=load_all_tools())
     """
     return merge_tool_lists(
         load_all_analysis_tools(),  # 14 functions
-        load_all_config_tools(),  # 9 functions
+        load_all_config_tools(),  # 28 functions
         load_all_git_tools(),  # 79 functions
         load_all_profiling_tools(),  # 8 functions
         load_all_quality_tools(),  # 7 functions
@@ -345,6 +345,7 @@ def list_all_available_tools() -> dict[str, list[dict[str, Any]]]:
     """
     return {
         "analysis": [get_tool_info(tool) for tool in load_all_analysis_tools()],
+        "config": [get_tool_info(tool) for tool in load_all_config_tools()],
         "git": [get_tool_info(tool) for tool in load_all_git_tools()],
         "profiling": [get_tool_info(tool) for tool in load_all_profiling_tools()],
         "quality": [get_tool_info(tool) for tool in load_all_quality_tools()],
