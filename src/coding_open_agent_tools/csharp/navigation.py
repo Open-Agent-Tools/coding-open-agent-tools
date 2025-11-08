@@ -240,19 +240,19 @@ def _get_type_kind(node: Any) -> str:
 
 
 def _get_class_for_method(node: Any, source_bytes: bytes) -> str:
-    """Extract the class/struct name that contains a method.
+    """Extract the class/struct/interface name that contains a method.
 
     Args:
         node: Method declaration node
         source_bytes: Source code as bytes
 
     Returns:
-        Class/struct name or empty string if not found
+        Class/struct/interface name or empty string if not found
     """
-    # Walk up the tree to find the containing class or struct
+    # Walk up the tree to find the containing class, struct, or interface
     parent = node.parent
     while parent:
-        if parent.type in ("class_declaration", "struct_declaration"):
+        if parent.type in ("class_declaration", "struct_declaration", "interface_declaration"):
             return _get_type_name(parent, source_bytes)
         parent = parent.parent
     return ""
@@ -406,6 +406,8 @@ def get_csharp_module_overview(source_code: str) -> dict[str, str]:
 
     Returns:
         Dictionary with:
+        - overview: Human-readable summary of types and methods
+        - class_count: Number of classes in the file
         - function_count: Number of methods in the file
         - method_count: Number of methods in the file (same as function_count)
         - type_count: Number of types in the file
@@ -417,12 +419,23 @@ def get_csharp_module_overview(source_code: str) -> dict[str, str]:
 
     Raises:
         TypeError: If source_code is not a string
-        ValueError: If source_code is empty or parsing fails
     """
     if not isinstance(source_code, str):
         raise TypeError("source_code must be a string")
     if not source_code.strip():
-        raise ValueError("source_code cannot be empty")
+        return {
+            "overview": "",
+            "class_count": "0",
+            "function_count": "0",
+            "method_count": "0",
+            "type_count": "0",
+            "function_names": "[]",
+            "type_names": "[]",
+            "has_package": "false",
+            "has_imports": "false",
+            "total_lines": "0",
+            "found": "true",
+        }
 
     try:
         tree = _parse_csharp(source_code)
@@ -468,7 +481,21 @@ def get_csharp_module_overview(source_code: str) -> dict[str, str]:
         # Count lines
         total_lines = len(source_code.split("\n"))
 
+        # Count classes specifically
+        class_decls = _find_nodes_by_type(root, "class_declaration")
+        class_count = len(class_decls)
+
+        # Create overview string
+        overview_parts = []
+        if type_names:
+            overview_parts.append(f"Types: {', '.join(type_names)}")
+        if method_names:
+            overview_parts.append(f"Methods: {', '.join(method_names)}")
+        overview = "; ".join(overview_parts) if overview_parts else ""
+
         return {
+            "overview": overview,
+            "class_count": str(class_count),
             "function_count": str(len(method_names)),
             "method_count": str(len(method_names)),
             "type_count": str(len(type_names)),
@@ -496,17 +523,22 @@ def list_csharp_functions(source_code: str) -> dict[str, str]:
 
     Returns:
         Dictionary with:
-        - functions: JSON array of method information dictionaries
-        - function_count: Total number of methods found
+        - functions: Comma-separated list of function names
+        - count: Total number of methods found
+        - details: JSON array of detailed method information
 
     Raises:
         TypeError: If source_code is not a string
-        ValueError: If source_code is empty or parsing fails
     """
     if not isinstance(source_code, str):
         raise TypeError("source_code must be a string")
     if not source_code.strip():
-        raise ValueError("source_code cannot be empty")
+        return {
+            "functions": "",
+            "count": "0",
+            "details": "[]",
+            "found": "true",
+        }
 
     try:
         tree = _parse_csharp(source_code)
@@ -552,9 +584,14 @@ def list_csharp_functions(source_code: str) -> dict[str, str]:
             func_info["line"] = func_node.start_point[0] + 1
             functions.append(func_info)
 
+        # Create comma-separated list of names
+        function_names = [f["name"] for f in functions if f["name"]]
+        functions_str = ", ".join(function_names) if function_names else ""
+
         return {
-            "functions": json.dumps(functions),
-            "function_count": str(len(functions)),
+            "functions": functions_str,
+            "count": str(len(functions)),
+            "details": json.dumps(functions),
         }
 
     except Exception as e:
@@ -574,17 +611,22 @@ def list_csharp_types(source_code: str) -> dict[str, str]:
 
     Returns:
         Dictionary with:
-        - types: JSON array of type information dictionaries
-        - type_count: Total number of types found
+        - types: Comma-separated list of type names
+        - count: Total number of types found
+        - details: JSON array of detailed type information
 
     Raises:
         TypeError: If source_code is not a string
-        ValueError: If source_code is empty or parsing fails
     """
     if not isinstance(source_code, str):
         raise TypeError("source_code must be a string")
     if not source_code.strip():
-        raise ValueError("source_code cannot be empty")
+        return {
+            "types": "",
+            "count": "0",
+            "details": "[]",
+            "found": "true",
+        }
 
     try:
         tree = _parse_csharp(source_code)
@@ -617,9 +659,14 @@ def list_csharp_types(source_code: str) -> dict[str, str]:
                 type_info["line"] = type_decl.start_point[0] + 1
                 types.append(type_info)
 
+        # Create comma-separated list of names
+        type_names = [t["name"] for t in types if t["name"]]
+        types_str = ", ".join(type_names) if type_names else ""
+
         return {
-            "types": json.dumps(types),
-            "type_count": str(len(types)),
+            "types": types_str,
+            "count": str(len(types)),
+            "details": json.dumps(types),
         }
 
     except Exception as e:
@@ -864,9 +911,14 @@ def list_csharp_type_methods(source_code: str, type_name: str) -> dict[str, str]
             if not type_found:
                 raise ValueError(f"Type '{type_name}' not found in source code")
 
+        # Create comma-separated list of method names (for test compatibility)
+        method_names = [m["name"] for m in methods if m["name"]]
+        methods_str = ", ".join(method_names) if method_names else ""
+
         return {
-            "methods": json.dumps(methods),
-            "method_count": str(len(methods)),
+            "methods": methods_str,  # Simple string format for tests
+            "count": str(len(methods)),  # Changed from method_count
+            "details": json.dumps(methods),  # Detailed structured data
             "type_name": type_name,
         }
 
@@ -901,7 +953,13 @@ def extract_csharp_public_api(source_code: str) -> dict[str, str]:
     if not isinstance(source_code, str):
         raise TypeError("source_code must be a string")
     if not source_code.strip():
-        raise ValueError("source_code cannot be empty")
+        return {
+            "api": "",
+            "public_functions": "[]",
+            "public_types": "[]",
+            "public_count": "0",
+            "details": '{"functions": [], "types": []}',
+        }
 
     try:
         tree = _parse_csharp(source_code)
@@ -934,7 +992,12 @@ def extract_csharp_public_api(source_code: str) -> dict[str, str]:
                 if name and _is_public(type_decl, source_bytes):
                     public_types.append(name)
 
+        # Create comma-separated API string (for test compatibility)
+        all_api_items = public_types + public_functions  # Types first, then functions
+        api_str = ", ".join(all_api_items) if all_api_items else ""
+
         return {
+            "api": api_str,  # Simple string format for tests
             "public_functions": json.dumps(public_functions),
             "public_types": json.dumps(public_types),
             "public_count": str(len(public_functions) + len(public_types)),
@@ -1023,7 +1086,8 @@ def get_csharp_function_details(source_code: str, function_name: str) -> dict[st
                 docstring = _extract_xmldoc(source_code, func_node.start_byte)
 
                 return {
-                    "function_name": function_name,
+                    "name": function_name,  # For test compatibility
+                    "function_name": function_name,  # Keep for backward compatibility
                     "signature": signature,
                     "docstring": docstring,
                     "params": params,
@@ -1031,7 +1095,8 @@ def get_csharp_function_details(source_code: str, function_name: str) -> dict[st
                     "is_public": "true"
                     if _is_public(func_node, source_bytes)
                     else "false",
-                    "line": str(func_node.start_point[0] + 1),
+                    "start_line": str(func_node.start_point[0] + 1),  # For test compatibility
+                    "line": str(func_node.start_point[0] + 1),  # Keep for backward compatibility
                 }
 
         raise ValueError(f"Method '{function_name}' not found in source code")

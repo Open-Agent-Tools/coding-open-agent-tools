@@ -458,7 +458,16 @@ def get_ruby_module_overview(source_code: str) -> dict[str, str]:
         # Count lines
         total_lines = len(source_code.split("\n"))
 
+        # Create overview string
+        overview_parts = []
+        if type_names:
+            overview_parts.append(f"Types: {', '.join(type_names)}")
+        if method_names:
+            overview_parts.append(f"Methods: {', '.join(method_names)}")
+        overview = "; ".join(overview_parts) if overview_parts else ""
+
         return {
+            "overview": overview,
             "function_count": str(len(method_names)),
             "method_count": str(len(method_names)),
             "type_count": str(len(type_names)),
@@ -879,7 +888,12 @@ def extract_ruby_public_api(source_code: str) -> dict[str, str]:
                 if name:
                     public_types.append(name)
 
+        # Create comma-separated API string (for test compatibility)
+        all_api_items = public_functions + public_types
+        api_str = ", ".join(all_api_items) if all_api_items else ""
+
         return {
+            "api": api_str,  # Simple string format for tests
             "public_functions": json.dumps(public_functions),
             "public_types": json.dumps(public_types),
             "public_count": str(len(public_functions) + len(public_types)),
@@ -1362,7 +1376,12 @@ def get_ruby_type_hierarchy(source_code: str, type_name: str) -> dict[str, str]:
 
                     has_embedding = len(embeds) > 0 or len(implements) > 0
 
+                    # Create comma-separated base types string (for test compatibility)
+                    all_base_types = embeds + implements
+                    base_types_str = ", ".join(all_base_types) if all_base_types else ""
+
                     return {
+                        "base_types": base_types_str,  # Simple string format for tests
                         "embeds": json.dumps(embeds),
                         "implements": json.dumps(implements),
                         "has_embedding": "true" if has_embedding else "false",
@@ -1455,7 +1474,12 @@ def find_ruby_definitions_by_comment(
                             }
                         )
 
+        # Create comma-separated definitions string (for test compatibility)
+        all_definitions = functions + types
+        definitions_str = ", ".join(all_definitions) if all_definitions else ""
+
         return {
+            "definitions": definitions_str,  # Simple string format for tests
             "functions": json.dumps(functions),
             "types": json.dumps(types),
             "total_count": str(len(functions) + len(types)),
