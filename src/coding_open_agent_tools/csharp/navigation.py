@@ -34,15 +34,16 @@ except ImportError:
 def _safe_execute(func: Callable[..., dict[str, str]]) -> Callable[..., dict[str, str]]:
     """Decorator to safely execute functions and return error dicts instead of raising.
 
-    C# navigation functions should return {"found": "false", "error": "..."}
-    instead of raising exceptions (except for invalid input types).
+    C# navigation functions should return results with explicit "found" status.
+    This decorator adds "found": "true" if not already present, and converts exceptions to error dicts.
     """
 
     def wrapper(*args: Any, **kwargs: Any) -> dict[str, str]:
         try:
             result = func(*args, **kwargs)
-            # Add "found": "true" to all successful results
-            result["found"] = "true"
+            # Add "found": "true" only if not already present
+            if "found" not in result:
+                result["found"] = "true"
             return result
         except (TypeError, AttributeError):
             # Re-raise type errors (invalid input types)
@@ -257,7 +258,6 @@ def _get_class_for_method(node: Any, source_bytes: bytes) -> str:
     return ""
 
 
-@_safe_execute
 @_safe_execute
 @strands_tool  # type: ignore[misc]
 def get_csharp_function_line_numbers(
