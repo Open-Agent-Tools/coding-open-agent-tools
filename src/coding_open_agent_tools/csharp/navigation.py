@@ -252,7 +252,11 @@ def _get_class_for_method(node: Any, source_bytes: bytes) -> str:
     # Walk up the tree to find the containing class, struct, or interface
     parent = node.parent
     while parent:
-        if parent.type in ("class_declaration", "struct_declaration", "interface_declaration"):
+        if parent.type in (
+            "class_declaration",
+            "struct_declaration",
+            "interface_declaration",
+        ):
             return _get_type_name(parent, source_bytes)
         parent = parent.parent
     return ""
@@ -1111,8 +1115,12 @@ def get_csharp_function_details(source_code: str, function_name: str) -> dict[st
                     "is_public": "true"
                     if _is_public(func_node, source_bytes)
                     else "false",
-                    "start_line": str(func_node.start_point[0] + 1),  # For test compatibility
-                    "line": str(func_node.start_point[0] + 1),  # Keep for backward compatibility
+                    "start_line": str(
+                        func_node.start_point[0] + 1
+                    ),  # For test compatibility
+                    "line": str(
+                        func_node.start_point[0] + 1
+                    ),  # Keep for backward compatibility
                 }
 
         raise ValueError(f"Method '{function_name}' not found in source code")
