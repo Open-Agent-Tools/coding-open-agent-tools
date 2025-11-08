@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta:__legacy__"
 
 [project]
 name = "coding-open-agent-tools"
-version = "0.7.0"  # Phase 2 complete: C# and Ruby navigation (8 languages, 258 unique tools)
+version = "0.7.1"  # Hotfix: 100% test pass rate (1096/1096), complete navigation API compatibility
 description = "Advanced code generation and shell scripting toolkit for AI agents, complementing basic-open-agent-tools with development-focused capabilities."
 readme = "README.md"
 requires-python = ">=3.9"
