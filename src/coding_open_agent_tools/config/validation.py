@@ -293,7 +293,9 @@ def validate_json_schema(
             "validation_type": "schema",
         }
     except jsonschema.ValidationError as e:
-        error_path = ".".join(str(p) for p in e.absolute_path) if e.absolute_path else "root"
+        error_path = (
+            ".".join(str(p) for p in e.absolute_path) if e.absolute_path else "root"
+        )
         return {
             "is_valid": "false",
             "error_message": str(e.message),
@@ -530,7 +532,9 @@ def check_dependency_conflicts(requirements_content: str) -> dict[str, str]:
     if conflicts or invalid_lines:
         conflict_details = []
         if conflicts:
-            conflict_details.append(f"{len(conflicts)} packages with conflicts: {', '.join(conflicts[:3])}")
+            conflict_details.append(
+                f"{len(conflicts)} packages with conflicts: {', '.join(conflicts[:3])}"
+            )
             if len(conflicts) > 3:
                 conflict_details[-1] += f" (+{len(conflicts) - 3} more)"
         if invalid_lines:
