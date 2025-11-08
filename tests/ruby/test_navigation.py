@@ -3,7 +3,6 @@
 These tests verify core functionality of all 17 Ruby navigation functions.
 """
 
-import pytest
 
 from coding_open_agent_tools.ruby.navigation import (
     extract_ruby_public_api,

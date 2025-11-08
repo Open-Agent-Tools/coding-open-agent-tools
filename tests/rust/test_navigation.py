@@ -457,7 +457,6 @@ impl Other {
 
     def test_immutable_and_mutable_receivers(self) -> None:
         """Test methods with both immutable and mutable receivers."""
-        import json
 
         code = """struct Counter {
     count: i32,

@@ -46,7 +46,15 @@ dependencies = [
 
 [project.optional-dependencies]
 # All optional features
-all = ["esprima>=4.0.0", "tree-sitter-language-pack>=0.9.0"]
+all = [
+    "esprima>=4.0.0",
+    "tree-sitter-language-pack>=0.9.0",
+    "PyYAML>=6.0.0",
+    "tomli>=2.0.0; python_version < '3.11'",
+    "jsonschema>=4.0.0",
+    "packaging>=21.0",
+    "detect-secrets>=1.5.0",
+]
 # JavaScript/TypeScript navigation support
 javascript = ["esprima>=4.0.0"]
 # Java navigation support
@@ -61,6 +69,15 @@ cpp = ["tree-sitter-language-pack>=0.9.0"]
 csharp = ["tree-sitter-language-pack>=0.9.0"]
 # Ruby navigation support
 ruby = ["tree-sitter-language-pack>=0.9.0"]
+# Configuration validation support
+config = [
+    "PyYAML>=6.0.0",
+    "tomli>=2.0.0; python_version < '3.11'",
+    "jsonschema>=4.0.0",
+    "packaging>=21.0",
+]
+# Enhanced security scanning for configs
+config-security = ["detect-secrets>=1.5.0"]
 # Strands integration testing
 strands = [
     "strands>=0.1.0",
@@ -82,6 +99,12 @@ dev = [
     "esprima>=4.0.0",
     # Java support for testing
     "tree-sitter-language-pack>=0.9.0",
+    # Config validation support for testing
+    "PyYAML>=6.0.0",
+    "tomli>=2.0.0; python_version < '3.11'",
+    "jsonschema>=4.0.0",
+    "packaging>=21.0",
+    "detect-secrets>=1.5.0",
     # Strands testing dependencies
     "strands>=0.1.0",
     "anthropic>=0.25.0",
@@ -149,7 +172,7 @@ follow_imports = "skip"  # Skip type checking of imported modules
 ignore_missing_imports = true  # Ignore missing imports in dependencies
 
 [[tool.mypy.overrides]]
-module = ["strands", "strands.*", "pkg_resources", "basic_open_agent_tools", "basic_open_agent_tools.*", "google.adk", "google.adk.*", "langgraph", "langgraph.*", "detect_secrets", "detect_secrets.*", "mcp", "mcp.*"]
+module = ["strands", "strands.*", "pkg_resources", "basic_open_agent_tools", "basic_open_agent_tools.*", "google.adk", "google.adk.*", "langgraph", "langgraph.*", "detect_secrets", "detect_secrets.*", "mcp", "mcp.*", "yaml", "tomli", "jsonschema"]
 ignore_missing_imports = true
 
 [tool.pytest.ini_options]

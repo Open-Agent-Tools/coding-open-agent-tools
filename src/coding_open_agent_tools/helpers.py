@@ -10,6 +10,7 @@ from typing import Any, Callable, Union
 __all__ = [
     "merge_tool_lists",
     "load_all_analysis_tools",
+    "load_all_config_tools",
     "load_all_git_tools",
     "load_all_profiling_tools",
     "load_all_quality_tools",
@@ -110,6 +111,27 @@ def load_all_analysis_tools() -> list[Callable[..., Any]]:
     tools = []
     for name in analysis.__all__:
         func = getattr(analysis, name)
+        if callable(func):
+            tools.append(func)
+    return tools
+
+
+def load_all_config_tools() -> list[Callable[..., Any]]:
+    """Load all configuration validation tools as a list of callable functions.
+
+    Returns:
+        List of 9 config validation tool functions
+
+    Example:
+        >>> config_tools = load_all_config_tools()
+        >>> len(config_tools) == 9
+        True
+    """
+    from coding_open_agent_tools import config
+
+    tools = []
+    for name in config.__all__:
+        func = getattr(config, name)
         if callable(func):
             tools.append(func)
     return tools
@@ -248,17 +270,18 @@ def load_all_tools() -> list[Callable[..., Any]]:
     implemented modules.
 
     Returns:
-        List of all 258 unique tool functions from all modules (automatically deduplicated)
+        List of all 267 unique tool functions from all modules (automatically deduplicated)
 
     Example:
         >>> all_tools = load_all_tools()
-        >>> len(all_tools) == 258
+        >>> len(all_tools) == 267
         True
         >>> # Use with agent frameworks
         >>> # agent = Agent(tools=load_all_tools())
     """
     return merge_tool_lists(
         load_all_analysis_tools(),  # 14 functions
+        load_all_config_tools(),  # 9 functions
         load_all_git_tools(),  # 79 functions
         load_all_profiling_tools(),  # 8 functions
         load_all_quality_tools(),  # 7 functions

@@ -437,7 +437,6 @@ public:
 
     def test_public_and_private_methods(self) -> None:
         """Test methods with both public and private access."""
-        import json
 
         code = """class Counter {
 public:

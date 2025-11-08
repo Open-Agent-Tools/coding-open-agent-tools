@@ -466,7 +466,6 @@ func (o *Other) OtherMethod() {}"""
 
     def test_value_and_pointer_receivers(self) -> None:
         """Test methods with both value and pointer receivers."""
-        import json
 
         code = """package main
 

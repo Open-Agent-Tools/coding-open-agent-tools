@@ -12,6 +12,7 @@ __version__ = "0.7.1"
 # Import migrated modules
 from . import (
     analysis,
+    config,
     cpp,
     csharp,
     database,
@@ -32,6 +33,7 @@ from .helpers import (
     get_tool_info,
     list_all_available_tools,
     load_all_analysis_tools,
+    load_all_config_tools,
     load_all_cpp_tools,
     load_all_csharp_tools,
     load_all_database_tools,
@@ -63,6 +65,7 @@ from .helpers import (
 __all__: list[str] = [
     # Modules
     "analysis",
+    "config",
     "cpp",
     "csharp",
     "database",
@@ -80,6 +83,7 @@ __all__: list[str] = [
     "get_tool_info",
     "list_all_available_tools",
     "load_all_analysis_tools",
+    "load_all_config_tools",
     "load_all_cpp_tools",
     "load_all_csharp_tools",
     "load_all_database_tools",

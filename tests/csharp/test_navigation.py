@@ -4,7 +4,6 @@ This module tests all 17 C# navigation functions with comprehensive test coverag
 Total: 75+ tests across 17 test classes.
 """
 
-import pytest
 
 from coding_open_agent_tools.csharp.navigation import (
     extract_csharp_public_api,
