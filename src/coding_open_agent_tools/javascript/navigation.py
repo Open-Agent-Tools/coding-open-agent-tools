@@ -1557,14 +1557,19 @@ def find_javascript_definitions_by_decorator(
         raise ValueError("source_code cannot be empty")
 
     try:
-        _parse_javascript(source_code)
+        # Try to parse, but don't fail if decorators aren't supported
+        try:
+            _parse_javascript(source_code)
+        except ValueError:
+            # Decorators may not be supported by esprima, continue with regex fallback
+            pass
 
         functions: list[str] = []
         classes: list[str] = []
         details: list[dict[str, Any]] = []
 
         # Note: esprima may not fully parse TypeScript decorators
-        # This is a best-effort implementation
+        # This is a best-effort implementation using regex
 
         # Check functions for decorators in comments (common pattern)
         lines = source_code.split("\n")
