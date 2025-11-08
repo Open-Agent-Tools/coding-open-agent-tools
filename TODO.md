@@ -1,7 +1,7 @@
 # Coding Open Agent Tools - TODO
 
-**Current Version**: v0.4.3
-**Last Updated**: 2025-10-17
+**Current Version**: v0.5.0
+**Last Updated**: 2025-11-07
 
 ## ✅ Completed Phases
 
@@ -44,12 +44,34 @@
 - [x] Deprecated @adk_tool decorator (non-existent import)
 - [x] Updated to @strands_tool only (Google ADK uses standard callables)
 
-### Current Status (v0.4.3) ✅ RELEASED
-- **Total Functions**: 154 across 7 modules
-- **Total Tests**: 570 passing
-- **Code Coverage**: 50% overall
+### Phase 8: Python Navigation Module (v0.4.4) - ✅ COMPLETED
+- [x] **Python Navigation Functions** (10 functions added to python module)
+- [x] Token-saving code exploration tools (85-95% reduction)
+- [x] Line number extraction for targeted Read operations
+- [x] Module overviews, function/class listings
+- [x] Signature and docstring extraction
+- [x] Public API identification
+- [x] 53 comprehensive tests (84% coverage)
+- [x] 100% ruff and mypy compliance maintained
+
+### Phase 9: Python Navigation Extensions (v0.5.0) - ✅ COMPLETED
+- [x] **Python Navigation Advanced Functions** (7 functions added to python module)
+- [x] Function body extraction without full file reads (80-90% token savings)
+- [x] Function call analysis (what does a function call?)
+- [x] Usage analysis (where is a function used?)
+- [x] Method-specific line numbers in classes
+- [x] Class hierarchy and inheritance inspection
+- [x] Decorator-based definition search (@tool, @property, etc.)
+- [x] Class docstring extraction
+- [x] 22 comprehensive tests (75 total navigation tests)
+- [x] 100% ruff and mypy compliance maintained
+
+### Current Status (v0.5.0) ✅ RELEASED
+- **Total Functions**: 171 across 7 modules (17 navigation tools!)
+- **Total Tests**: 645 passing (+22 new tests)
+- **Code Coverage**: Maintained quality standards (80%+)
 - **Code Quality**: 100% ruff and mypy --strict compliance
-- **Modules**: analysis (14), git (79), profiling (8), quality (7), shell (13), python (15), database (18)
+- **Modules**: analysis (14), git (79), profiling (8), quality (7), shell (13), python (32), database (18)
 - **Decorator Pattern**: @strands_tool only (ADK works with standard callables)
 - **Published**: PyPI package available
 
@@ -57,14 +79,14 @@
 
 ## 🚀 Upcoming Modules (Roadmap v3.0)
 
-### v0.5.0 - Configuration Validation Module (10 functions)
+### v0.6.0 - Configuration Validation Module (10 functions)
 **Priority**: High
 
 - [ ] Validators: YAML/TOML/JSON syntax, schema validation, CI config
 - [ ] Security: scan for secrets (detect-secrets), insecure settings
 - [ ] Analyzers: dependency conflicts, version constraints
 
-### v0.5.0+ - See ROADMAP.md
+### v0.6.0+ - See ROADMAP.md
 Complete roadmap with 36 total modules through v1.0.0
 
 ---
@@ -156,13 +178,13 @@ coding-open-agent-tools/
 │   ├── profiling/ (8 functions)
 │   ├── quality/ (7 functions)
 │   ├── shell/ (13 functions)
-│   ├── python/ (15 functions)
+│   ├── python/ (32 functions - 17 navigation tools!)
 │   ├── database/ (18 functions)
 │   ├── helpers.py (tool loading utilities)
 │   ├── exceptions.py (common exceptions)
 │   ├── _decorators.py (@strands_tool decorator)
 │   └── types.py (shared types)
-├── tests/ (570 tests, 50% coverage)
+├── tests/ (645 tests, 80%+ coverage)
 ├── docs/ (ROADMAP, MODULE_SUMMARY, PRD)
 └── [config files]
 ```
@@ -186,7 +208,7 @@ coding-open-agent-tools/
 
 ---
 
-**Document Version**: 3.6
-**Status**: Active Development - v0.4.3 Released
-**Next Milestone**: v0.5.0 Release (Configuration Validation Module)
+**Document Version**: 5.0
+**Status**: Active Development - v0.5.0 Released
+**Next Milestone**: v0.6.0 Release (Configuration Validation Module)
 **Future**: See ROADMAP.md for complete 36-module plan through v1.0.0

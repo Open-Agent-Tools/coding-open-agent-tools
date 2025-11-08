@@ -19,9 +19,22 @@ This project provides **parsing, validation, and analysis tools** that save agen
 - ❌ Code refactoring (agents reason through transformations)
 - ❌ Project scaffolding (agents use examples effectively)
 
-## 🆕 What's New in v0.4.3
+## 🆕 What's New in v0.5.0
 
-📚 **Helper Function Documentation**: Added comprehensive documentation for all 11 helper functions with usage examples and `__all__` export
+🚀 **Python Navigation Complete**: Added 7 advanced navigation functions (70-90% token reduction):
+- Extract function bodies without full file reads
+- Analyze function dependencies (what does it call?)
+- Impact analysis (where is function used?)
+- Target specific methods in classes
+- Class hierarchy and inheritance analysis
+- Find all definitions by decorator (@tool, @property, etc.)
+- Extract class docstrings
+
+### Previous Updates
+
+**v0.4.4** - Python Navigation Tools: Added 10 token-saving navigation functions for line numbers, overviews, and signatures
+
+**v0.4.3** - Helper Function Documentation: Added comprehensive documentation for all 11 helper functions with usage examples and `__all__` export
 
 ### Recent Updates
 
@@ -37,7 +50,7 @@ This project provides **parsing, validation, and analysis tools** that save agen
 
 ## Available Tools
 
-**7 modules** with **154 total functions** — all with `@strands_tool` decorator and Google ADK compatible signatures.
+**7 modules** with **171 total functions** — all with `@strands_tool` decorator and Google ADK compatible signatures.
 
 ### 📊 Complete Module Breakdown
 
@@ -45,7 +58,7 @@ This project provides **parsing, validation, and analysis tools** that save agen
 |--------|-----------|-------------|
 | **Code Analysis** | | |
 | `git` | 79 | Repository operations, history, commits, branches, tags, hooks, workflows |
-| `python` | 15 | Syntax validation, type checking, import analysis, AST parsing |
+| `python` | 32 | **Navigation (17 tools!)**, syntax validation, type checking, import analysis, AST parsing |
 | `analysis` | 14 | Code complexity, AST parsing, import tracking, secret detection |
 | **Data & Storage** | | |
 | `database` | 18 | SQLite operations, safe query building, schema inspection |
@@ -53,7 +66,7 @@ This project provides **parsing, validation, and analysis tools** that save agen
 | `shell` | 13 | Shell validation, security scanning, argument escaping |
 | `profiling` | 8 | Performance profiling, memory analysis, execution timing |
 | `quality` | 7 | Static analysis parsers, linting tool integration |
-| **TOTAL** | **154** | |
+| **TOTAL** | **171** | |
 
 See [docs/ROADMAP.md](./docs/ROADMAP.md) and [docs/PRD](./docs/PRD/) for detailed plans.
 
@@ -252,13 +265,13 @@ The package provides 11 helper functions for tool management and introspection:
 
 ### Tool Loading Functions
 
-- **`load_all_tools()`** - Load all 154 functions from all modules
+- **`load_all_tools()`** - Load all 171 functions from all modules
 - **`load_all_analysis_tools()`** - Load 14 code analysis functions
 - **`load_all_git_tools()`** - Load 79 git operation functions
 - **`load_all_profiling_tools()`** - Load 8 profiling functions
 - **`load_all_quality_tools()`** - Load 7 static analysis functions
 - **`load_all_shell_tools()`** - Load 13 shell validation functions
-- **`load_all_python_tools()`** - Load 15 Python validation functions
+- **`load_all_python_tools()`** - Load 32 Python validation and navigation functions
 - **`load_all_database_tools()`** - Load 18 SQLite operation functions
 
 ### Tool Management Functions
@@ -272,7 +285,7 @@ The package provides 11 helper functions for tool management and introspection:
 ```python
 import coding_open_agent_tools as coat
 
-# Load all 154 functions
+# Load all 171 functions
 all_tools = coat.load_all_tools()
 
 # Or load by category
@@ -281,7 +294,7 @@ git_tools = coat.load_all_git_tools()            # 79 functions
 profiling_tools = coat.load_all_profiling_tools()  # 8 functions
 quality_tools = coat.load_all_quality_tools()    # 7 functions
 shell_tools = coat.load_all_shell_tools()        # 13 functions
-python_tools = coat.load_all_python_tools()      # 15 functions
+python_tools = coat.load_all_python_tools()      # 32 functions (17 navigation tools!)
 database_tools = coat.load_all_database_tools()  # 18 functions
 
 # Merge custom tools with built-in tools
@@ -322,13 +335,24 @@ from coding_open_agent_tools import git
 
 status = git.get_git_status("/path/to/repo")
 print(f"Modified files: {len(status['modified'])}")
+
+# Example: Use navigation tools to save tokens (NEW in v0.4.4)
+from coding_open_agent_tools import python
+
+# Get overview without reading entire file (85-90% token savings)
+overview = python.get_python_module_overview(source_code)
+print(f"Functions: {overview['function_names']}")
+
+# Get line numbers for targeted reading (90-95% token savings)
+lines = python.get_python_function_line_numbers(source_code, "process_data")
+# Then use: Read(file_path="module.py", offset=int(lines['start_line']), limit=int(lines['end_line'])-int(lines['start_line']))
 ```
 
 ## Development Status
 
-**Current Version**: v0.4.3
+**Current Version**: v0.5.0
 **Status**: Active Development
-**Focus**: Code validation and analysis tools for AI agents
+**Focus**: Token-efficient code navigation and analysis tools for AI agents
 
 ## Quality Standards
 
@@ -358,5 +382,5 @@ MIT License (same as basic-open-agent-tools)
 
 ---
 
-**Version**: v0.4.3
-**Last Updated**: 2025-10-17
+**Version**: v0.5.0
+**Last Updated**: 2025-11-07

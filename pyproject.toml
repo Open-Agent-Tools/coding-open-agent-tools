@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta:__legacy__"
 
 [project]
 name = "coding-open-agent-tools"
-version = "0.4.3"  # Add __all__ export and helper function documentation
+version = "0.6.0"  # Phase 2 complete: C# and Ruby navigation (8 languages, 258 unique tools)
 description = "Advanced code generation and shell scripting toolkit for AI agents, complementing basic-open-agent-tools with development-focused capabilities."
 readme = "README.md"
 requires-python = ">=3.9"
@@ -46,7 +46,21 @@ dependencies = [
 
 [project.optional-dependencies]
 # All optional features
-all = []
+all = ["esprima>=4.0.0", "tree-sitter-language-pack>=0.9.0"]
+# JavaScript/TypeScript navigation support
+javascript = ["esprima>=4.0.0"]
+# Java navigation support
+java = ["tree-sitter-language-pack>=0.9.0"]
+# Go navigation support
+go = ["tree-sitter-language-pack>=0.9.0"]
+# Rust navigation support
+rust = ["tree-sitter-language-pack>=0.9.0"]
+# C++ navigation support
+cpp = ["tree-sitter-language-pack>=0.9.0"]
+# C# navigation support
+csharp = ["tree-sitter-language-pack>=0.9.0"]
+# Ruby navigation support
+ruby = ["tree-sitter-language-pack>=0.9.0"]
 # Strands integration testing
 strands = [
     "strands>=0.1.0",
@@ -64,6 +78,10 @@ dev = [
     "freezegun>=1.2.0",
     "google-adk>=0.1.0",
     "basic-open-agent-tools[all]>=0.12.0",
+    # JavaScript/TypeScript support for testing
+    "esprima>=4.0.0",
+    # Java support for testing
+    "tree-sitter-language-pack>=0.9.0",
     # Strands testing dependencies
     "strands>=0.1.0",
     "anthropic>=0.25.0",

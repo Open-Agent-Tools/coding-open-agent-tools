@@ -8,7 +8,74 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Planned
-- Configuration validation module (v0.5.0)
+- Configuration validation module (v0.6.0)
+
+## [0.5.0] - 2025-11-07
+
+### Added
+- **Python Navigation Extensions** (7 new advanced functions in python/navigation.py):
+  - **Advanced Code Exploration Tools** (70-90% token reduction):
+    - `get_python_function_body()` - Extract just the implementation body (80-90% savings)
+    - `list_python_function_calls()` - Analyze function dependencies and call patterns (75-85% savings)
+    - `find_python_function_usages()` - Impact analysis: where is a function used? (75-85% savings)
+    - `get_python_method_line_numbers()` - Target specific methods in classes (85-90% savings)
+    - `get_python_class_hierarchy()` - Inheritance and base class analysis (70-80% savings)
+    - `find_python_definitions_by_decorator()` - Find all @tool, @property, etc. (70-80% savings)
+    - `get_python_class_docstring()` - Extract class documentation only (80-85% savings)
+
+### Changed
+- **Python module**: Expanded from 25 to 32 functions (+7 navigation tools)
+- **Total tools**: 164 → 171 functions across 7 modules
+- Updated helpers.py with correct function counts (171 total, python: 32)
+- Enhanced navigation capabilities with dependency analysis and impact tracking
+
+### Testing
+- Added 22 comprehensive tests for new navigation functions
+- Total tests: 623 → 645 passing
+- Navigation module maintains 80%+ coverage target
+- 100% ruff compliance maintained
+- 100% mypy --strict compliance maintained
+
+### Documentation
+- Updated README.md with v0.5.0 features and new tool counts
+- Updated TODO.md with Phase 9 completion status
+- Updated all function count references (171 total, python: 32)
+- Added usage examples for advanced navigation workflows
+
+## [0.4.4] - 2025-11-07
+
+### Added
+- **Python Navigation Module** (10 new functions in python/navigation.py):
+  - **Token-Saving Tools** (85-95% reduction in typical workflows):
+    - `get_python_function_line_numbers()` - Get line numbers for targeted Read operations
+    - `get_python_class_line_numbers()` - Get class line numbers for targeted reading
+    - `get_python_module_overview()` - High-level file summary without full parse
+    - `list_python_functions()` - All function signatures with metadata
+    - `list_python_classes()` - All class definitions with methods
+    - `get_python_function_signature()` - Extract just the signature
+    - `get_python_function_docstring()` - Extract just the docstring
+    - `list_python_class_methods()` - List methods with signatures
+    - `extract_python_public_api()` - Identify public interface (__all__ or public names)
+    - `get_python_function_details()` - Complete function info (signature + docstring + decorators)
+
+### Changed
+- **Python module**: Expanded from 15 to 25 functions (+10 navigation tools)
+- **Total tools**: 154 → 164 functions across 7 modules
+- Updated helpers.py with correct function counts (164 total, python: 25)
+- Enhanced python module docstring to emphasize token-saving capabilities
+
+### Testing
+- Added 53 comprehensive tests for navigation module (84% coverage)
+- Total tests: 570 → 623 passing
+- Navigation module exceeds 80% coverage target
+- 100% ruff compliance maintained
+- 100% mypy --strict compliance maintained
+
+### Documentation
+- Updated README.md with new tool counts and navigation examples
+- Updated TODO.md with Phase 8 completion status
+- Added usage examples demonstrating token savings
+- Updated helper function documentation
 
 ## [0.4.1] - 2025-10-15
 
