@@ -509,12 +509,12 @@ def load_python_loadout() -> list[Callable[..., Any]]:
         True
     """
     return merge_tool_lists(
-        load_all_python_tools(),    # 32 - Python navigation, validation, analysis
+        load_all_python_tools(),  # 32 - Python navigation, validation, analysis
         load_all_analysis_tools(),  # 14 - AST parsing, complexity, imports, secrets
-        load_all_quality_tools(),   # 7 - ruff, mypy, pytest output parsing
-        load_all_git_tools(),        # 79 - Full version control operations
-        load_all_shell_tools(),      # 13 - Shell script validation & security
-        load_all_database_tools(),   # 18 - SQLite operations for agent memory
+        load_all_quality_tools(),  # 7 - ruff, mypy, pytest output parsing
+        load_all_git_tools(),  # 79 - Full version control operations
+        load_all_shell_tools(),  # 13 - Shell script validation & security
+        load_all_database_tools(),  # 18 - SQLite operations for agent memory
         load_all_profiling_tools(),  # 8 - Performance & memory profiling
     )
 
@@ -543,11 +543,11 @@ def load_javascript_loadout() -> list[Callable[..., Any]]:
     """
     return merge_tool_lists(
         load_all_javascript_tools(),  # 17 - JavaScript/TypeScript navigation
-        load_all_analysis_tools(),    # 14 - AST parsing, complexity, imports, secrets
-        load_all_git_tools(),          # 79 - Full version control operations
-        load_all_shell_tools(),        # 13 - Shell script validation & security
-        load_all_database_tools(),     # 18 - SQLite operations for agent memory
-        load_all_profiling_tools(),    # 8 - Performance & memory profiling
+        load_all_analysis_tools(),  # 14 - AST parsing, complexity, imports, secrets
+        load_all_git_tools(),  # 79 - Full version control operations
+        load_all_shell_tools(),  # 13 - Shell script validation & security
+        load_all_database_tools(),  # 18 - SQLite operations for agent memory
+        load_all_profiling_tools(),  # 8 - Performance & memory profiling
     )
 
 
@@ -574,12 +574,12 @@ def load_java_loadout() -> list[Callable[..., Any]]:
         True
     """
     return merge_tool_lists(
-        load_all_java_tools(),       # 17 - Java navigation
-        load_all_analysis_tools(),   # 14 - AST parsing, complexity, imports, secrets
-        load_all_git_tools(),         # 79 - Full version control operations
-        load_all_shell_tools(),       # 13 - Shell script validation & security
-        load_all_database_tools(),    # 18 - SQLite operations for agent memory
-        load_all_profiling_tools(),   # 8 - Performance & memory profiling
+        load_all_java_tools(),  # 17 - Java navigation
+        load_all_analysis_tools(),  # 14 - AST parsing, complexity, imports, secrets
+        load_all_git_tools(),  # 79 - Full version control operations
+        load_all_shell_tools(),  # 13 - Shell script validation & security
+        load_all_database_tools(),  # 18 - SQLite operations for agent memory
+        load_all_profiling_tools(),  # 8 - Performance & memory profiling
     )
 
 
@@ -606,12 +606,12 @@ def load_cpp_loadout() -> list[Callable[..., Any]]:
         True
     """
     return merge_tool_lists(
-        load_all_cpp_tools(),         # 17 - C++ code navigation
-        load_all_analysis_tools(),   # 14 - Code analysis
-        load_all_git_tools(),         # 79 - Version control
-        load_all_shell_tools(),       # 13 - Build scripts, deployment
-        load_all_database_tools(),    # 18 - SQLite for applications
-        load_all_profiling_tools(),   # 8 - Performance analysis
+        load_all_cpp_tools(),  # 17 - C++ code navigation
+        load_all_analysis_tools(),  # 14 - Code analysis
+        load_all_git_tools(),  # 79 - Version control
+        load_all_shell_tools(),  # 13 - Build scripts, deployment
+        load_all_database_tools(),  # 18 - SQLite for applications
+        load_all_profiling_tools(),  # 8 - Performance analysis
     )
 
 
@@ -638,12 +638,12 @@ def load_csharp_loadout() -> list[Callable[..., Any]]:
         True
     """
     return merge_tool_lists(
-        load_all_csharp_tools(),      # 17 - C# code navigation
-        load_all_analysis_tools(),   # 14 - Code analysis
-        load_all_git_tools(),         # 79 - Version control
-        load_all_shell_tools(),       # 13 - Build scripts, deployment
-        load_all_database_tools(),    # 18 - SQLite for applications
-        load_all_profiling_tools(),   # 8 - Performance & memory analysis
+        load_all_csharp_tools(),  # 17 - C# code navigation
+        load_all_analysis_tools(),  # 14 - Code analysis
+        load_all_git_tools(),  # 79 - Version control
+        load_all_shell_tools(),  # 13 - Build scripts, deployment
+        load_all_database_tools(),  # 18 - SQLite for applications
+        load_all_profiling_tools(),  # 8 - Performance & memory analysis
     )
 
 
@@ -670,12 +670,12 @@ def load_go_loadout() -> list[Callable[..., Any]]:
         True
     """
     return merge_tool_lists(
-        load_all_go_tools(),          # 17 - Go code navigation
-        load_all_analysis_tools(),   # 14 - Code analysis
-        load_all_git_tools(),         # 79 - Version control
-        load_all_shell_tools(),       # 13 - Deployment scripts
-        load_all_database_tools(),    # 18 - SQLite for services
-        load_all_profiling_tools(),   # 8 - Performance analysis
+        load_all_go_tools(),  # 17 - Go code navigation
+        load_all_analysis_tools(),  # 14 - Code analysis
+        load_all_git_tools(),  # 79 - Version control
+        load_all_shell_tools(),  # 13 - Deployment scripts
+        load_all_database_tools(),  # 18 - SQLite for services
+        load_all_profiling_tools(),  # 8 - Performance analysis
     )
 
 
@@ -702,12 +702,12 @@ def load_rust_loadout() -> list[Callable[..., Any]]:
         True
     """
     return merge_tool_lists(
-        load_all_rust_tools(),        # 17 - Rust code navigation
-        load_all_analysis_tools(),   # 14 - Code analysis
-        load_all_git_tools(),         # 79 - Version control
-        load_all_shell_tools(),       # 13 - Cargo scripts, build tools
-        load_all_database_tools(),    # 18 - SQLite for applications
-        load_all_profiling_tools(),   # 8 - Performance & memory safety
+        load_all_rust_tools(),  # 17 - Rust code navigation
+        load_all_analysis_tools(),  # 14 - Code analysis
+        load_all_git_tools(),  # 79 - Version control
+        load_all_shell_tools(),  # 13 - Cargo scripts, build tools
+        load_all_database_tools(),  # 18 - SQLite for applications
+        load_all_profiling_tools(),  # 8 - Performance & memory safety
     )
 
 
@@ -734,12 +734,12 @@ def load_ruby_loadout() -> list[Callable[..., Any]]:
         True
     """
     return merge_tool_lists(
-        load_all_ruby_tools(),        # 17 - Ruby code navigation
-        load_all_analysis_tools(),   # 14 - Code analysis
-        load_all_git_tools(),         # 79 - Version control
-        load_all_shell_tools(),       # 13 - Rake tasks, deployment
-        load_all_database_tools(),    # 18 - SQLite for Rails apps
-        load_all_profiling_tools(),   # 8 - Performance analysis
+        load_all_ruby_tools(),  # 17 - Ruby code navigation
+        load_all_analysis_tools(),  # 14 - Code analysis
+        load_all_git_tools(),  # 79 - Version control
+        load_all_shell_tools(),  # 13 - Rake tasks, deployment
+        load_all_database_tools(),  # 18 - SQLite for Rails apps
+        load_all_profiling_tools(),  # 8 - Performance analysis
     )
 
 
@@ -765,11 +765,11 @@ def load_swift_loadout() -> list[Callable[..., Any]]:
         True
     """
     return merge_tool_lists(
-        load_all_analysis_tools(),   # 14 - Code analysis
-        load_all_git_tools(),         # 79 - Version control
-        load_all_shell_tools(),       # 13 - Build scripts, Xcode automation
-        load_all_database_tools(),    # 18 - SQLite for apps
-        load_all_profiling_tools(),   # 8 - Performance analysis
+        load_all_analysis_tools(),  # 14 - Code analysis
+        load_all_git_tools(),  # 79 - Version control
+        load_all_shell_tools(),  # 13 - Build scripts, Xcode automation
+        load_all_database_tools(),  # 18 - SQLite for apps
+        load_all_profiling_tools(),  # 8 - Performance analysis
     )
 
 
@@ -795,11 +795,11 @@ def load_kotlin_loadout() -> list[Callable[..., Any]]:
         True
     """
     return merge_tool_lists(
-        load_all_analysis_tools(),   # 14 - Code analysis
-        load_all_git_tools(),         # 79 - Version control
-        load_all_shell_tools(),       # 13 - Gradle scripts, deployment
-        load_all_database_tools(),    # 18 - SQLite for Android apps
-        load_all_profiling_tools(),   # 8 - Performance analysis
+        load_all_analysis_tools(),  # 14 - Code analysis
+        load_all_git_tools(),  # 79 - Version control
+        load_all_shell_tools(),  # 13 - Gradle scripts, deployment
+        load_all_database_tools(),  # 18 - SQLite for Android apps
+        load_all_profiling_tools(),  # 8 - Performance analysis
     )
 
 

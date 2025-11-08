@@ -37,6 +37,7 @@ def _safe_execute(func: Callable[..., dict[str, str]]) -> Callable[..., dict[str
     C# navigation functions should return {"found": "false", "error": "..."}
     instead of raising exceptions (except for invalid input types).
     """
+
     def wrapper(*args: Any, **kwargs: Any) -> dict[str, str]:
         try:
             result = func(*args, **kwargs)
@@ -52,6 +53,7 @@ def _safe_execute(func: Callable[..., dict[str, str]]) -> Callable[..., dict[str
                 "found": "false",
                 "error": str(e),
             }
+
     return wrapper
 
 
@@ -514,10 +516,9 @@ def list_csharp_functions(source_code: str) -> dict[str, str]:
         functions: list[dict[str, Any]] = []
 
         # Find all function-like nodes (both methods and local functions)
-        function_nodes = (
-            _find_nodes_by_type(root, "method_declaration")
-            + _find_nodes_by_type(root, "local_function_statement")
-        )
+        function_nodes = _find_nodes_by_type(
+            root, "method_declaration"
+        ) + _find_nodes_by_type(root, "local_function_statement")
 
         for func_node in function_nodes:
             func_info: dict[str, Any] = {
@@ -663,10 +664,9 @@ def get_csharp_function_signature(
         source_bytes = bytes(source_code, "utf8")
 
         # Check both method declarations and local functions
-        function_nodes = (
-            _find_nodes_by_type(root, "method_declaration")
-            + _find_nodes_by_type(root, "local_function_statement")
-        )
+        function_nodes = _find_nodes_by_type(
+            root, "method_declaration"
+        ) + _find_nodes_by_type(root, "local_function_statement")
 
         for func_node in function_nodes:
             name = _get_method_name(func_node, source_bytes)
@@ -701,7 +701,9 @@ def get_csharp_function_signature(
                     "function_name": function_name,
                     "params": params,
                     "returns": returns,
-                    "is_public": "true" if _is_public(func_node, source_bytes) else "false",
+                    "is_public": "true"
+                    if _is_public(func_node, source_bytes)
+                    else "false",
                 }
 
         raise ValueError(f"Method '{function_name}' not found in source code")
@@ -748,10 +750,9 @@ def get_csharp_function_docstring(
         source_bytes = bytes(source_code, "utf8")
 
         # Check both method declarations and local functions
-        function_nodes = (
-            _find_nodes_by_type(root, "method_declaration")
-            + _find_nodes_by_type(root, "local_function_statement")
-        )
+        function_nodes = _find_nodes_by_type(
+            root, "method_declaration"
+        ) + _find_nodes_by_type(root, "local_function_statement")
 
         for func_node in function_nodes:
             name = _get_method_name(func_node, source_bytes)
@@ -911,10 +912,9 @@ def extract_csharp_public_api(source_code: str) -> dict[str, str]:
         public_types: list[str] = []
 
         # Find public methods (both in classes and at global scope)
-        function_nodes = (
-            _find_nodes_by_type(root, "method_declaration")
-            + _find_nodes_by_type(root, "local_function_statement")
-        )
+        function_nodes = _find_nodes_by_type(
+            root, "method_declaration"
+        ) + _find_nodes_by_type(root, "local_function_statement")
         for func_node in function_nodes:
             name = _get_method_name(func_node, source_bytes)
             if name and _is_public(func_node, source_bytes):
@@ -938,10 +938,12 @@ def extract_csharp_public_api(source_code: str) -> dict[str, str]:
             "public_functions": json.dumps(public_functions),
             "public_types": json.dumps(public_types),
             "public_count": str(len(public_functions) + len(public_types)),
-            "details": json.dumps({
-                "functions": public_functions,
-                "types": public_types,
-            }),
+            "details": json.dumps(
+                {
+                    "functions": public_functions,
+                    "types": public_types,
+                }
+            ),
         }
 
     except Exception as e:
@@ -950,9 +952,7 @@ def extract_csharp_public_api(source_code: str) -> dict[str, str]:
 
 @_safe_execute
 @strands_tool  # type: ignore[misc]
-def get_csharp_function_details(
-    source_code: str, function_name: str
-) -> dict[str, str]:
+def get_csharp_function_details(source_code: str, function_name: str) -> dict[str, str]:
     """Get complete details about a C# method.
 
     Returns signature, XML doc, parameters, and metadata without the body,
@@ -989,10 +989,9 @@ def get_csharp_function_details(
         source_bytes = bytes(source_code, "utf8")
 
         # Check both method declarations and local functions
-        function_nodes = (
-            _find_nodes_by_type(root, "method_declaration")
-            + _find_nodes_by_type(root, "local_function_statement")
-        )
+        function_nodes = _find_nodes_by_type(
+            root, "method_declaration"
+        ) + _find_nodes_by_type(root, "local_function_statement")
 
         for func_node in function_nodes:
             name = _get_method_name(func_node, source_bytes)
@@ -1029,7 +1028,9 @@ def get_csharp_function_details(
                     "docstring": docstring,
                     "params": params,
                     "returns": returns,
-                    "is_public": "true" if _is_public(func_node, source_bytes) else "false",
+                    "is_public": "true"
+                    if _is_public(func_node, source_bytes)
+                    else "false",
                     "line": str(func_node.start_point[0] + 1),
                 }
 
@@ -1078,10 +1079,9 @@ def get_csharp_function_body(source_code: str, function_name: str) -> dict[str, 
         lines = source_code.split("\n")
 
         # Check both method declarations and local functions
-        function_nodes = (
-            _find_nodes_by_type(root, "method_declaration")
-            + _find_nodes_by_type(root, "local_function_statement")
-        )
+        function_nodes = _find_nodes_by_type(
+            root, "method_declaration"
+        ) + _find_nodes_by_type(root, "local_function_statement")
 
         for func_node in function_nodes:
             name = _get_method_name(func_node, source_bytes)
@@ -1110,9 +1110,7 @@ def get_csharp_function_body(source_code: str, function_name: str) -> dict[str, 
 
 @_safe_execute
 @strands_tool  # type: ignore[misc]
-def list_csharp_function_calls(
-    source_code: str, function_name: str
-) -> dict[str, str]:
+def list_csharp_function_calls(source_code: str, function_name: str) -> dict[str, str]:
     """List all function calls made within a specific C# method.
 
     Analyzes method dependencies and call patterns, saving 75-85% of tokens.
@@ -1145,10 +1143,9 @@ def list_csharp_function_calls(
         source_bytes = bytes(source_code, "utf8")
 
         # Check both method declarations and local functions
-        function_nodes = (
-            _find_nodes_by_type(root, "method_declaration")
-            + _find_nodes_by_type(root, "local_function_statement")
-        )
+        function_nodes = _find_nodes_by_type(
+            root, "method_declaration"
+        ) + _find_nodes_by_type(root, "local_function_statement")
 
         for func_node in function_nodes:
             name = _get_method_name(func_node, source_bytes)
@@ -1164,10 +1161,12 @@ def list_csharp_function_calls(
                         callee = invocation.children[0]
                         call_name = _get_node_text(callee, source_bytes)
                         calls.append(call_name)
-                        call_details.append({
-                            "name": call_name,
-                            "line": invocation.start_point[0] + 1,
-                        })
+                        call_details.append(
+                            {
+                                "name": call_name,
+                                "line": invocation.start_point[0] + 1,
+                            }
+                        )
 
                 return {
                     "calls": json.dumps(calls),
@@ -1229,13 +1228,17 @@ def find_csharp_function_usages(source_code: str, function_name: str) -> dict[st
 
                 # Check if this is a call to the target method
                 # Handle both direct calls and member access (e.g., obj.Method)
-                if call_text == function_name or call_text.endswith("." + function_name):
+                if call_text == function_name or call_text.endswith(
+                    "." + function_name
+                ):
                     line = invocation.start_point[0] + 1
                     usages.append(line)
-                    usage_details.append({
-                        "line": line,
-                        "context": "method_call",
-                    })
+                    usage_details.append(
+                        {
+                            "line": line,
+                            "context": "method_call",
+                        }
+                    )
 
         return {
             "usages": json.dumps(usages),
@@ -1456,21 +1459,22 @@ def find_csharp_definitions_by_comment(
         pattern = re.compile(re.escape(comment_pattern), re.IGNORECASE)
 
         # Check methods (both in classes and at global scope)
-        function_nodes = (
-            _find_nodes_by_type(root, "method_declaration")
-            + _find_nodes_by_type(root, "local_function_statement")
-        )
+        function_nodes = _find_nodes_by_type(
+            root, "method_declaration"
+        ) + _find_nodes_by_type(root, "local_function_statement")
         for func_node in function_nodes:
             name = _get_method_name(func_node, source_bytes)
             if name:
                 docstring = _extract_xmldoc(source_code, func_node.start_byte)
                 if pattern.search(docstring):
                     functions.append(name)
-                    details.append({
-                        "name": name,
-                        "type": "method",
-                        "line": func_node.start_point[0] + 1,
-                    })
+                    details.append(
+                        {
+                            "name": name,
+                            "type": "method",
+                            "line": func_node.start_point[0] + 1,
+                        }
+                    )
 
         # Check types
         type_kinds = [
@@ -1487,11 +1491,13 @@ def find_csharp_definitions_by_comment(
                     docstring = _extract_xmldoc(source_code, type_decl.start_byte)
                     if pattern.search(docstring):
                         types.append(name)
-                        details.append({
-                            "name": name,
-                            "type": _get_type_kind(type_decl),
-                            "line": type_decl.start_point[0] + 1,
-                        })
+                        details.append(
+                            {
+                                "name": name,
+                                "type": _get_type_kind(type_decl),
+                                "line": type_decl.start_point[0] + 1,
+                            }
+                        )
 
         return {
             "functions": json.dumps(functions),

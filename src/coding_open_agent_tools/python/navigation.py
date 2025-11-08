@@ -57,7 +57,9 @@ def get_python_function_line_numbers(
         if isinstance(node, ast.FunctionDef) and node.name == function_name:
             return {
                 "start_line": str(node.lineno),
-                "end_line": str(node.end_lineno) if node.end_lineno else str(node.lineno),
+                "end_line": str(node.end_lineno)
+                if node.end_lineno
+                else str(node.lineno),
                 "function_name": function_name,
             }
 
@@ -65,9 +67,7 @@ def get_python_function_line_numbers(
 
 
 @strands_tool
-def get_python_class_line_numbers(
-    source_code: str, class_name: str
-) -> dict[str, str]:
+def get_python_class_line_numbers(source_code: str, class_name: str) -> dict[str, str]:
     """Get start and end line numbers for a specific class.
 
     Enables targeted file reading using Read tool's offset/limit parameters.
@@ -103,7 +103,9 @@ def get_python_class_line_numbers(
         if isinstance(node, ast.ClassDef) and node.name == class_name:
             return {
                 "start_line": str(node.lineno),
-                "end_line": str(node.end_lineno) if node.end_lineno else str(node.lineno),
+                "end_line": str(node.end_lineno)
+                if node.end_lineno
+                else str(node.lineno),
                 "class_name": class_name,
             }
 
@@ -165,7 +167,10 @@ def get_python_module_overview(source_code: str) -> dict[str, str]:
         elif isinstance(node, ast.If):
             # Check for if __name__ == "__main__"
             if isinstance(node.test, ast.Compare):
-                if isinstance(node.test.left, ast.Name) and node.test.left.id == "__name__":
+                if (
+                    isinstance(node.test.left, ast.Name)
+                    and node.test.left.id == "__name__"
+                ):
                     has_main = True
 
     total_lines = len(source_code.splitlines())
@@ -242,16 +247,22 @@ def list_python_functions(source_code: str) -> list[dict[str, str]]:
             # Decorators
             decorator_names = [ast.unparse(d) for d in node.decorator_list]
 
-            functions.append({
-                "name": node.name,
-                "signature": signature,
-                "start_line": str(node.lineno),
-                "end_line": str(node.end_lineno) if node.end_lineno else str(node.lineno),
-                "arg_count": str(len(args.args)),
-                "has_docstring": "true" if ast.get_docstring(node) else "false",
-                "is_async": "true" if isinstance(node, ast.AsyncFunctionDef) else "false",
-                "decorators": json.dumps(decorator_names),
-            })
+            functions.append(
+                {
+                    "name": node.name,
+                    "signature": signature,
+                    "start_line": str(node.lineno),
+                    "end_line": str(node.end_lineno)
+                    if node.end_lineno
+                    else str(node.lineno),
+                    "arg_count": str(len(args.args)),
+                    "has_docstring": "true" if ast.get_docstring(node) else "false",
+                    "is_async": "true"
+                    if isinstance(node, ast.AsyncFunctionDef)
+                    else "false",
+                    "decorators": json.dumps(decorator_names),
+                }
+            )
 
     return functions
 
@@ -308,16 +319,20 @@ def list_python_classes(source_code: str) -> list[dict[str, str]]:
             # Decorators
             decorator_names = [ast.unparse(d) for d in node.decorator_list]
 
-            classes.append({
-                "name": node.name,
-                "start_line": str(node.lineno),
-                "end_line": str(node.end_lineno) if node.end_lineno else str(node.lineno),
-                "method_count": str(len(methods)),
-                "method_names": json.dumps(methods),
-                "base_classes": json.dumps(bases),
-                "has_docstring": "true" if ast.get_docstring(node) else "false",
-                "decorators": json.dumps(decorator_names),
-            })
+            classes.append(
+                {
+                    "name": node.name,
+                    "start_line": str(node.lineno),
+                    "end_line": str(node.end_lineno)
+                    if node.end_lineno
+                    else str(node.lineno),
+                    "method_count": str(len(methods)),
+                    "method_names": json.dumps(methods),
+                    "base_classes": json.dumps(bases),
+                    "has_docstring": "true" if ast.get_docstring(node) else "false",
+                    "decorators": json.dumps(decorator_names),
+                }
+            )
 
     return classes
 
@@ -360,7 +375,10 @@ def get_python_function_signature(
         raise ValueError(f"Invalid Python syntax: {e}") from e
 
     for node in ast.walk(tree):
-        if isinstance(node, (ast.FunctionDef, ast.AsyncFunctionDef)) and node.name == function_name:
+        if (
+            isinstance(node, (ast.FunctionDef, ast.AsyncFunctionDef))
+            and node.name == function_name
+        ):
             # Build signature
             args = node.args
             params: list[str] = []
@@ -384,7 +402,9 @@ def get_python_function_signature(
                 "function_name": function_name,
                 "arg_count": str(len(args.args)),
                 "has_return_type": "true" if node.returns else "false",
-                "is_async": "true" if isinstance(node, ast.AsyncFunctionDef) else "false",
+                "is_async": "true"
+                if isinstance(node, ast.AsyncFunctionDef)
+                else "false",
             }
 
     raise ValueError(f"Function '{function_name}' not found in source code")
@@ -426,7 +446,10 @@ def get_python_function_docstring(
         raise ValueError(f"Invalid Python syntax: {e}") from e
 
     for node in ast.walk(tree):
-        if isinstance(node, (ast.FunctionDef, ast.AsyncFunctionDef)) and node.name == function_name:
+        if (
+            isinstance(node, (ast.FunctionDef, ast.AsyncFunctionDef))
+            and node.name == function_name
+        ):
             docstring = ast.get_docstring(node) or ""
             return {
                 "docstring": docstring,
@@ -510,18 +533,26 @@ def list_python_class_methods(
                     is_classmethod = "classmethod" in decorator_names
                     is_staticmethod = "staticmethod" in decorator_names
 
-                    methods.append({
-                        "name": method_node.name,
-                        "signature": signature,
-                        "start_line": str(method_node.lineno),
-                        "end_line": str(method_node.end_lineno) if method_node.end_lineno else str(method_node.lineno),
-                        "arg_count": str(len(args.args)),
-                        "has_docstring": "true" if ast.get_docstring(method_node) else "false",
-                        "is_async": "true" if isinstance(method_node, ast.AsyncFunctionDef) else "false",
-                        "is_property": "true" if is_property else "false",
-                        "is_classmethod": "true" if is_classmethod else "false",
-                        "is_staticmethod": "true" if is_staticmethod else "false",
-                    })
+                    methods.append(
+                        {
+                            "name": method_node.name,
+                            "signature": signature,
+                            "start_line": str(method_node.lineno),
+                            "end_line": str(method_node.end_lineno)
+                            if method_node.end_lineno
+                            else str(method_node.lineno),
+                            "arg_count": str(len(args.args)),
+                            "has_docstring": "true"
+                            if ast.get_docstring(method_node)
+                            else "false",
+                            "is_async": "true"
+                            if isinstance(method_node, ast.AsyncFunctionDef)
+                            else "false",
+                            "is_property": "true" if is_property else "false",
+                            "is_classmethod": "true" if is_classmethod else "false",
+                            "is_staticmethod": "true" if is_staticmethod else "false",
+                        }
+                    )
 
             return methods
 
@@ -570,7 +601,9 @@ def extract_python_public_api(source_code: str) -> dict[str, str]:
                     has_all = True
                     if isinstance(node.value, (ast.List, ast.Tuple)):
                         for elt in node.value.elts:
-                            if isinstance(elt, ast.Constant) and isinstance(elt.value, str):
+                            if isinstance(elt, ast.Constant) and isinstance(
+                                elt.value, str
+                            ):
                                 all_names.append(elt.value)
 
     # Get all public (non-underscore) functions and classes
@@ -594,9 +627,7 @@ def extract_python_public_api(source_code: str) -> dict[str, str]:
 
 
 @strands_tool
-def get_python_function_details(
-    source_code: str, function_name: str
-) -> dict[str, str]:
+def get_python_function_details(source_code: str, function_name: str) -> dict[str, str]:
     """Get complete details about a function (signature, docstring, decorators, line numbers).
 
     Combines multiple queries into one for efficiency. Returns everything
@@ -636,7 +667,10 @@ def get_python_function_details(
         raise ValueError(f"Invalid Python syntax: {e}") from e
 
     for node in ast.walk(tree):
-        if isinstance(node, (ast.FunctionDef, ast.AsyncFunctionDef)) and node.name == function_name:
+        if (
+            isinstance(node, (ast.FunctionDef, ast.AsyncFunctionDef))
+            and node.name == function_name
+        ):
             # Build signature
             args = node.args
             params: list[str] = []
@@ -664,11 +698,15 @@ def get_python_function_details(
                 "signature": signature,
                 "docstring": docstring,
                 "start_line": str(node.lineno),
-                "end_line": str(node.end_lineno) if node.end_lineno else str(node.lineno),
+                "end_line": str(node.end_lineno)
+                if node.end_lineno
+                else str(node.lineno),
                 "arg_count": str(len(args.args)),
                 "has_return_type": "true" if node.returns else "false",
                 "has_docstring": "true" if docstring else "false",
-                "is_async": "true" if isinstance(node, ast.AsyncFunctionDef) else "false",
+                "is_async": "true"
+                if isinstance(node, ast.AsyncFunctionDef)
+                else "false",
                 "decorators": json.dumps(decorator_names),
             }
 
@@ -712,7 +750,10 @@ def get_python_function_body(source_code: str, function_name: str) -> dict[str, 
     source_lines = source_code.splitlines()
 
     for node in ast.walk(tree):
-        if isinstance(node, (ast.FunctionDef, ast.AsyncFunctionDef)) and node.name == function_name:
+        if (
+            isinstance(node, (ast.FunctionDef, ast.AsyncFunctionDef))
+            and node.name == function_name
+        ):
             # Start line is the first line after the function definition
             body_start = node.lineno  # def line
             body_end = node.end_lineno if node.end_lineno else node.lineno
@@ -769,7 +810,10 @@ def list_python_function_calls(source_code: str, function_name: str) -> dict[str
 
     # Find the target function
     for node in ast.walk(tree):
-        if isinstance(node, (ast.FunctionDef, ast.AsyncFunctionDef)) and node.name == function_name:
+        if (
+            isinstance(node, (ast.FunctionDef, ast.AsyncFunctionDef))
+            and node.name == function_name
+        ):
             calls: list[str] = []
             call_details: list[dict[str, str]] = []
 
@@ -780,19 +824,23 @@ def list_python_function_calls(source_code: str, function_name: str) -> dict[str
                     if isinstance(child.func, ast.Name):
                         call_name = child.func.id
                         calls.append(call_name)
-                        call_details.append({
-                            "name": call_name,
-                            "line": str(child.lineno),
-                            "type": "direct_call",
-                        })
+                        call_details.append(
+                            {
+                                "name": call_name,
+                                "line": str(child.lineno),
+                                "type": "direct_call",
+                            }
+                        )
                     elif isinstance(child.func, ast.Attribute):
                         call_name = child.func.attr
                         calls.append(call_name)
-                        call_details.append({
-                            "name": call_name,
-                            "line": str(child.lineno),
-                            "type": "method_call",
-                        })
+                        call_details.append(
+                            {
+                                "name": call_name,
+                                "line": str(child.lineno),
+                                "type": "method_call",
+                            }
+                        )
 
             return {
                 "calls": json.dumps(list(set(calls))),  # Unique names
@@ -858,13 +906,19 @@ def find_python_function_usages(source_code: str, function_name: str) -> dict[st
 
             if called_name == function_name:
                 line_num = node.lineno
-                context = source_lines[line_num - 1].strip() if line_num <= len(source_lines) else ""
+                context = (
+                    source_lines[line_num - 1].strip()
+                    if line_num <= len(source_lines)
+                    else ""
+                )
                 usages.append(str(line_num))
-                usage_details.append({
-                    "line": str(line_num),
-                    "context": context,
-                    "calling_function": current_function,
-                })
+                usage_details.append(
+                    {
+                        "line": str(line_num),
+                        "context": context,
+                        "calling_function": current_function,
+                    }
+                )
 
     return {
         "usages": json.dumps(usages),
@@ -917,16 +971,23 @@ def get_python_method_line_numbers(
         if isinstance(node, ast.ClassDef) and node.name == class_name:
             # Find the method within the class
             for method_node in node.body:
-                if isinstance(method_node, (ast.FunctionDef, ast.AsyncFunctionDef)) and method_node.name == method_name:
+                if (
+                    isinstance(method_node, (ast.FunctionDef, ast.AsyncFunctionDef))
+                    and method_node.name == method_name
+                ):
                     return {
                         "start_line": str(method_node.lineno),
-                        "end_line": str(method_node.end_lineno) if method_node.end_lineno else str(method_node.lineno),
+                        "end_line": str(method_node.end_lineno)
+                        if method_node.end_lineno
+                        else str(method_node.lineno),
                         "class_name": class_name,
                         "method_name": method_name,
                     }
 
             # Class found but method not found
-            raise ValueError(f"Method '{method_name}' not found in class '{class_name}'")
+            raise ValueError(
+                f"Method '{method_name}' not found in class '{class_name}'"
+            )
 
     raise ValueError(f"Class '{class_name}' not found in source code")
 
@@ -1028,28 +1089,36 @@ def find_python_definitions_by_decorator(
                 ast.unparse(d) if not isinstance(d, ast.Name) else d.id
                 for d in node.decorator_list
             ]
-            if decorator_name in decorators or any(decorator_name in d for d in decorators):
+            if decorator_name in decorators or any(
+                decorator_name in d for d in decorators
+            ):
                 functions.append(node.name)
-                details.append({
-                    "name": node.name,
-                    "type": "function",
-                    "line": str(node.lineno),
-                    "decorators": json.dumps(decorators),
-                })
+                details.append(
+                    {
+                        "name": node.name,
+                        "type": "function",
+                        "line": str(node.lineno),
+                        "decorators": json.dumps(decorators),
+                    }
+                )
 
         elif isinstance(node, ast.ClassDef):
             decorators = [
                 ast.unparse(d) if not isinstance(d, ast.Name) else d.id
                 for d in node.decorator_list
             ]
-            if decorator_name in decorators or any(decorator_name in d for d in decorators):
+            if decorator_name in decorators or any(
+                decorator_name in d for d in decorators
+            ):
                 classes.append(node.name)
-                details.append({
-                    "name": node.name,
-                    "type": "class",
-                    "line": str(node.lineno),
-                    "decorators": json.dumps(decorators),
-                })
+                details.append(
+                    {
+                        "name": node.name,
+                        "type": "class",
+                        "line": str(node.lineno),
+                        "decorators": json.dumps(decorators),
+                    }
+                )
 
     total = len(functions) + len(classes)
 

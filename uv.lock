@@ -422,7 +422,7 @@ wheels = [
 
 [[package]]
 name = "coding-open-agent-tools"
-version = "0.5.0"
+version = "0.6.0"
 source = { editable = "." }
 dependencies = [
     { name = "basic-open-agent-tools" },
@@ -435,6 +435,10 @@ all = [
     { name = "tree-sitter-language-pack", version = "0.10.0", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version >= '3.10'" },
 ]
 cpp = [
+    { name = "tree-sitter-language-pack", version = "0.9.1", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version < '3.10'" },
+    { name = "tree-sitter-language-pack", version = "0.10.0", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version >= '3.10'" },
+]
+csharp = [
     { name = "tree-sitter-language-pack", version = "0.9.1", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version < '3.10'" },
     { name = "tree-sitter-language-pack", version = "0.10.0", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version >= '3.10'" },
 ]
@@ -465,6 +469,10 @@ java = [
 ]
 javascript = [
     { name = "esprima" },
+]
+ruby = [
+    { name = "tree-sitter-language-pack", version = "0.9.1", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version < '3.10'" },
+    { name = "tree-sitter-language-pack", version = "0.10.0", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version >= '3.10'" },
 ]
 rust = [
     { name = "tree-sitter-language-pack", version = "0.9.1", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version < '3.10'" },
@@ -518,12 +526,14 @@ requires-dist = [
     { name = "strands", marker = "extra == 'strands'", specifier = ">=0.1.0" },
     { name = "tree-sitter-language-pack", marker = "extra == 'all'", specifier = ">=0.9.0" },
     { name = "tree-sitter-language-pack", marker = "extra == 'cpp'", specifier = ">=0.9.0" },
+    { name = "tree-sitter-language-pack", marker = "extra == 'csharp'", specifier = ">=0.9.0" },
     { name = "tree-sitter-language-pack", marker = "extra == 'dev'", specifier = ">=0.9.0" },
     { name = "tree-sitter-language-pack", marker = "extra == 'go'", specifier = ">=0.9.0" },
     { name = "tree-sitter-language-pack", marker = "extra == 'java'", specifier = ">=0.9.0" },
+    { name = "tree-sitter-language-pack", marker = "extra == 'ruby'", specifier = ">=0.9.0" },
     { name = "tree-sitter-language-pack", marker = "extra == 'rust'", specifier = ">=0.9.0" },
 ]
-provides-extras = ["all", "javascript", "java", "go", "rust", "cpp", "strands", "dev", "test"]
+provides-extras = ["all", "javascript", "java", "go", "rust", "cpp", "csharp", "ruby", "strands", "dev", "test"]
 
 [package.metadata.requires-dev]
 dev = [{ name = "ruff", specifier = ">=0.12.12" }]

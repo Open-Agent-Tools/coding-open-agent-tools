@@ -44,18 +44,20 @@ def _parse_javascript(source_code: str) -> dict[str, Any]:
         ValueError: If esprima not available or parsing fails
     """
     if not ESPRIMA_AVAILABLE:
-        raise ValueError(
-            "esprima not installed. Install with: pip install esprima"
-        )
+        raise ValueError("esprima not installed. Install with: pip install esprima")
 
     try:
         # Parse with JSX support for React code
-        ast = esprima.parseScript(source_code, {"loc": True, "range": True, "jsx": True})  # type: ignore[attr-defined]
+        ast = esprima.parseScript(
+            source_code, {"loc": True, "range": True, "jsx": True}
+        )  # type: ignore[attr-defined]
         return ast.toDict()  # type: ignore[union-attr, no-any-return]
     except Exception as e:
         # Try parsing as module if script fails
         try:
-            ast = esprima.parseModule(source_code, {"loc": True, "range": True, "jsx": True})  # type: ignore[attr-defined]
+            ast = esprima.parseModule(
+                source_code, {"loc": True, "range": True, "jsx": True}
+            )  # type: ignore[attr-defined]
             return ast.toDict()  # type: ignore[union-attr, no-any-return]
         except Exception:
             raise ValueError(f"Failed to parse JavaScript code: {e}") from e
@@ -224,7 +226,10 @@ def get_javascript_function_line_numbers(
         for var in variables:
             if var.get("id", {}).get("name") == function_name:
                 init = var.get("init", {})
-                if init.get("type") in ["FunctionExpression", "ArrowFunctionExpression"]:
+                if init.get("type") in [
+                    "FunctionExpression",
+                    "ArrowFunctionExpression",
+                ]:
                     loc = init.get("loc", {})
                     start = loc.get("start", {}).get("line", 0)
                     end = loc.get("end", {}).get("line", 0)
@@ -447,7 +452,9 @@ def list_javascript_functions(source_code: str) -> dict[str, str]:
                 functions.append(
                     {
                         "name": str(name),
-                        "type": "arrow" if init["type"] == "ArrowFunctionExpression" else "expression",
+                        "type": "arrow"
+                        if init["type"] == "ArrowFunctionExpression"
+                        else "expression",
                         "async": init.get("async", False),
                         "params": param_names,
                         "line": loc.get("start", {}).get("line", 0),
@@ -601,7 +608,10 @@ def get_javascript_function_signature(
         for var in variables:
             if var.get("id", {}).get("name") == function_name:
                 init = var.get("init", {})
-                if init.get("type") in ["FunctionExpression", "ArrowFunctionExpression"]:
+                if init.get("type") in [
+                    "FunctionExpression",
+                    "ArrowFunctionExpression",
+                ]:
                     params = init.get("params", [])
                     param_names = [
                         p.get("name", "?") for p in params if isinstance(p, dict)
@@ -612,7 +622,9 @@ def get_javascript_function_signature(
                     async_str = "async " if is_async else ""
                     params_str = ", ".join(param_names)
                     arrow = " =>" if init["type"] == "ArrowFunctionExpression" else ""
-                    signature = f"{async_str}const {function_name} = ({params_str}){arrow}"
+                    signature = (
+                        f"{async_str}const {function_name} = ({params_str}){arrow}"
+                    )
 
                     return {
                         "signature": signature,
@@ -689,7 +701,10 @@ def get_javascript_function_docstring(
         for var in variables:
             if var.get("id", {}).get("name") == function_name:
                 init = var.get("init", {})
-                if init.get("type") in ["FunctionExpression", "ArrowFunctionExpression"]:
+                if init.get("type") in [
+                    "FunctionExpression",
+                    "ArrowFunctionExpression",
+                ]:
                     loc = init.get("loc", {})
                     start_line = loc.get("start", {}).get("line", 0)
 
@@ -710,9 +725,7 @@ def get_javascript_function_docstring(
 
 
 @strands_tool
-def list_javascript_class_methods(
-    source_code: str, class_name: str
-) -> dict[str, str]:
+def list_javascript_class_methods(source_code: str, class_name: str) -> dict[str, str]:
     """List all methods in a specific JavaScript/TypeScript class with signatures.
 
     Returns method signatures without bodies, saving 80-85% of tokens.
@@ -877,7 +890,9 @@ def extract_javascript_public_api(source_code: str) -> dict[str, str]:
                         export_types[str(name)] = "default"
                     else:
                         exports.append("default")
-                        export_types["default"] = decl_type.replace("Declaration", "").lower()
+                        export_types["default"] = decl_type.replace(
+                            "Declaration", ""
+                        ).lower()
 
         return {
             "exports": json.dumps(exports),
@@ -948,7 +963,11 @@ def get_javascript_function_details(
                     is_async = func.get("async", False)
 
                     # Get docstring
-                    docstring = _extract_jsdoc(source_code, start_line) if start_line > 0 else ""
+                    docstring = (
+                        _extract_jsdoc(source_code, start_line)
+                        if start_line > 0
+                        else ""
+                    )
 
                     # Build signature
                     async_str = "async " if is_async else ""
@@ -970,7 +989,10 @@ def get_javascript_function_details(
         for var in variables:
             if var.get("id", {}).get("name") == function_name:
                 init = var.get("init", {})
-                if init.get("type") in ["FunctionExpression", "ArrowFunctionExpression"]:
+                if init.get("type") in [
+                    "FunctionExpression",
+                    "ArrowFunctionExpression",
+                ]:
                     loc = init.get("loc", {})
                     start_line = loc.get("start", {}).get("line", 0)
                     params = init.get("params", [])
@@ -980,14 +1002,24 @@ def get_javascript_function_details(
                     is_async = init.get("async", False)
 
                     # Get docstring
-                    docstring = _extract_jsdoc(source_code, start_line) if start_line > 0 else ""
+                    docstring = (
+                        _extract_jsdoc(source_code, start_line)
+                        if start_line > 0
+                        else ""
+                    )
 
                     # Build signature
                     async_str = "async " if is_async else ""
                     params_str = ", ".join(param_names)
-                    func_type_str = "arrow" if init["type"] == "ArrowFunctionExpression" else "expression"
+                    func_type_str = (
+                        "arrow"
+                        if init["type"] == "ArrowFunctionExpression"
+                        else "expression"
+                    )
                     arrow = " =>" if func_type_str == "arrow" else ""
-                    signature = f"{async_str}const {function_name} = ({params_str}){arrow}"
+                    signature = (
+                        f"{async_str}const {function_name} = ({params_str}){arrow}"
+                    )
 
                     return {
                         "function_name": function_name,
@@ -1057,7 +1089,10 @@ def get_javascript_function_body(
                     body_node = func.get("body", {})
 
                     # Handle arrow functions with expression body
-                    if func_type == "ArrowFunctionExpression" and body_node.get("type") != "BlockStatement":
+                    if (
+                        func_type == "ArrowFunctionExpression"
+                        and body_node.get("type") != "BlockStatement"
+                    ):
                         loc = body_node.get("loc", {})
                         start_line = loc.get("start", {}).get("line", 0)
                         end_line = loc.get("end", {}).get("line", 0)
@@ -1090,11 +1125,17 @@ def get_javascript_function_body(
         for var in variables:
             if var.get("id", {}).get("name") == function_name:
                 init = var.get("init", {})
-                if init.get("type") in ["FunctionExpression", "ArrowFunctionExpression"]:
+                if init.get("type") in [
+                    "FunctionExpression",
+                    "ArrowFunctionExpression",
+                ]:
                     body_node = init.get("body", {})
 
                     # Handle arrow functions with expression body
-                    if init["type"] == "ArrowFunctionExpression" and body_node.get("type") != "BlockStatement":
+                    if (
+                        init["type"] == "ArrowFunctionExpression"
+                        and body_node.get("type") != "BlockStatement"
+                    ):
                         loc = body_node.get("loc", {})
                         start_line = loc.get("start", {}).get("line", 0)
                         end_line = loc.get("end", {}).get("line", 0)
@@ -1186,7 +1227,10 @@ def list_javascript_function_calls(
             for var in variables:
                 if var.get("id", {}).get("name") == function_name:
                     init = var.get("init", {})
-                    if init.get("type") in ["FunctionExpression", "ArrowFunctionExpression"]:
+                    if init.get("type") in [
+                        "FunctionExpression",
+                        "ArrowFunctionExpression",
+                    ]:
                         target_func = init
                         break
 
@@ -1207,11 +1251,13 @@ def list_javascript_function_calls(
                         call_name = callee.get("name", "unknown")
                         calls.append(str(call_name))
                         loc = node.get("loc", {})
-                        call_details.append({
-                            "name": str(call_name),
-                            "line": loc.get("start", {}).get("line", 0),
-                            "type": "function"
-                        })
+                        call_details.append(
+                            {
+                                "name": str(call_name),
+                                "line": loc.get("start", {}).get("line", 0),
+                                "type": "function",
+                            }
+                        )
 
                     # Method call (e.g., obj.method())
                     elif callee.get("type") == "MemberExpression":
@@ -1222,11 +1268,13 @@ def list_javascript_function_calls(
                         full_name = f"{obj_name}.{method_name}"
                         calls.append(full_name)
                         loc = node.get("loc", {})
-                        call_details.append({
-                            "name": full_name,
-                            "line": loc.get("start", {}).get("line", 0),
-                            "type": "method"
-                        })
+                        call_details.append(
+                            {
+                                "name": full_name,
+                                "line": loc.get("start", {}).get("line", 0),
+                                "type": "method",
+                            }
+                        )
 
                 # Recursively search
                 for value in node.values():
@@ -1290,7 +1338,11 @@ def find_javascript_function_usages(
             if isinstance(node, dict):
                 # Track context (which function we're in)
                 current_context = parent_context
-                if node.get("type") in ["FunctionDeclaration", "FunctionExpression", "ArrowFunctionExpression"]:
+                if node.get("type") in [
+                    "FunctionDeclaration",
+                    "FunctionExpression",
+                    "ArrowFunctionExpression",
+                ]:
                     func_name = _get_function_name(node)
                     if func_name != "anonymous":
                         current_context = func_name
@@ -1300,16 +1352,21 @@ def find_javascript_function_usages(
                     callee = node.get("callee", {})
 
                     # Direct function call
-                    if callee.get("type") == "Identifier" and callee.get("name") == function_name:
+                    if (
+                        callee.get("type") == "Identifier"
+                        and callee.get("name") == function_name
+                    ):
                         loc = node.get("loc", {})
                         line = loc.get("start", {}).get("line", 0)
                         if line > 0:
                             usages.append(line)
-                            usage_details.append({
-                                "line": line,
-                                "context": current_context,
-                                "type": "call"
-                            })
+                            usage_details.append(
+                                {
+                                    "line": line,
+                                    "context": current_context,
+                                    "type": "call",
+                                }
+                            )
 
                 # Recursively search with context
                 for value in node.values():
@@ -1409,9 +1466,7 @@ def get_javascript_method_line_numbers(
 
 
 @strands_tool
-def get_javascript_class_hierarchy(
-    source_code: str, class_name: str
-) -> dict[str, str]:
+def get_javascript_class_hierarchy(source_code: str, class_name: str) -> dict[str, str]:
     """Get inheritance hierarchy information for a JavaScript/TypeScript class.
 
     Analyzes class inheritance using 'extends', saving 70-80% of tokens.
@@ -1521,17 +1576,21 @@ def find_javascript_definitions_by_decorator(
                     next_line = lines[j - 1].strip()
 
                     # Function pattern
-                    if next_line.startswith("function ") or next_line.startswith("async function "):
+                    if next_line.startswith("function ") or next_line.startswith(
+                        "async function "
+                    ):
                         match = re.match(r"(?:async\s+)?function\s+(\w+)", next_line)
                         if match:
                             func_name = match.group(1)
                             functions.append(func_name)
-                            details.append({
-                                "name": func_name,
-                                "type": "function",
-                                "line": j,
-                                "decorator": decorator_name
-                            })
+                            details.append(
+                                {
+                                    "name": func_name,
+                                    "type": "function",
+                                    "line": j,
+                                    "decorator": decorator_name,
+                                }
+                            )
                             break
 
                     # Class pattern
@@ -1540,12 +1599,14 @@ def find_javascript_definitions_by_decorator(
                         if match:
                             class_name = match.group(1)
                             classes.append(class_name)
-                            details.append({
-                                "name": class_name,
-                                "type": "class",
-                                "line": j,
-                                "decorator": decorator_name
-                            })
+                            details.append(
+                                {
+                                    "name": class_name,
+                                    "type": "class",
+                                    "line": j,
+                                    "decorator": decorator_name,
+                                }
+                            )
                             break
 
         return {
@@ -1560,9 +1621,7 @@ def find_javascript_definitions_by_decorator(
 
 
 @strands_tool
-def get_javascript_class_docstring(
-    source_code: str, class_name: str
-) -> dict[str, str]:
+def get_javascript_class_docstring(source_code: str, class_name: str) -> dict[str, str]:
     """Get just the JSDoc comment of a specific JavaScript/TypeScript class.
 
     Returns only the class documentation without implementation, saving 80-85% of tokens.

@@ -37,6 +37,7 @@ def _safe_execute(func: Callable[..., dict[str, str]]) -> Callable[..., dict[str
     Ruby navigation functions should return {"found": "false", "error": "..."}
     instead of raising exceptions (except for invalid input types).
     """
+
     def wrapper(*args: Any, **kwargs: Any) -> dict[str, str]:
         try:
             result = func(*args, **kwargs)
@@ -52,6 +53,7 @@ def _safe_execute(func: Callable[..., dict[str, str]]) -> Callable[..., dict[str
                 "found": "false",
                 "error": str(e),
             }
+
     return wrapper
 
 
@@ -232,7 +234,9 @@ def _get_class_for_method(node: Any, source_bytes: bytes) -> str:
     return ""
 
 
-def _determine_visibility_context(root: Any, method_line: int, source_bytes: bytes) -> str:
+def _determine_visibility_context(
+    root: Any, method_line: int, source_bytes: bytes
+) -> str:
     """Determine the visibility context for a method based on preceding visibility keywords.
 
     Args:
@@ -301,7 +305,9 @@ def get_ruby_function_line_numbers(
         source_bytes = bytes(source_code, "utf8")
 
         # Find method declarations
-        methods = _find_nodes_by_type(root, "method") + _find_nodes_by_type(root, "singleton_method")
+        methods = _find_nodes_by_type(root, "method") + _find_nodes_by_type(
+            root, "singleton_method"
+        )
         for method in methods:
             name = _get_method_name(method, source_bytes)
             if name == function_name:
@@ -417,7 +423,9 @@ def get_ruby_module_overview(source_code: str) -> dict[str, str]:
 
         # Count methods
         method_names: list[str] = []
-        methods = _find_nodes_by_type(root, "method") + _find_nodes_by_type(root, "singleton_method")
+        methods = _find_nodes_by_type(root, "method") + _find_nodes_by_type(
+            root, "singleton_method"
+        )
         for method in methods:
             name = _get_method_name(method, source_bytes)
             if name:
@@ -498,7 +506,9 @@ def list_ruby_functions(source_code: str) -> dict[str, str]:
         functions: list[dict[str, Any]] = []
 
         # Find all method nodes
-        method_nodes = _find_nodes_by_type(root, "method") + _find_nodes_by_type(root, "singleton_method")
+        method_nodes = _find_nodes_by_type(root, "method") + _find_nodes_by_type(
+            root, "singleton_method"
+        )
 
         for func_node in method_nodes:
             func_info: dict[str, Any] = {
@@ -510,7 +520,9 @@ def list_ruby_functions(source_code: str) -> dict[str, str]:
             func_info["name"] = _get_method_name(func_node, source_bytes)
 
             # Determine visibility
-            visibility = _determine_visibility_context(root, func_node.start_point[0], source_bytes)
+            visibility = _determine_visibility_context(
+                root, func_node.start_point[0], source_bytes
+            )
             func_info["is_public"] = visibility == "public"
 
             # Extract parameters
@@ -590,9 +602,7 @@ def list_ruby_types(source_code: str) -> dict[str, str]:
 
 @_safe_execute
 @strands_tool  # type: ignore[misc]
-def get_ruby_function_signature(
-    source_code: str, function_name: str
-) -> dict[str, str]:
+def get_ruby_function_signature(source_code: str, function_name: str) -> dict[str, str]:
     """Get just the signature of a specific Ruby method.
 
     Returns only the method signature without the body, saving 85-90% of tokens.
@@ -625,7 +635,9 @@ def get_ruby_function_signature(
         source_bytes = bytes(source_code, "utf8")
 
         # Find all method nodes
-        method_nodes = _find_nodes_by_type(root, "method") + _find_nodes_by_type(root, "singleton_method")
+        method_nodes = _find_nodes_by_type(root, "method") + _find_nodes_by_type(
+            root, "singleton_method"
+        )
 
         for func_node in method_nodes:
             name = _get_method_name(func_node, source_bytes)
@@ -638,7 +650,9 @@ def get_ruby_function_signature(
                         params = _get_node_text(child, source_bytes)
 
                 # Determine visibility
-                visibility = _determine_visibility_context(root, func_node.start_point[0], source_bytes)
+                visibility = _determine_visibility_context(
+                    root, func_node.start_point[0], source_bytes
+                )
                 is_public = visibility == "public"
 
                 signature = f"def {function_name}{params}"
@@ -660,9 +674,7 @@ def get_ruby_function_signature(
 
 @_safe_execute
 @strands_tool  # type: ignore[misc]
-def get_ruby_function_docstring(
-    source_code: str, function_name: str
-) -> dict[str, str]:
+def get_ruby_function_docstring(source_code: str, function_name: str) -> dict[str, str]:
     """Get just the RDoc comment of a specific Ruby method.
 
     Returns only the RDoc comment without the implementation, saving 80-85% of tokens.
@@ -694,7 +706,9 @@ def get_ruby_function_docstring(
         source_bytes = bytes(source_code, "utf8")
 
         # Find all method nodes
-        method_nodes = _find_nodes_by_type(root, "method") + _find_nodes_by_type(root, "singleton_method")
+        method_nodes = _find_nodes_by_type(root, "method") + _find_nodes_by_type(
+            root, "singleton_method"
+        )
 
         for func_node in method_nodes:
             name = _get_method_name(func_node, source_bytes)
@@ -750,7 +764,9 @@ def list_ruby_type_methods(source_code: str, type_name: str) -> dict[str, str]:
         methods: list[dict[str, Any]] = []
 
         # Find all method declarations
-        method_nodes = _find_nodes_by_type(root, "method") + _find_nodes_by_type(root, "singleton_method")
+        method_nodes = _find_nodes_by_type(root, "method") + _find_nodes_by_type(
+            root, "singleton_method"
+        )
         for method in method_nodes:
             class_name = _get_class_for_method(method, source_bytes)
 
@@ -765,7 +781,9 @@ def list_ruby_type_methods(source_code: str, type_name: str) -> dict[str, str]:
                 method_info["name"] = method_name
 
                 # Determine visibility
-                visibility = _determine_visibility_context(root, method.start_point[0], source_bytes)
+                visibility = _determine_visibility_context(
+                    root, method.start_point[0], source_bytes
+                )
                 method_info["is_public"] = visibility == "public"
 
                 # Extract parameters
@@ -841,10 +859,14 @@ def extract_ruby_public_api(source_code: str) -> dict[str, str]:
         public_types: list[str] = []
 
         # Find public methods
-        method_nodes = _find_nodes_by_type(root, "method") + _find_nodes_by_type(root, "singleton_method")
+        method_nodes = _find_nodes_by_type(root, "method") + _find_nodes_by_type(
+            root, "singleton_method"
+        )
         for func_node in method_nodes:
             name = _get_method_name(func_node, source_bytes)
-            visibility = _determine_visibility_context(root, func_node.start_point[0], source_bytes)
+            visibility = _determine_visibility_context(
+                root, func_node.start_point[0], source_bytes
+            )
             if name and visibility == "public":
                 public_functions.append(name)
 
@@ -861,10 +883,12 @@ def extract_ruby_public_api(source_code: str) -> dict[str, str]:
             "public_functions": json.dumps(public_functions),
             "public_types": json.dumps(public_types),
             "public_count": str(len(public_functions) + len(public_types)),
-            "details": json.dumps({
-                "functions": public_functions,
-                "types": public_types,
-            }),
+            "details": json.dumps(
+                {
+                    "functions": public_functions,
+                    "types": public_types,
+                }
+            ),
         }
 
     except Exception as e:
@@ -873,9 +897,7 @@ def extract_ruby_public_api(source_code: str) -> dict[str, str]:
 
 @_safe_execute
 @strands_tool  # type: ignore[misc]
-def get_ruby_function_details(
-    source_code: str, function_name: str
-) -> dict[str, str]:
+def get_ruby_function_details(source_code: str, function_name: str) -> dict[str, str]:
     """Get complete details about a Ruby method.
 
     Returns signature, RDoc comment, parameters, and metadata without the body,
@@ -911,7 +933,9 @@ def get_ruby_function_details(
         source_bytes = bytes(source_code, "utf8")
 
         # Find all method nodes
-        method_nodes = _find_nodes_by_type(root, "method") + _find_nodes_by_type(root, "singleton_method")
+        method_nodes = _find_nodes_by_type(root, "method") + _find_nodes_by_type(
+            root, "singleton_method"
+        )
 
         for func_node in method_nodes:
             name = _get_method_name(func_node, source_bytes)
@@ -924,7 +948,9 @@ def get_ruby_function_details(
                         params = _get_node_text(child, source_bytes)
 
                 # Determine visibility
-                visibility = _determine_visibility_context(root, func_node.start_point[0], source_bytes)
+                visibility = _determine_visibility_context(
+                    root, func_node.start_point[0], source_bytes
+                )
                 is_public = visibility == "public"
 
                 signature = f"def {function_name}{params}"
@@ -984,7 +1010,9 @@ def get_ruby_function_body(source_code: str, function_name: str) -> dict[str, st
         lines = source_code.split("\n")
 
         # Find all method nodes
-        method_nodes = _find_nodes_by_type(root, "method") + _find_nodes_by_type(root, "singleton_method")
+        method_nodes = _find_nodes_by_type(root, "method") + _find_nodes_by_type(
+            root, "singleton_method"
+        )
 
         for func_node in method_nodes:
             name = _get_method_name(func_node, source_bytes)
@@ -1026,9 +1054,7 @@ def get_ruby_function_body(source_code: str, function_name: str) -> dict[str, st
 
 @_safe_execute
 @strands_tool  # type: ignore[misc]
-def list_ruby_function_calls(
-    source_code: str, function_name: str
-) -> dict[str, str]:
+def list_ruby_function_calls(source_code: str, function_name: str) -> dict[str, str]:
     """List all function calls made within a specific Ruby method.
 
     Analyzes method dependencies and call patterns, saving 75-85% of tokens.
@@ -1061,7 +1087,9 @@ def list_ruby_function_calls(
         source_bytes = bytes(source_code, "utf8")
 
         # Find all method nodes
-        method_nodes = _find_nodes_by_type(root, "method") + _find_nodes_by_type(root, "singleton_method")
+        method_nodes = _find_nodes_by_type(root, "method") + _find_nodes_by_type(
+            root, "singleton_method"
+        )
 
         for func_node in method_nodes:
             name = _get_method_name(func_node, source_bytes)
@@ -1070,7 +1098,9 @@ def list_ruby_function_calls(
                 call_details: list[dict[str, Any]] = []
 
                 # Find call nodes and method_call nodes
-                call_nodes = _find_nodes_by_type(func_node, "call") + _find_nodes_by_type(func_node, "method_call")
+                call_nodes = _find_nodes_by_type(
+                    func_node, "call"
+                ) + _find_nodes_by_type(func_node, "method_call")
                 for call_node in call_nodes:
                     # Get the method being called
                     call_name = ""
@@ -1084,10 +1114,12 @@ def list_ruby_function_calls(
 
                     if call_name:
                         calls.append(call_name)
-                        call_details.append({
-                            "name": call_name,
-                            "line": call_node.start_point[0] + 1,
-                        })
+                        call_details.append(
+                            {
+                                "name": call_name,
+                                "line": call_node.start_point[0] + 1,
+                            }
+                        )
 
                 return {
                     "calls": json.dumps(calls),
@@ -1141,7 +1173,9 @@ def find_ruby_function_usages(source_code: str, function_name: str) -> dict[str,
         usage_details: list[dict[str, Any]] = []
 
         # Find all call and method_call nodes
-        call_nodes = _find_nodes_by_type(root, "call") + _find_nodes_by_type(root, "method_call")
+        call_nodes = _find_nodes_by_type(root, "call") + _find_nodes_by_type(
+            root, "method_call"
+        )
         for call_node in call_nodes:
             call_name = ""
             for child in call_node.children:
@@ -1156,10 +1190,12 @@ def find_ruby_function_usages(source_code: str, function_name: str) -> dict[str,
             if call_name == function_name:
                 line = call_node.start_point[0] + 1
                 usages.append(line)
-                usage_details.append({
-                    "line": line,
-                    "context": "method_call",
-                })
+                usage_details.append(
+                    {
+                        "line": line,
+                        "context": "method_call",
+                    }
+                )
 
         return {
             "usages": json.dumps(usages),
@@ -1211,7 +1247,9 @@ def get_ruby_specific_function_line_numbers(
         source_bytes = bytes(source_code, "utf8")
 
         # Find method declarations for the specific type
-        methods = _find_nodes_by_type(root, "method") + _find_nodes_by_type(root, "singleton_method")
+        methods = _find_nodes_by_type(root, "method") + _find_nodes_by_type(
+            root, "singleton_method"
+        )
         for method in methods:
             class_name = _get_class_for_method(method, source_bytes)
 
@@ -1302,7 +1340,9 @@ def get_ruby_type_hierarchy(source_code: str, type_name: str) -> dict[str, str]:
                                 # Extract superclass name
                                 for subchild in child.children:
                                     if subchild.type == "constant":
-                                        superclass_name = _get_node_text(subchild, source_bytes)
+                                        superclass_name = _get_node_text(
+                                            subchild, source_bytes
+                                        )
                                         embeds.append(superclass_name)
 
                     # Check for include statements (module inclusions)
@@ -1315,7 +1355,9 @@ def get_ruby_type_hierarchy(source_code: str, type_name: str) -> dict[str, str]:
                                     # Find the module name
                                     for arg_child in call_node.children:
                                         if arg_child.type == "constant":
-                                            module_name = _get_node_text(arg_child, source_bytes)
+                                            module_name = _get_node_text(
+                                                arg_child, source_bytes
+                                            )
                                             implements.append(module_name)
 
                     has_embedding = len(embeds) > 0 or len(implements) > 0
@@ -1378,18 +1420,22 @@ def find_ruby_definitions_by_comment(
         pattern = re.compile(re.escape(comment_pattern), re.IGNORECASE)
 
         # Check methods
-        method_nodes = _find_nodes_by_type(root, "method") + _find_nodes_by_type(root, "singleton_method")
+        method_nodes = _find_nodes_by_type(root, "method") + _find_nodes_by_type(
+            root, "singleton_method"
+        )
         for func_node in method_nodes:
             name = _get_method_name(func_node, source_bytes)
             if name:
                 docstring = _extract_doc_comment(source_code, func_node.start_byte)
                 if pattern.search(docstring):
                     functions.append(name)
-                    details.append({
-                        "name": name,
-                        "type": "method",
-                        "line": func_node.start_point[0] + 1,
-                    })
+                    details.append(
+                        {
+                            "name": name,
+                            "type": "method",
+                            "line": func_node.start_point[0] + 1,
+                        }
+                    )
 
         # Check classes and modules
         type_kinds = ["class", "module"]
@@ -1401,11 +1447,13 @@ def find_ruby_definitions_by_comment(
                     docstring = _extract_doc_comment(source_code, type_decl.start_byte)
                     if pattern.search(docstring):
                         types.append(name)
-                        details.append({
-                            "name": name,
-                            "type": type_kind,
-                            "line": type_decl.start_point[0] + 1,
-                        })
+                        details.append(
+                            {
+                                "name": name,
+                                "type": type_kind,
+                                "line": type_decl.start_point[0] + 1,
+                            }
+                        )
 
         return {
             "functions": json.dumps(functions),

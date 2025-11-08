@@ -233,7 +233,11 @@ def get_java_class_line_numbers(source_code: str, class_name: str) -> dict[str, 
         root = tree.root_node
 
         # Find class declarations
-        for node_type in ["class_declaration", "interface_declaration", "enum_declaration"]:
+        for node_type in [
+            "class_declaration",
+            "interface_declaration",
+            "enum_declaration",
+        ]:
             classes = _find_nodes_by_type(root, node_type)
             for cls in classes:
                 for child in cls.children:
@@ -302,7 +306,11 @@ def get_java_module_overview(source_code: str) -> dict[str, str]:
 
         # Count classes
         class_names: list[str] = []
-        for node_type in ["class_declaration", "interface_declaration", "enum_declaration"]:
+        for node_type in [
+            "class_declaration",
+            "interface_declaration",
+            "enum_declaration",
+        ]:
             classes = _find_nodes_by_type(root, node_type)
             for cls in classes:
                 for child in cls.children:
@@ -366,7 +374,12 @@ def list_java_methods(source_code: str) -> dict[str, str]:
         # Find method declarations
         method_nodes = _find_nodes_by_type(root, "method_declaration")
         for method in method_nodes:
-            method_info: dict[str, Any] = {"name": "", "params": [], "return_type": "", "modifiers": []}
+            method_info: dict[str, Any] = {
+                "name": "",
+                "params": [],
+                "return_type": "",
+                "modifiers": [],
+            }
 
             for child in method.children:
                 if child.type == "identifier":
@@ -377,11 +390,18 @@ def list_java_methods(source_code: str) -> dict[str, str]:
                     method_info["params"] = [
                         _get_node_text(p, source_bytes) for p in params
                     ]
-                elif child.type in ["type_identifier", "void_type", "integral_type", "floating_point_type"]:
+                elif child.type in [
+                    "type_identifier",
+                    "void_type",
+                    "integral_type",
+                    "floating_point_type",
+                ]:
                     if not method_info["return_type"]:
                         method_info["return_type"] = _get_node_text(child, source_bytes)
                 elif child.type == "modifiers":
-                    modifiers = [_get_node_text(m, source_bytes) for m in child.children]
+                    modifiers = [
+                        _get_node_text(m, source_bytes) for m in child.children
+                    ]
                     method_info["modifiers"] = modifiers
 
             method_info["line"] = method.start_point[0] + 1
@@ -428,7 +448,11 @@ def list_java_classes(source_code: str) -> dict[str, str]:
         classes: list[dict[str, Any]] = []
 
         # Find class declarations
-        for node_type in ["class_declaration", "interface_declaration", "enum_declaration"]:
+        for node_type in [
+            "class_declaration",
+            "interface_declaration",
+            "enum_declaration",
+        ]:
             class_nodes = _find_nodes_by_type(root, node_type)
             for cls in class_nodes:
                 class_info: dict[str, Any] = {
@@ -447,7 +471,9 @@ def list_java_classes(source_code: str) -> dict[str, str]:
                     elif child.type == "superclass":
                         for subchild in child.children:
                             if subchild.type == "type_identifier":
-                                class_info["extends"] = _get_node_text(subchild, source_bytes)
+                                class_info["extends"] = _get_node_text(
+                                    subchild, source_bytes
+                                )
                     elif child.type == "super_interfaces":
                         interfaces = _find_nodes_by_type(child, "type_identifier")
                         class_info["implements"] = [
@@ -459,10 +485,14 @@ def list_java_classes(source_code: str) -> dict[str, str]:
                         for method in methods:
                             for m_child in method.children:
                                 if m_child.type == "identifier":
-                                    class_info["methods"].append(_get_node_text(m_child, source_bytes))
+                                    class_info["methods"].append(
+                                        _get_node_text(m_child, source_bytes)
+                                    )
                                     break
                     elif child.type == "modifiers":
-                        modifiers = [_get_node_text(m, source_bytes) for m in child.children]
+                        modifiers = [
+                            _get_node_text(m, source_bytes) for m in child.children
+                        ]
                         class_info["modifiers"] = modifiers
 
                 class_info["line"] = cls.start_point[0] + 1
@@ -526,14 +556,21 @@ def get_java_method_signature(source_code: str, method_name: str) -> dict[str, s
                 modifiers: list[str] = []
 
                 for child in method.children:
-                    if child.type in ["type_identifier", "void_type", "integral_type", "floating_point_type"]:
+                    if child.type in [
+                        "type_identifier",
+                        "void_type",
+                        "integral_type",
+                        "floating_point_type",
+                    ]:
                         if not return_type:
                             return_type = _get_node_text(child, source_bytes)
                     elif child.type == "formal_parameters":
                         param_nodes = _find_nodes_by_type(child, "formal_parameter")
                         params = [_get_node_text(p, source_bytes) for p in param_nodes]
                     elif child.type == "modifiers":
-                        modifiers = [_get_node_text(m, source_bytes) for m in child.children]
+                        modifiers = [
+                            _get_node_text(m, source_bytes) for m in child.children
+                        ]
 
                 # Build signature
                 mods_str = " ".join(modifiers) + " " if modifiers else ""
@@ -660,7 +697,9 @@ def list_java_class_methods(source_code: str, class_name: str) -> dict[str, str]
                     # Find class body
                     for child in cls.children:
                         if child.type == "class_body":
-                            method_nodes = _find_nodes_by_type(child, "method_declaration")
+                            method_nodes = _find_nodes_by_type(
+                                child, "method_declaration"
+                            )
                             for method in method_nodes:
                                 method_info: dict[str, Any] = {
                                     "name": "",
@@ -671,17 +710,31 @@ def list_java_class_methods(source_code: str, class_name: str) -> dict[str, str]
 
                                 for m_child in method.children:
                                     if m_child.type == "identifier":
-                                        method_info["name"] = _get_node_text(m_child, source_bytes)
-                                    elif m_child.type in ["type_identifier", "void_type", "integral_type"]:
+                                        method_info["name"] = _get_node_text(
+                                            m_child, source_bytes
+                                        )
+                                    elif m_child.type in [
+                                        "type_identifier",
+                                        "void_type",
+                                        "integral_type",
+                                    ]:
                                         if not method_info["return_type"]:
-                                            method_info["return_type"] = _get_node_text(m_child, source_bytes)
+                                            method_info["return_type"] = _get_node_text(
+                                                m_child, source_bytes
+                                            )
                                     elif m_child.type == "formal_parameters":
-                                        params = _find_nodes_by_type(m_child, "formal_parameter")
+                                        params = _find_nodes_by_type(
+                                            m_child, "formal_parameter"
+                                        )
                                         method_info["params"] = [
-                                            _get_node_text(p, source_bytes) for p in params
+                                            _get_node_text(p, source_bytes)
+                                            for p in params
                                         ]
                                     elif m_child.type == "modifiers":
-                                        modifiers = [_get_node_text(mod, source_bytes) for mod in m_child.children]
+                                        modifiers = [
+                                            _get_node_text(mod, source_bytes)
+                                            for mod in m_child.children
+                                        ]
                                         method_info["modifiers"] = modifiers
 
                                 methods.append(method_info)
@@ -735,7 +788,11 @@ def extract_java_public_api(source_code: str) -> dict[str, str]:
         public_classes: list[str] = []
 
         # Find public classes
-        for node_type in ["class_declaration", "interface_declaration", "enum_declaration"]:
+        for node_type in [
+            "class_declaration",
+            "interface_declaration",
+            "enum_declaration",
+        ]:
             classes = _find_nodes_by_type(root, node_type)
             for cls in classes:
                 is_public = False
@@ -743,7 +800,9 @@ def extract_java_public_api(source_code: str) -> dict[str, str]:
 
                 for child in cls.children:
                     if child.type == "modifiers":
-                        modifiers = [_get_node_text(m, source_bytes) for m in child.children]
+                        modifiers = [
+                            _get_node_text(m, source_bytes) for m in child.children
+                        ]
                         is_public = "public" in modifiers
                     elif child.type == "identifier":
                         class_name = _get_node_text(child, source_bytes)
@@ -759,7 +818,9 @@ def extract_java_public_api(source_code: str) -> dict[str, str]:
 
             for child in method.children:
                 if child.type == "modifiers":
-                    modifiers = [_get_node_text(m, source_bytes) for m in child.children]
+                    modifiers = [
+                        _get_node_text(m, source_bytes) for m in child.children
+                    ]
                     is_public = "public" in modifiers
                 elif child.type == "identifier":
                     method_name = _get_node_text(child, source_bytes)
@@ -771,10 +832,12 @@ def extract_java_public_api(source_code: str) -> dict[str, str]:
             "public_methods": json.dumps(public_methods),
             "public_classes": json.dumps(public_classes),
             "public_count": str(len(public_methods) + len(public_classes)),
-            "details": json.dumps({
-                "methods": public_methods,
-                "classes": public_classes,
-            }),
+            "details": json.dumps(
+                {
+                    "methods": public_methods,
+                    "classes": public_classes,
+                }
+            ),
         }
 
     except Exception as e:
@@ -832,14 +895,21 @@ def get_java_method_details(source_code: str, method_name: str) -> dict[str, str
                 modifiers: list[str] = []
 
                 for child in method.children:
-                    if child.type in ["type_identifier", "void_type", "integral_type", "floating_point_type"]:
+                    if child.type in [
+                        "type_identifier",
+                        "void_type",
+                        "integral_type",
+                        "floating_point_type",
+                    ]:
                         if not return_type:
                             return_type = _get_node_text(child, source_bytes)
                     elif child.type == "formal_parameters":
                         param_nodes = _find_nodes_by_type(child, "formal_parameter")
                         params = [_get_node_text(p, source_bytes) for p in param_nodes]
                     elif child.type == "modifiers":
-                        modifiers = [_get_node_text(m, source_bytes) for m in child.children]
+                        modifiers = [
+                            _get_node_text(m, source_bytes) for m in child.children
+                        ]
 
                 # Build signature
                 mods_str = " ".join(modifiers) + " " if modifiers else ""
@@ -985,10 +1055,12 @@ def list_java_method_calls(source_code: str, method_name: str) -> dict[str, str]
                         if child.type == "identifier":
                             call_name = _get_node_text(child, source_bytes)
                             calls.append(call_name)
-                            call_details.append({
-                                "name": call_name,
-                                "line": invocation.start_point[0] + 1,
-                            })
+                            call_details.append(
+                                {
+                                    "name": call_name,
+                                    "line": invocation.start_point[0] + 1,
+                                }
+                            )
                             break
 
                 return {
@@ -1050,10 +1122,12 @@ def find_java_method_usages(source_code: str, method_name: str) -> dict[str, str
                     if name == method_name:
                         line = invocation.start_point[0] + 1
                         usages.append(line)
-                        usage_details.append({
-                            "line": line,
-                            "context": "method_call",
-                        })
+                        usage_details.append(
+                            {
+                                "line": line,
+                                "context": "method_call",
+                            }
+                        )
                     break
 
         return {
@@ -1198,7 +1272,9 @@ def get_java_class_hierarchy(source_code: str, class_name: str) -> dict[str, str
                                 extends = _get_node_text(subchild, source_bytes)
                     elif child.type == "super_interfaces":
                         interfaces = _find_nodes_by_type(child, "type_identifier")
-                        implements = [_get_node_text(i, source_bytes) for i in interfaces]
+                        implements = [
+                            _get_node_text(i, source_bytes) for i in interfaces
+                        ]
 
                 has_inheritance = bool(extends or implements)
 
@@ -1273,25 +1349,34 @@ def find_java_definitions_by_annotation(
                                 # Find method name
                                 for p_child in parent.children:
                                     if p_child.type == "identifier":
-                                        method_name = _get_node_text(p_child, source_bytes)
+                                        method_name = _get_node_text(
+                                            p_child, source_bytes
+                                        )
                                         methods.append(method_name)
-                                        details.append({
-                                            "name": method_name,
-                                            "type": "method",
-                                            "line": parent.start_point[0] + 1,
-                                        })
+                                        details.append(
+                                            {
+                                                "name": method_name,
+                                                "type": "method",
+                                                "line": parent.start_point[0] + 1,
+                                            }
+                                        )
                                         break
-                            elif parent.type in ["class_declaration", "interface_declaration"]:
+                            elif parent.type in [
+                                "class_declaration",
+                                "interface_declaration",
+                            ]:
                                 # Find class name
                                 for p_child in parent.children:
                                     if p_child.type == "identifier":
                                         class_nm = _get_node_text(p_child, source_bytes)
                                         classes.append(class_nm)
-                                        details.append({
-                                            "name": class_nm,
-                                            "type": "class",
-                                            "line": parent.start_point[0] + 1,
-                                        })
+                                        details.append(
+                                            {
+                                                "name": class_nm,
+                                                "type": "class",
+                                                "line": parent.start_point[0] + 1,
+                                            }
+                                        )
                                         break
 
         return {
@@ -1338,7 +1423,11 @@ def get_java_class_docstring(source_code: str, class_name: str) -> dict[str, str
         source_bytes = bytes(source_code, "utf8")
 
         # Find the class
-        for node_type in ["class_declaration", "interface_declaration", "enum_declaration"]:
+        for node_type in [
+            "class_declaration",
+            "interface_declaration",
+            "enum_declaration",
+        ]:
             classes = _find_nodes_by_type(root, node_type)
             for cls in classes:
                 name = ""

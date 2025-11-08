@@ -206,7 +206,9 @@ def _get_receiver_type(node: Any, source_bytes: bytes) -> str:
 
 
 @strands_tool  # type: ignore[misc]
-def get_go_function_line_numbers(source_code: str, function_name: str) -> dict[str, str]:
+def get_go_function_line_numbers(
+    source_code: str, function_name: str
+) -> dict[str, str]:
     """Get start and end line numbers for a specific Go function.
 
     Enables targeted file reading instead of loading entire files, saving 85-90% of tokens.
@@ -458,9 +460,16 @@ def list_go_functions(source_code: str) -> dict[str, str]:
                     func_info["is_public"] = _is_public(func_info["name"])
                 elif child.type == "parameter_list":
                     func_info["params"] = _get_node_text(child, source_bytes)
-                elif child.type in ["parameter_list", "type_identifier", "pointer_type"]:
+                elif child.type in [
+                    "parameter_list",
+                    "type_identifier",
+                    "pointer_type",
+                ]:
                     # This might be the return type
-                    if child.type != "parameter_list" or child.start_byte > func.start_byte + 100:
+                    if (
+                        child.type != "parameter_list"
+                        or child.start_byte > func.start_byte + 100
+                    ):
                         func_info["returns"] = _get_node_text(child, source_bytes)
 
             func_info["line"] = func.start_point[0] + 1
@@ -527,7 +536,12 @@ def list_go_types(source_code: str) -> dict[str, str]:
                         type_info["kind"] = "struct"
                     elif child.type == "interface_type":
                         type_info["kind"] = "interface"
-                    elif child.type in ["type_identifier", "pointer_type", "array_type", "slice_type"]:
+                    elif child.type in [
+                        "type_identifier",
+                        "pointer_type",
+                        "array_type",
+                        "slice_type",
+                    ]:
                         type_info["kind"] = "alias"
 
                 type_info["line"] = type_decl.start_point[0] + 1
@@ -622,7 +636,12 @@ def get_go_function_signature(source_code: str, function_name: str) -> dict[str,
                         elif param_count == 1:
                             params = text
                         param_count += 1
-                    elif child.type in ("type_identifier", "pointer_type", "array_type", "slice_type"):
+                    elif child.type in (
+                        "type_identifier",
+                        "pointer_type",
+                        "array_type",
+                        "slice_type",
+                    ):
                         # Return type is a direct child, not in parameter_list
                         returns = _get_node_text(child, source_bytes)
 
@@ -869,10 +888,12 @@ def extract_go_public_api(source_code: str) -> dict[str, str]:
             "public_functions": json.dumps(public_functions),
             "public_types": json.dumps(public_types),
             "public_count": str(len(public_functions) + len(public_types)),
-            "details": json.dumps({
-                "functions": public_functions,
-                "types": public_types,
-            }),
+            "details": json.dumps(
+                {
+                    "functions": public_functions,
+                    "types": public_types,
+                }
+            ),
         }
 
     except Exception as e:
@@ -966,7 +987,12 @@ def get_go_function_details(source_code: str, function_name: str) -> dict[str, s
                         elif param_count == 1:
                             params = text
                         param_count += 1
-                    elif child.type in ("type_identifier", "pointer_type", "array_type", "slice_type"):
+                    elif child.type in (
+                        "type_identifier",
+                        "pointer_type",
+                        "array_type",
+                        "slice_type",
+                    ):
                         # Return type is a direct child, not in parameter_list
                         returns = _get_node_text(child, source_bytes)
 
@@ -1124,10 +1150,12 @@ def list_go_function_calls(source_code: str, function_name: str) -> dict[str, st
                         callee = call_expr.children[0]
                         call_name = _get_node_text(callee, source_bytes)
                         calls.append(call_name)
-                        call_details.append({
-                            "name": call_name,
-                            "line": call_expr.start_point[0] + 1,
-                        })
+                        call_details.append(
+                            {
+                                "name": call_name,
+                                "line": call_expr.start_point[0] + 1,
+                            }
+                        )
 
                 return {
                     "calls": json.dumps(calls),
@@ -1151,10 +1179,12 @@ def list_go_function_calls(source_code: str, function_name: str) -> dict[str, st
                         callee = call_expr.children[0]
                         call_name = _get_node_text(callee, source_bytes)
                         method_calls.append(call_name)
-                        method_call_details.append({
-                            "name": call_name,
-                            "line": call_expr.start_point[0] + 1,
-                        })
+                        method_call_details.append(
+                            {
+                                "name": call_name,
+                                "line": call_expr.start_point[0] + 1,
+                            }
+                        )
 
                 return {
                     "calls": json.dumps(method_calls),
@@ -1215,13 +1245,17 @@ def find_go_function_usages(source_code: str, function_name: str) -> dict[str, s
 
                 # Check if this is a call to the target function
                 # Handle both direct calls and selector calls (e.g., pkg.Function)
-                if call_text == function_name or call_text.endswith("." + function_name):
+                if call_text == function_name or call_text.endswith(
+                    "." + function_name
+                ):
                     line = call_expr.start_point[0] + 1
                     usages.append(line)
-                    usage_details.append({
-                        "line": line,
-                        "context": "function_call",
-                    })
+                    usage_details.append(
+                        {
+                            "line": line,
+                            "context": "function_call",
+                        }
+                    )
 
         return {
             "usages": json.dumps(usages),
@@ -1363,7 +1397,9 @@ def get_go_type_hierarchy(source_code: str, type_name: str) -> dict[str, str]:
                     for child in type_spec.children:
                         if child.type == "struct_type":
                             # Find field declarations
-                            field_decls = _find_nodes_by_type(child, "field_declaration")
+                            field_decls = _find_nodes_by_type(
+                                child, "field_declaration"
+                            )
                             for field in field_decls:
                                 # Embedded fields have no field name
                                 has_name = False
@@ -1375,15 +1411,22 @@ def get_go_type_hierarchy(source_code: str, type_name: str) -> dict[str, str]:
                                 if not has_name:
                                     # This is an embedded field
                                     for fchild in field.children:
-                                        if fchild.type in ["type_identifier", "qualified_type"]:
-                                            embed_name = _get_node_text(fchild, source_bytes)
+                                        if fchild.type in [
+                                            "type_identifier",
+                                            "qualified_type",
+                                        ]:
+                                            embed_name = _get_node_text(
+                                                fchild, source_bytes
+                                            )
                                             embeds.append(embed_name)
 
                     has_embedding = len(embeds) > 0
 
                     return {
                         "embeds": json.dumps(embeds),
-                        "implements": json.dumps([]),  # Go doesn't explicitly declare interface implementation
+                        "implements": json.dumps(
+                            []
+                        ),  # Go doesn't explicitly declare interface implementation
                         "has_embedding": "true" if has_embedding else "false",
                         "type_name": type_name,
                     }
@@ -1445,11 +1488,13 @@ def find_go_definitions_by_comment(
                 docstring = _extract_godoc(source_code, func.start_byte)
                 if pattern.search(docstring):
                     functions.append(name)
-                    details.append({
-                        "name": name,
-                        "type": "function",
-                        "line": func.start_point[0] + 1,
-                    })
+                    details.append(
+                        {
+                            "name": name,
+                            "type": "function",
+                            "line": func.start_point[0] + 1,
+                        }
+                    )
 
         # Check methods
         method_nodes = _find_nodes_by_type(root, "method_declaration")
@@ -1459,11 +1504,13 @@ def find_go_definitions_by_comment(
                 docstring = _extract_godoc(source_code, method.start_byte)
                 if pattern.search(docstring):
                     functions.append(name)
-                    details.append({
-                        "name": name,
-                        "type": "method",
-                        "line": method.start_point[0] + 1,
-                    })
+                    details.append(
+                        {
+                            "name": name,
+                            "type": "method",
+                            "line": method.start_point[0] + 1,
+                        }
+                    )
 
         # Check types
         type_decls = _find_nodes_by_type(root, "type_declaration")
@@ -1475,11 +1522,13 @@ def find_go_definitions_by_comment(
                     docstring = _extract_godoc(source_code, type_decl.start_byte)
                     if pattern.search(docstring):
                         types.append(name)
-                        details.append({
-                            "name": name,
-                            "type": "type",
-                            "line": type_decl.start_point[0] + 1,
-                        })
+                        details.append(
+                            {
+                                "name": name,
+                                "type": "type",
+                                "line": type_decl.start_point[0] + 1,
+                            }
+                        )
 
         return {
             "functions": json.dumps(functions),
