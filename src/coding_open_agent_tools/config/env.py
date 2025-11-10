@@ -43,7 +43,7 @@ def parse_env_file(env_content: str) -> dict[str, str]:
     line_num = 0
 
     try:
-        for line in env_content.split("\n"):
+        for line in env_content.splitlines():
             line_num += 1
             # Strip whitespace
             line = line.strip()
@@ -129,7 +129,7 @@ def validate_env_file(env_content: str) -> dict[str, str]:
     errors = []
     warnings = []
 
-    for line_num, line in enumerate(env_content.split("\n"), 1):
+    for line_num, line in enumerate(env_content.splitlines(), 1):
         stripped = line.strip()
 
         # Skip empty lines and comments
@@ -212,7 +212,7 @@ def extract_env_variable(env_content: str, variable_name: str) -> dict[str, str]
     if not variable_name.strip():
         raise ValueError("variable_name cannot be empty")
 
-    for line_num, line in enumerate(env_content.split("\n"), 1):
+    for line_num, line in enumerate(env_content.splitlines(), 1):
         stripped = line.strip()
 
         # Skip empty lines and comments

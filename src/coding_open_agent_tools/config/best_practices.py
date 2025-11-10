@@ -5,6 +5,7 @@ Provides tools for checking gitignore coverage, exposed configs, and file permis
 
 import json
 import os
+import platform
 import re
 from typing import Any, Callable
 
@@ -85,7 +86,7 @@ def check_gitignore_security(gitignore_content: str) -> dict[str, str]:
 
     # Parse existing patterns from gitignore
     existing_patterns = set()
-    for line in gitignore_content.split("\n"):
+    for line in gitignore_content.splitlines():
         stripped = line.strip()
         # Skip comments and empty lines
         if stripped and not stripped.startswith("#"):
@@ -283,6 +284,10 @@ def validate_config_permissions(file_permissions: str) -> dict[str, str]:
 
     Checks for overly permissive file permissions on sensitive configs.
 
+    Note: This function validates Unix-style permissions (Linux/macOS/BSD).
+    On Windows, it returns a message indicating permission validation is not
+    supported, as Windows uses a different permissions model (ACLs).
+
     Args:
         file_permissions: JSON string of file paths and their permissions
                          Format: {"path/to/file": "0644", "path/to/key": "0600"}
@@ -308,6 +313,20 @@ def validate_config_permissions(file_permissions: str) -> dict[str, str]:
 
     if not isinstance(permissions_dict, dict):
         raise ValueError("file_permissions must be a JSON object/dictionary")
+
+    # Windows uses ACLs, not Unix permissions - skip validation on Windows
+    if platform.system() == "Windows":
+        return {
+            "is_secure": "true",
+            "violation_count": "0",
+            "violations": json.dumps([]),
+            "recommendations": json.dumps([
+                "Permission validation is not supported on Windows",
+                "Windows uses ACLs (Access Control Lists) instead of Unix permissions",
+                "Use Windows File Explorer or icacls command to manage file permissions",
+                "Ensure sensitive files like .env are not readable by all users"
+            ]),
+        }
 
     violations = []
     recommendations = []

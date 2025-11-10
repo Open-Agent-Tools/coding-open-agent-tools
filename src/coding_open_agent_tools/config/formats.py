@@ -109,7 +109,7 @@ def validate_ini_syntax(ini_content: str) -> dict[str, str]:
 
         # Check for duplicate sections
         seen_sections = set()
-        for line_num, line in enumerate(ini_content.split("\n"), 1):
+        for line_num, line in enumerate(ini_content.splitlines(), 1):
             stripped = line.strip()
 
             # Check section headers
@@ -179,7 +179,7 @@ def parse_properties_file(properties_content: str) -> dict[str, str]:
 
     try:
         properties = {}
-        lines = properties_content.split("\n")
+        lines = properties_content.splitlines()
         i = 0
 
         while i < len(lines):
