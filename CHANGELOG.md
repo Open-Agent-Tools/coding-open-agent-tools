@@ -10,6 +10,21 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Planned
 - Advanced Analysis Module (security, performance, compliance scanning)
 
+## [0.9.1] - 2025-11-08
+
+### Fixed
+- **Windows Compatibility**: Full cross-platform support for config module
+  - Line ending handling: Replace `split("\n")` with `splitlines()` to handle Unix (\n), Windows (\r\n), and Mac (\r) line endings
+  - Affects: `parse_env_file`, `validate_env_file`, `extract_env_variable`, `validate_ini_syntax`, `parse_properties_file`, `check_gitignore_security`
+  - Permission validation: Add platform detection in `validate_config_permissions`
+  - Windows: Skip Unix permission checks, return ACL-specific guidance
+  - Unix/Linux/macOS/BSD: Validate octal permissions (0600, 0644) as before
+
+### Testing
+- All 1,244 tests passing on Unix systems
+- Config module functions properly handle all line ending types
+- Public API verified (28 config tools, 286 total)
+
 ## [0.9.0] - 2025-11-08
 
 ### Added
