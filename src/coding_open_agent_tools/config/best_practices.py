@@ -320,12 +320,14 @@ def validate_config_permissions(file_permissions: str) -> dict[str, str]:
             "is_secure": "true",
             "violation_count": "0",
             "violations": json.dumps([]),
-            "recommendations": json.dumps([
-                "Permission validation is not supported on Windows",
-                "Windows uses ACLs (Access Control Lists) instead of Unix permissions",
-                "Use Windows File Explorer or icacls command to manage file permissions",
-                "Ensure sensitive files like .env are not readable by all users"
-            ]),
+            "recommendations": json.dumps(
+                [
+                    "Permission validation is not supported on Windows",
+                    "Windows uses ACLs (Access Control Lists) instead of Unix permissions",
+                    "Use Windows File Explorer or icacls command to manage file permissions",
+                    "Ensure sensitive files like .env are not readable by all users",
+                ]
+            ),
         }
 
     violations = []
