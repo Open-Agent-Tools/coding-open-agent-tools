@@ -101,7 +101,7 @@ print("Example 2: Get function signature without reading full code")
 print("=" * 60)
 
 signature = navigation.get_python_function_signature(source_code, "calculate_total")
-print(f"Function: calculate_total")
+print("Function: calculate_total")
 print(f"Signature: {signature['signature']}")
 print(f"Has return type: {signature['has_return_type']}")
 print()
@@ -112,7 +112,7 @@ print("Example 3: Get function docstring")
 print("=" * 60)
 
 docstring = navigation.get_python_function_docstring(source_code, "process_data")
-print(f"Function: process_data")
+print("Function: process_data")
 print(f"Docstring: {docstring['docstring'][:100]}...")
 print(f"Has docstring: {docstring['has_docstring']}")
 print()
@@ -137,13 +137,15 @@ print("Example 5: Get line numbers for targeted file reading")
 print("=" * 60)
 
 line_nums = navigation.get_python_function_line_numbers(source_code, "process_data")
-print(f"Function: process_data")
+print("Function: process_data")
 print(f"Start line: {line_nums['start_line']}")
 print(f"End line: {line_nums['end_line']}")
 print(f"Line count: {line_nums['line_count']}")
 print()
 print("Now you can use Read tool with offset/limit:")
-print(f"  Read(file_path='module.py', offset={line_nums['start_line']}, limit={line_nums['line_count']})")
+print(
+    f"  Read(file_path='module.py', offset={line_nums['start_line']}, limit={line_nums['line_count']})"
+)
 print()
 
 # Example 6: Check if function exists (quick validation)
@@ -154,7 +156,9 @@ print("=" * 60)
 exists_check = navigation.check_python_function_exists(source_code, "calculate_total")
 print(f"Function 'calculate_total' exists: {exists_check['exists']}")
 
-missing_check = navigation.check_python_function_exists(source_code, "nonexistent_function")
+missing_check = navigation.check_python_function_exists(
+    source_code, "nonexistent_function"
+)
 print(f"Function 'nonexistent_function' exists: {missing_check['exists']}")
 print()
 
@@ -174,7 +178,7 @@ print("Example 8: Get methods for a specific class")
 print("=" * 60)
 
 methods = navigation.get_python_class_methods(source_code, "DataProcessor")
-print(f"Class: DataProcessor")
+print("Class: DataProcessor")
 print(f"Methods: {methods['methods']}")
 print(f"Method count: {methods['method_count']}")
 print()

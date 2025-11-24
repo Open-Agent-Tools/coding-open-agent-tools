@@ -87,7 +87,19 @@ BREAKING CHANGE: API endpoint changed
 
     def test_all_commit_types(self) -> None:
         """Test all valid commit types."""
-        types = ["feat", "fix", "docs", "style", "refactor", "perf", "test", "build", "ci", "chore", "revert"]
+        types = [
+            "feat",
+            "fix",
+            "docs",
+            "style",
+            "refactor",
+            "perf",
+            "test",
+            "build",
+            "ci",
+            "chore",
+            "revert",
+        ]
 
         for commit_type in types:
             result = validate_conventional_commit(f"{commit_type}: test message")

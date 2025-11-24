@@ -169,9 +169,7 @@ class TestValidateHookSyntax:
             hook_file.write_text("#!/bin/bash\nif [ test\n")
 
             mock_run.return_value = Mock(
-                returncode=1,
-                stdout="",
-                stderr="pre-commit: line 2: syntax error"
+                returncode=1, stdout="", stderr="pre-commit: line 2: syntax error"
             )
 
             result = validate_hook_syntax(tmpdir, "pre-commit")
@@ -520,11 +518,7 @@ class TestTestHookExecution:
             hook_file.write_text("#!/bin/bash\necho 'test'\n")
             hook_file.chmod(0o755)
 
-            mock_run.return_value = Mock(
-                returncode=0,
-                stdout="test output",
-                stderr=""
-            )
+            mock_run.return_value = Mock(returncode=0, stdout="test output", stderr="")
 
             result = test_hook_execution(tmpdir, "pre-commit", "")
             assert result["can_execute"] == "true"

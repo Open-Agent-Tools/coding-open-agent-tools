@@ -6,9 +6,10 @@ and get actionable metrics without manual git command execution.
 Token Savings: 70-85% (structured metrics vs parsing git output)
 """
 
-from coding_open_agent_tools.git import health
-import tempfile
 import subprocess
+import tempfile
+
+from coding_open_agent_tools.git import health
 
 # Create a temporary git repository for demonstration
 print("=" * 60)
@@ -21,15 +22,23 @@ print(f"Created temp repo at: {repo_path}\n")
 
 # Initialize git repo
 subprocess.run(["git", "init"], cwd=repo_path, capture_output=True)
-subprocess.run(["git", "config", "user.name", "Demo User"], cwd=repo_path, capture_output=True)
-subprocess.run(["git", "config", "user.email", "demo@example.com"], cwd=repo_path, capture_output=True)
+subprocess.run(
+    ["git", "config", "user.name", "Demo User"], cwd=repo_path, capture_output=True
+)
+subprocess.run(
+    ["git", "config", "user.email", "demo@example.com"],
+    cwd=repo_path,
+    capture_output=True,
+)
 
 # Create some commits
 for i in range(5):
     with open(f"{repo_path}/file{i}.txt", "w") as f:
         f.write(f"Content for file {i}\n" * 100)
     subprocess.run(["git", "add", "."], cwd=repo_path, capture_output=True)
-    subprocess.run(["git", "commit", "-m", f"Commit {i+1}"], cwd=repo_path, capture_output=True)
+    subprocess.run(
+        ["git", "commit", "-m", f"Commit {i + 1}"], cwd=repo_path, capture_output=True
+    )
 
 print("Demo repository created with 5 commits\n")
 
@@ -56,7 +65,7 @@ print(f"GC needed: {gc_check['gc_needed']}")
 print(f"Loose objects: {gc_check['loose_objects_count']}")
 print(f"Pack files: {gc_check['pack_files_count']}")
 print(f"Repository size: {gc_check['repo_size_mb']} MB")
-if gc_check['gc_needed'] == "true":
+if gc_check["gc_needed"] == "true":
     print(f"Recommendations: {gc_check['recommendations']}")
 print()
 
@@ -67,7 +76,7 @@ print("=" * 60)
 
 large_files = health.find_large_files(repo_path, "1")  # Files > 1KB
 print(f"Large files found: {large_files['large_files_count']}")
-if int(large_files['large_files_count']) > 0:
+if int(large_files["large_files_count"]) > 0:
     print(f"Files: {large_files['files_list']}")
 print(f"Total size: {large_files['total_size_kb']} KB")
 print()
@@ -95,7 +104,7 @@ print("=" * 60)
 health_check = health.check_repository_health(repo_path)
 print(f"Has issues: {health_check['has_issues']}")
 print(f"Issue count: {health_check['issue_count']}")
-if int(health_check['issue_count']) > 0:
+if int(health_check["issue_count"]) > 0:
     print(f"Issues: {health_check['issues']}")
 print(f"Recommendations: {health_check['recommendations']}")
 print()

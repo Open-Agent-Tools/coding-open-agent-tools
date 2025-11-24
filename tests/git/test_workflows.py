@@ -199,7 +199,12 @@ class TestAnalyzeMergeStrategy:
             output = "abc123 Merge branch 'feature'\ndef456 Add feature\n"
             mock_run.return_value = Mock(returncode=0, stdout=output, stderr="")
             result = analyze_merge_strategy(tmpdir, "main")
-            assert result["dominant_strategy"] in ["merge", "rebase", "squash", "unknown"]
+            assert result["dominant_strategy"] in [
+                "merge",
+                "rebase",
+                "squash",
+                "unknown",
+            ]
 
 
 class TestValidateCommitFrequency:

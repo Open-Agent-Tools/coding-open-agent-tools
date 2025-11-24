@@ -1,6 +1,7 @@
 """Tests for advanced code analysis detectors."""
 
 import json
+
 import pytest
 
 from coding_open_agent_tools.advanced_analysis.detectors import (
@@ -240,13 +241,13 @@ class TestFindXssVulnerabilities:
 
     def test_safe_text_content(self):
         """Test that safe DOM manipulation is not flagged."""
-        code = 'element.textContent = userInput;'
+        code = "element.textContent = userInput;"
         result = find_xss_vulnerabilities(code, "javascript")
         assert result["has_vulnerabilities"] == "false"
 
     def test_innerhtml_vulnerability(self):
         """Test detection of innerHTML XSS."""
-        code = 'element.innerHTML = userInput;'
+        code = "element.innerHTML = userInput;"
         result = find_xss_vulnerabilities(code, "javascript")
         assert result["has_vulnerabilities"] == "true"
         assert int(result["vulnerability_count"]) >= 1
@@ -255,7 +256,7 @@ class TestFindXssVulnerabilities:
 
     def test_document_write_vulnerability(self):
         """Test detection of document.write XSS."""
-        code = 'document.write(userData);'
+        code = "document.write(userData);"
         result = find_xss_vulnerabilities(code, "javascript")
         assert result["has_vulnerabilities"] == "true"
         vulns = json.loads(result["vulnerabilities"])
@@ -269,7 +270,7 @@ class TestFindXssVulnerabilities:
 
     def test_react_dangerously_set_html(self):
         """Test detection of React dangerouslySetInnerHTML."""
-        code = '<div dangerouslySetInnerHTML={{__html: userContent}} />'
+        code = "<div dangerouslySetInnerHTML={{__html: userContent}} />"
         result = find_xss_vulnerabilities(code, "javascript")
         assert result["has_vulnerabilities"] == "true"
         vulns = json.loads(result["vulnerabilities"])
@@ -476,7 +477,9 @@ class TestDetectMemoryLeakPatterns:
         assert result["has_leak_patterns"] == "true"
         assert int(result["pattern_count"]) >= 1
         patterns = json.loads(result["patterns"])
-        assert any("file" in str(p).lower() or "close" in str(p).lower() for p in patterns)
+        assert any(
+            "file" in str(p).lower() or "close" in str(p).lower() for p in patterns
+        )
 
     def test_unremoved_event_listener(self):
         """Test detection of unremoved event listeners."""
@@ -500,7 +503,10 @@ class TestDetectMemoryLeakPatterns:
         result = detect_memory_leak_patterns(code, "javascript")
         assert result["has_leak_patterns"] == "true"
         patterns = json.loads(result["patterns"])
-        assert any("interval" in str(p).lower() or "timeout" in str(p).lower() for p in patterns)
+        assert any(
+            "interval" in str(p).lower() or "timeout" in str(p).lower()
+            for p in patterns
+        )
 
     def test_global_list_accumulation(self):
         """Test detection of global list/array accumulation."""
@@ -562,7 +568,10 @@ class TestFindBlockingIo:
         assert result["has_blocking_io"] == "true"
         assert int(result["blocking_count"]) >= 1
         operations = json.loads(result["operations"])
-        assert any("http" in str(op).lower() or "request" in str(op).lower() for op in operations)
+        assert any(
+            "http" in str(op).lower() or "request" in str(op).lower()
+            for op in operations
+        )
 
     def test_sync_file_io(self):
         """Test detection of synchronous file I/O."""
@@ -741,7 +750,9 @@ class TestValidateAccessibility:
         result = validate_accessibility(code)
         assert result["has_accessibility_issues"] == "true"
         issues = json.loads(result["issues"])
-        assert any("button" in str(i).lower() or "label" in str(i).lower() for i in issues)
+        assert any(
+            "button" in str(i).lower() or "label" in str(i).lower() for i in issues
+        )
 
     def test_input_without_label(self):
         """Test detection of inputs without labels."""
@@ -749,7 +760,9 @@ class TestValidateAccessibility:
         result = validate_accessibility(code)
         assert result["has_accessibility_issues"] == "true"
         issues = json.loads(result["issues"])
-        assert any("input" in str(i).lower() or "label" in str(i).lower() for i in issues)
+        assert any(
+            "input" in str(i).lower() or "label" in str(i).lower() for i in issues
+        )
 
     def test_non_semantic_html(self):
         """Test detection of non-semantic HTML structure."""

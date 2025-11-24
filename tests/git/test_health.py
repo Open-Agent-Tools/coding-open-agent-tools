@@ -44,7 +44,9 @@ class TestFindLargeFiles:
 
     def test_invalid_size_threshold_format(self) -> None:
         """Test ValueError when size_threshold_mb is not a valid number."""
-        with pytest.raises(ValueError, match="size_threshold_mb must be a valid number"):
+        with pytest.raises(
+            ValueError, match="size_threshold_mb must be a valid number"
+        ):
             find_large_files("/tmp", "not_a_number")
 
     def test_negative_size_threshold(self) -> None:
@@ -107,9 +109,7 @@ class TestFindLargeFiles:
             small_file = Path(tmpdir) / "small.txt"
             small_file.write_text("small content")
 
-            mock_run.return_value = Mock(
-                returncode=0, stdout="small.txt\n", stderr=""
-            )
+            mock_run.return_value = Mock(returncode=0, stdout="small.txt\n", stderr="")
             result = find_large_files(tmpdir, "10")
 
             assert result["large_files_count"] == "0"
@@ -125,9 +125,7 @@ class TestFindLargeFiles:
             large_file = Path(tmpdir) / "large.bin"
             large_file.write_bytes(b"x" * (2 * 1024 * 1024))  # 2 MB
 
-            mock_run.return_value = Mock(
-                returncode=0, stdout="large.bin\n", stderr=""
-            )
+            mock_run.return_value = Mock(returncode=0, stdout="large.bin\n", stderr="")
             result = find_large_files(tmpdir, "1")
 
             assert int(result["large_files_count"]) == 1
@@ -507,7 +505,9 @@ class TestDetectCorruptedObjects:
             (Path(tmpdir) / ".git").mkdir()
 
             mock_run.return_value = Mock(
-                returncode=0, stdout="", stderr="",
+                returncode=0,
+                stdout="",
+                stderr="",
             )
             result = detect_corrupted_objects(tmpdir)
 
@@ -621,9 +621,7 @@ class TestAnalyzeRepositoryActivity:
                 "def456|2024-01-15 11:00:00 +0000|Jane Smith\n"
                 "ghi789|2024-01-16 09:00:00 +0000|John Doe\n"
             )
-            mock_run.return_value = Mock(
-                returncode=0, stdout=commits_output, stderr=""
-            )
+            mock_run.return_value = Mock(returncode=0, stdout=commits_output, stderr="")
             result = analyze_repository_activity(tmpdir, "30")
 
             assert result["total_commits"] == "3"
@@ -687,7 +685,10 @@ class TestCheckWorktreeClean:
             assert result["is_clean"] == "false"
             # Due to strip(), first line becomes "M file1.txt" (staged), only second is modified
             assert int(result["modified_count"]) >= 1
-            assert "modified" in result["status_summary"] or "staged" in result["status_summary"]
+            assert (
+                "modified" in result["status_summary"]
+                or "staged" in result["status_summary"]
+            )
 
     @patch("subprocess.run")
     def test_staged_files(self, mock_run: Mock) -> None:
@@ -761,7 +762,9 @@ class TestGetRepositoryMetrics:
                 if "rev-list" in cmd:
                     return Mock(returncode=0, stdout="150\n", stderr="")
                 elif "branch" in cmd:
-                    return Mock(returncode=0, stdout="main\ndevelop\nfeature\n", stderr="")
+                    return Mock(
+                        returncode=0, stdout="main\ndevelop\nfeature\n", stderr=""
+                    )
                 elif "tag" in cmd:
                     return Mock(returncode=0, stdout="v1.0\nv2.0\n", stderr="")
                 elif "log" in cmd and "--format=%an" in cmd:

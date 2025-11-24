@@ -47,7 +47,9 @@ class TestParseGitConfig:
             config_dir = Path(tmpdir) / ".git"
             config_dir.mkdir()
             config_file = config_dir / "config"
-            config_file.write_text("[core]\n\trepositoryformatversion = 0\n[remote \"origin\"]\n\turl = https://github.com/user/repo.git\n")
+            config_file.write_text(
+                '[core]\n\trepositoryformatversion = 0\n[remote "origin"]\n\turl = https://github.com/user/repo.git\n'
+            )
 
             result = parse_git_config(tmpdir)
             assert result["has_config"] == "true"
@@ -147,7 +149,10 @@ class TestValidateGitattributes:
         """Test invalid gitattributes syntax."""
         content = "invalid_line\n"
         result = validate_gitattributes(content)
-        assert int(result["errors"].count("Invalid syntax") if result["errors"] else 0) >= 0
+        assert (
+            int(result["errors"].count("Invalid syntax") if result["errors"] else 0)
+            >= 0
+        )
 
 
 class TestAnalyzeConfigSecurity:
@@ -181,7 +186,9 @@ class TestAnalyzeConfigSecurity:
             config_dir = Path(tmpdir) / ".git"
             config_dir.mkdir()
             config_file = config_dir / "config"
-            config_file.write_text("[remote \"origin\"]\n\turl = https://github.com/user/repo.git\n")
+            config_file.write_text(
+                '[remote "origin"]\n\turl = https://github.com/user/repo.git\n'
+            )
 
             result = analyze_config_security(tmpdir)
             assert result["is_secure"] == "true"
@@ -193,7 +200,9 @@ class TestAnalyzeConfigSecurity:
             config_dir = Path(tmpdir) / ".git"
             config_dir.mkdir()
             config_file = config_dir / "config"
-            config_file.write_text("[remote \"origin\"]\n\turl = http://example.com/repo.git\n")
+            config_file.write_text(
+                '[remote "origin"]\n\turl = http://example.com/repo.git\n'
+            )
 
             result = analyze_config_security(tmpdir)
             assert result["is_secure"] == "false"

@@ -159,11 +159,9 @@ class TestValidatePackageJson:
 
     def test_valid_package_json(self) -> None:
         """Test valid package.json."""
-        content = json.dumps({
-            "name": "test-package",
-            "version": "1.0.0",
-            "description": "Test package"
-        })
+        content = json.dumps(
+            {"name": "test-package", "version": "1.0.0", "description": "Test package"}
+        )
         result = validation.validate_package_json(content)
         assert result["is_valid"] == "true"
 
@@ -176,10 +174,7 @@ class TestValidatePackageJson:
 
     def test_invalid_version_format(self) -> None:
         """Test detection of invalid version format."""
-        content = json.dumps({
-            "name": "test",
-            "version": "not-semver"
-        })
+        content = json.dumps({"name": "test", "version": "not-semver"})
         result = validation.validate_package_json(content)
         assert result["is_valid"] == "false"
         assert "Invalid version format" in result["error_message"]
@@ -200,13 +195,15 @@ class TestParseTsconfigJson:
 
     def test_valid_tsconfig(self) -> None:
         """Test valid tsconfig.json parsing."""
-        content = json.dumps({
-            "compilerOptions": {
-                "target": "ES2020",
-                "module": "commonjs",
-                "strict": True
+        content = json.dumps(
+            {
+                "compilerOptions": {
+                    "target": "ES2020",
+                    "module": "commonjs",
+                    "strict": True,
+                }
             }
-        })
+        )
         result = validation.parse_tsconfig_json(content)
         assert result["is_valid"] == "true"
         assert result["target"] == "ES2020"
@@ -356,21 +353,17 @@ class TestDetectCircularDependencies:
 
     def test_no_circular_dependencies(self) -> None:
         """Test modules without circular dependencies."""
-        structure = json.dumps({
-            "moduleA": ["moduleB"],
-            "moduleB": ["moduleC"],
-            "moduleC": []
-        })
+        structure = json.dumps(
+            {"moduleA": ["moduleB"], "moduleB": ["moduleC"], "moduleC": []}
+        )
         result = validation.detect_circular_dependencies(structure)
         assert result["has_circular"] == "false"
 
     def test_circular_dependencies_detected(self) -> None:
         """Test detection of circular dependencies."""
-        structure = json.dumps({
-            "moduleA": ["moduleB"],
-            "moduleB": ["moduleC"],
-            "moduleC": ["moduleA"]
-        })
+        structure = json.dumps(
+            {"moduleA": ["moduleB"], "moduleB": ["moduleC"], "moduleC": ["moduleA"]}
+        )
         result = validation.detect_circular_dependencies(structure)
         assert result["has_circular"] == "true"
         assert int(result["cycle_count"]) > 0
@@ -434,13 +427,13 @@ class TestCheckEslintConfig:
 
     def test_valid_eslint_config(self) -> None:
         """Test valid ESLint configuration."""
-        config = json.dumps({
-            "extends": ["eslint:recommended"],
-            "parser": "@typescript-eslint/parser",
-            "rules": {
-                "semi": ["error", "always"]
+        config = json.dumps(
+            {
+                "extends": ["eslint:recommended"],
+                "parser": "@typescript-eslint/parser",
+                "rules": {"semi": ["error", "always"]},
             }
-        })
+        )
         result = validation.check_eslint_config(config)
         assert result["is_valid"] == "true"
         assert result["parser"] == "@typescript-eslint/parser"

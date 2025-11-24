@@ -76,7 +76,7 @@ class TestAnalyzeDiffStats:
             mock_run.return_value = Mock(
                 returncode=0,
                 stdout="5 files changed, 120 insertions(+), 45 deletions(-)",
-                stderr=""
+                stderr="",
             )
             result = analyze_diff_stats(tmpdir, "ref1", "ref2")
             assert result["files_changed"] == "5"
@@ -152,9 +152,15 @@ class TestCalculateCodeChurn:
             def side_effect(*args, **kwargs):
                 call_count[0] += 1
                 if call_count[0] == 1:
-                    return Mock(returncode=0, stdout="abc123 commit1\ndef456 commit2", stderr="")
+                    return Mock(
+                        returncode=0, stdout="abc123 commit1\ndef456 commit2", stderr=""
+                    )
                 else:
-                    return Mock(returncode=0, stdout="10\t5\tfile.py\n20\t10\tfile.py", stderr="")
+                    return Mock(
+                        returncode=0,
+                        stdout="10\t5\tfile.py\n20\t10\tfile.py",
+                        stderr="",
+                    )
 
             mock_run.side_effect = side_effect
             result = calculate_code_churn(tmpdir, "file.py", "30")

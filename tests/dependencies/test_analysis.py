@@ -75,17 +75,14 @@ class TestParsePackageJson:
 
     def test_valid_package_json(self) -> None:
         """Test parsing valid package.json."""
-        content = json.dumps({
-            "name": "test-app",
-            "version": "1.0.0",
-            "dependencies": {
-                "express": "^4.18.0",
-                "lodash": "~4.17.0"
-            },
-            "devDependencies": {
-                "jest": "^29.0.0"
+        content = json.dumps(
+            {
+                "name": "test-app",
+                "version": "1.0.0",
+                "dependencies": {"express": "^4.18.0", "lodash": "~4.17.0"},
+                "devDependencies": {"jest": "^29.0.0"},
             }
-        })
+        )
         result = analysis.parse_package_json(content)
         assert result["package_name"] == "test-app"
         assert result["version"] == "1.0.0"
@@ -94,22 +91,15 @@ class TestParsePackageJson:
 
     def test_package_with_scripts(self) -> None:
         """Test detection of scripts."""
-        content = json.dumps({
-            "name": "app",
-            "scripts": {
-                "test": "jest",
-                "build": "webpack"
-            }
-        })
+        content = json.dumps(
+            {"name": "app", "scripts": {"test": "jest", "build": "webpack"}}
+        )
         result = analysis.parse_package_json(content)
         assert result["has_scripts"] == "true"
 
     def test_package_with_workspaces(self) -> None:
         """Test detection of workspaces."""
-        content = json.dumps({
-            "name": "monorepo",
-            "workspaces": ["packages/*"]
-        })
+        content = json.dumps({"name": "monorepo", "workspaces": ["packages/*"]})
         result = analysis.parse_package_json(content)
         assert result["has_workspaces"] == "true"
 
@@ -207,19 +197,23 @@ class TestDetectVersionConflicts:
 
     def test_no_conflicts(self) -> None:
         """Test dependencies without conflicts."""
-        deps = json.dumps([
-            {"name": "pkg1", "version": "1.0.0", "specifier": "=="},
-            {"name": "pkg2", "version": "2.0.0", "specifier": "=="}
-        ])
+        deps = json.dumps(
+            [
+                {"name": "pkg1", "version": "1.0.0", "specifier": "=="},
+                {"name": "pkg2", "version": "2.0.0", "specifier": "=="},
+            ]
+        )
         result = analysis.detect_version_conflicts(deps)
         assert result["has_conflicts"] == "false"
 
     def test_conflicting_versions(self) -> None:
         """Test detection of conflicting versions."""
-        deps = json.dumps([
-            {"name": "pkg1", "version": "1.0.0", "specifier": "=="},
-            {"name": "pkg1", "version": "2.0.0", "specifier": "=="}
-        ])
+        deps = json.dumps(
+            [
+                {"name": "pkg1", "version": "1.0.0", "specifier": "=="},
+                {"name": "pkg1", "version": "2.0.0", "specifier": "=="},
+            ]
+        )
         result = analysis.detect_version_conflicts(deps)
         assert result["has_conflicts"] == "true"
         assert int(result["conflict_count"]) > 0
@@ -280,30 +274,36 @@ class TestCheckLicenseConflicts:
 
     def test_permissive_licenses(self) -> None:
         """Test packages with permissive licenses."""
-        pkgs = json.dumps([
-            {"name": "pkg1", "license": "MIT"},
-            {"name": "pkg2", "license": "Apache-2.0"},
-            {"name": "pkg3", "license": "BSD-3-Clause"}
-        ])
+        pkgs = json.dumps(
+            [
+                {"name": "pkg1", "license": "MIT"},
+                {"name": "pkg2", "license": "Apache-2.0"},
+                {"name": "pkg3", "license": "BSD-3-Clause"},
+            ]
+        )
         result = analysis.check_license_conflicts(pkgs)
         assert result["permissive_count"] == "3"
         assert result["has_conflicts"] == "false"
 
     def test_copyleft_licenses(self) -> None:
         """Test detection of copyleft licenses."""
-        pkgs = json.dumps([
-            {"name": "pkg1", "license": "GPL-3.0"},
-            {"name": "pkg2", "license": "AGPL-3.0"}
-        ])
+        pkgs = json.dumps(
+            [
+                {"name": "pkg1", "license": "GPL-3.0"},
+                {"name": "pkg2", "license": "AGPL-3.0"},
+            ]
+        )
         result = analysis.check_license_conflicts(pkgs)
         assert int(result["copyleft_count"]) == 2
 
     def test_license_conflicts(self) -> None:
         """Test detection of license conflicts."""
-        pkgs = json.dumps([
-            {"name": "pkg1", "license": "GPL-3.0"},
-            {"name": "pkg2", "license": "Proprietary"}
-        ])
+        pkgs = json.dumps(
+            [
+                {"name": "pkg1", "license": "GPL-3.0"},
+                {"name": "pkg2", "license": "Proprietary"},
+            ]
+        )
         result = analysis.check_license_conflicts(pkgs)
         assert result["has_conflicts"] == "true"
 
@@ -323,23 +323,27 @@ class TestCalculateDependencyTree:
 
     def test_simple_tree(self) -> None:
         """Test simple dependency tree."""
-        deps = json.dumps([
-            {"name": "app", "requires": ["lib1", "lib2"]},
-            {"name": "lib1", "requires": []},
-            {"name": "lib2", "requires": []}
-        ])
+        deps = json.dumps(
+            [
+                {"name": "app", "requires": ["lib1", "lib2"]},
+                {"name": "lib1", "requires": []},
+                {"name": "lib2", "requires": []},
+            ]
+        )
         result = analysis.calculate_dependency_tree(deps)
         assert int(result["root_packages"]) >= 1
         assert int(result["leaf_packages"]) >= 2
 
     def test_deep_tree(self) -> None:
         """Test deep dependency tree."""
-        deps = json.dumps([
-            {"name": "app", "requires": ["lib1"]},
-            {"name": "lib1", "requires": ["lib2"]},
-            {"name": "lib2", "requires": ["lib3"]},
-            {"name": "lib3", "requires": []}
-        ])
+        deps = json.dumps(
+            [
+                {"name": "app", "requires": ["lib1"]},
+                {"name": "lib1", "requires": ["lib2"]},
+                {"name": "lib2", "requires": ["lib3"]},
+                {"name": "lib3", "requires": []},
+            ]
+        )
         result = analysis.calculate_dependency_tree(deps)
         assert int(result["max_depth"]) >= 3
 
@@ -391,22 +395,14 @@ class TestIdentifyCircularDependencyChains:
 
     def test_no_circular_dependencies(self) -> None:
         """Test graph without circular dependencies."""
-        graph = json.dumps({
-            "A": ["B"],
-            "B": ["C"],
-            "C": []
-        })
+        graph = json.dumps({"A": ["B"], "B": ["C"], "C": []})
         result = analysis.identify_circular_dependency_chains(graph)
         assert result["has_circular"] == "false"
         assert result["cycle_count"] == "0"
 
     def test_circular_dependencies(self) -> None:
         """Test detection of circular dependencies."""
-        graph = json.dumps({
-            "A": ["B"],
-            "B": ["C"],
-            "C": ["A"]
-        })
+        graph = json.dumps({"A": ["B"], "B": ["C"], "C": ["A"]})
         result = analysis.identify_circular_dependency_chains(graph)
         assert result["has_circular"] == "true"
         assert int(result["cycle_count"]) > 0
@@ -457,19 +453,25 @@ class TestAnalyzeSecurityAdvisories:
     def test_no_vulnerabilities(self) -> None:
         """Test when no vulnerabilities found."""
         pkgs = json.dumps([{"name": "safe-lib", "version": "1.0.0"}])
-        advisories = json.dumps([{"package": "other-lib", "version": "1.0.0", "cve": "CVE-2023-1234"}])
+        advisories = json.dumps(
+            [{"package": "other-lib", "version": "1.0.0", "cve": "CVE-2023-1234"}]
+        )
         result = analysis.analyze_security_advisories(pkgs, advisories)
         assert result["has_vulnerabilities"] == "false"
 
     def test_vulnerabilities_found(self) -> None:
         """Test when vulnerabilities are found."""
         pkgs = json.dumps([{"name": "vuln-lib", "version": "1.0.0"}])
-        advisories = json.dumps([{
-            "package": "vuln-lib",
-            "version": "1.0.0",
-            "cve": "CVE-2023-1234",
-            "severity": "high"
-        }])
+        advisories = json.dumps(
+            [
+                {
+                    "package": "vuln-lib",
+                    "version": "1.0.0",
+                    "cve": "CVE-2023-1234",
+                    "severity": "high",
+                }
+            ]
+        )
         result = analysis.analyze_security_advisories(pkgs, advisories)
         assert result["has_vulnerabilities"] == "true"
         assert int(result["vulnerability_count"]) > 0
@@ -477,11 +479,15 @@ class TestAnalyzeSecurityAdvisories:
     def test_critical_vulnerabilities(self) -> None:
         """Test detection of critical vulnerabilities."""
         pkgs = json.dumps([{"name": "lib", "version": "1.0.0"}])
-        advisories = json.dumps([{
-            "package": "lib",
-            "version": "1.0.0",
-            "cve": "CVE-2023-9999",
-            "severity": "critical"
-        }])
+        advisories = json.dumps(
+            [
+                {
+                    "package": "lib",
+                    "version": "1.0.0",
+                    "cve": "CVE-2023-9999",
+                    "severity": "critical",
+                }
+            ]
+        )
         result = analysis.analyze_security_advisories(pkgs, advisories)
         assert int(result["critical_count"]) > 0

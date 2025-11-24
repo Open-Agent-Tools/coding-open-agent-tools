@@ -407,7 +407,7 @@ def detect_sql_injection_patterns(source_code: str, language: str) -> dict[str, 
                 if (
                     "+" in stripped
                     or ".format(" in stripped
-                    or "f\"" in stripped
+                    or 'f"' in stripped
                     or "f'" in stripped
                 ):
                     vulnerabilities.append(
@@ -474,9 +474,13 @@ def detect_sql_injection_patterns(source_code: str, language: str) -> dict[str, 
         remediation.append("Never concatenate user input into SQL queries")
         remediation.append("Use ORM methods that automatically parameterize")
         if lang == "python":
-            remediation.append("Use execute() with tuple parameters: execute(query, (param1, param2))")
+            remediation.append(
+                "Use execute() with tuple parameters: execute(query, (param1, param2))"
+            )
         elif lang in ["javascript", "typescript"]:
-            remediation.append("Use placeholders: query('SELECT * FROM users WHERE id = ?', [userId])")
+            remediation.append(
+                "Use placeholders: query('SELECT * FROM users WHERE id = ?', [userId])"
+            )
 
     return {
         "has_vulnerabilities": "true" if vulnerabilities else "false",
@@ -628,7 +632,9 @@ def find_xss_vulnerabilities(source_code: str, language: str) -> dict[str, str]:
         remediation.append("Sanitize HTML with DOMPurify or similar libraries")
         if lang in ["javascript", "typescript"]:
             remediation.append("Avoid eval(), document.write(), and innerHTML")
-            remediation.append("Use createElement() and textContent for DOM manipulation")
+            remediation.append(
+                "Use createElement() and textContent for DOM manipulation"
+            )
         if lang == "python":
             remediation.append("Use auto-escaping template engines (Jinja2)")
 
@@ -683,12 +689,28 @@ def scan_for_hardcoded_credentials(source_code: str) -> dict[str, str]:
 
     # Secret patterns
     patterns = [
-        (r"password\s*=\s*['\"](?!.*(PASSWORD|password|\{|\$))(.{8,})['\"]", "password", "critical"),
+        (
+            r"password\s*=\s*['\"](?!.*(PASSWORD|password|\{|\$))(.{8,})['\"]",
+            "password",
+            "critical",
+        ),
         (r"api[_-]?key\s*=\s*['\"]([A-Za-z0-9_\-]{20,})['\"]", "api_key", "critical"),
-        (r"secret[_-]?key\s*=\s*['\"]([A-Za-z0-9_\-]{20,})['\"]", "secret_key", "critical"),
+        (
+            r"secret[_-]?key\s*=\s*['\"]([A-Za-z0-9_\-]{20,})['\"]",
+            "secret_key",
+            "critical",
+        ),
         (r"token\s*=\s*['\"]([A-Za-z0-9_\-\.]{20,})['\"]", "token", "high"),
-        (r"private[_-]?key\s*=\s*['\"]([A-Za-z0-9+/=\n\-]{40,})['\"]", "private_key", "critical"),
-        (r"aws[_-]?access[_-]?key[_-]?id\s*=\s*['\"]([A-Z0-9]{20})['\"]", "aws_key", "critical"),
+        (
+            r"private[_-]?key\s*=\s*['\"]([A-Za-z0-9+/=\n\-]{40,})['\"]",
+            "private_key",
+            "critical",
+        ),
+        (
+            r"aws[_-]?access[_-]?key[_-]?id\s*=\s*['\"]([A-Z0-9]{20})['\"]",
+            "aws_key",
+            "critical",
+        ),
         (r"sk-[a-zA-Z0-9]{48}", "openai_key", "critical"),  # OpenAI keys
         (r"ghp_[a-zA-Z0-9]{36}", "github_token", "critical"),  # GitHub tokens
     ]
@@ -727,7 +749,9 @@ def scan_for_hardcoded_credentials(source_code: str) -> dict[str, str]:
     remediation = []
     if unique_secrets:
         remediation.append("Move all secrets to environment variables")
-        remediation.append("Use secret management services (AWS Secrets Manager, Vault)")
+        remediation.append(
+            "Use secret management services (AWS Secrets Manager, Vault)"
+        )
         remediation.append("Add .env to .gitignore")
         remediation.append("Rotate any exposed credentials immediately")
         remediation.append("Use os.environ.get() or process.env to access secrets")
@@ -866,7 +890,9 @@ def identify_n_squared_loops(source_code: str, language: str) -> dict[str, str]:
     suggestions = []
     if patterns:
         suggestions.append("Consider using hash maps/sets for O(1) lookups")
-        suggestions.append("Use list comprehensions or map/filter instead of nested loops")
+        suggestions.append(
+            "Use list comprehensions or map/filter instead of nested loops"
+        )
         suggestions.append("Consider algorithmic improvements (sorting + two-pointer)")
         suggestions.append("Profile to confirm performance impact")
         if any("same collection" in str(p.get("type", "")).lower() for p in patterns):
@@ -984,8 +1010,10 @@ def detect_memory_leak_patterns(source_code: str, language: str) -> dict[str, st
                     affected_lines.append(i)
 
         # Pattern 4: Growing global arrays/objects
-        if "global " in stripped.lower() or (lang in ["javascript", "typescript"] and stripped.startswith("var ")):
-            if any(op in stripped for op in [".append(", ".push(", "[" ]):
+        if "global " in stripped.lower() or (
+            lang in ["javascript", "typescript"] and stripped.startswith("var ")
+        ):
+            if any(op in stripped for op in [".append(", ".push(", "["]):
                 patterns.append(
                     {
                         "line": i,
@@ -1079,7 +1107,8 @@ def find_blocking_io(source_code: str, language: str) -> dict[str, str]:
             # Pattern 1: Synchronous HTTP requests
             if lang == "python":
                 if "requests." in stripped and any(
-                    method in stripped for method in [".get(", ".post(", ".put(", ".delete("]
+                    method in stripped
+                    for method in [".get(", ".post(", ".put(", ".delete("]
                 ):
                     operations.append(
                         {
@@ -1115,7 +1144,11 @@ def find_blocking_io(source_code: str, language: str) -> dict[str, str]:
 
             elif lang in ["javascript", "typescript"]:
                 # Pattern 4: XMLHttpRequest (sync)
-                if "XMLHttpRequest" in stripped and "async" in stripped and "false" in stripped:
+                if (
+                    "XMLHttpRequest" in stripped
+                    and "async" in stripped
+                    and "false" in stripped
+                ):
                     operations.append(
                         {
                             "line": i,
@@ -1214,8 +1247,15 @@ def check_gdpr_compliance(source_code: str, language: str) -> dict[str, str]:
 
     # PII data identifiers
     pii_keywords = [
-        "email", "phone", "address", "ssn", "passport",
-        "credit_card", "ip_address", "geolocation", "biometric"
+        "email",
+        "phone",
+        "address",
+        "ssn",
+        "passport",
+        "credit_card",
+        "ip_address",
+        "geolocation",
+        "biometric",
     ]
 
     for i, line in enumerate(lines, 1):
@@ -1242,8 +1282,7 @@ def check_gdpr_compliance(source_code: str, language: str) -> dict[str, str]:
         if any(kw in stripped for kw in ["save", "store", "insert", "create"]):
             if any(pii in stripped for pii in pii_keywords):
                 has_encryption = any(
-                    term in stripped
-                    for term in ["encrypt", "hash", "bcrypt", "crypto"]
+                    term in stripped for term in ["encrypt", "hash", "bcrypt", "crypto"]
                 )
                 if not has_encryption:
                     issues.append(
@@ -1288,7 +1327,9 @@ def check_gdpr_compliance(source_code: str, language: str) -> dict[str, str]:
 
     recommendations = []
     if issues:
-        recommendations.append("Implement explicit consent collection before processing PII")
+        recommendations.append(
+            "Implement explicit consent collection before processing PII"
+        )
         recommendations.append("Encrypt PII data at rest and in transit")
         recommendations.append("Add audit logging for all PII access")
         recommendations.append("Implement data retention and deletion policies")
@@ -1464,7 +1505,9 @@ def validate_accessibility(source_code: str) -> dict[str, str]:
 
 
 @strands_tool
-def detect_license_violations(dependencies_json: str, project_license: str) -> dict[str, str]:
+def detect_license_violations(
+    dependencies_json: str, project_license: str
+) -> dict[str, str]:
     """Detect license compatibility violations in dependencies.
 
     Checks if dependency licenses are compatible with the project license
@@ -1523,7 +1566,9 @@ def detect_license_violations(dependencies_json: str, project_license: str) -> d
     if isinstance(dependencies, dict):
         dep_items = [(name, license) for name, license in dependencies.items()]
     else:
-        dep_items = [(dep.get("name", "unknown"), dep.get("license", "")) for dep in dependencies]
+        dep_items = [
+            (dep.get("name", "unknown"), dep.get("license", "")) for dep in dependencies
+        ]
 
     for dep_name, dep_license in dep_items:
         dep_license_upper = dep_license.upper()
@@ -1580,7 +1625,9 @@ def detect_license_violations(dependencies_json: str, project_license: str) -> d
         remediation.append("Consider changing project license if necessary")
         remediation.append("Consult legal counsel for commercial projects")
         if any(v["severity"] == "critical" for v in violations):
-            remediation.append("URGENT: GPL violations can have serious legal consequences")
+            remediation.append(
+                "URGENT: GPL violations can have serious legal consequences"
+            )
 
     return {
         "has_violations": "true" if violations else "false",

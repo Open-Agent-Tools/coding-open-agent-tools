@@ -102,7 +102,9 @@ class TestValidateSubmoduleUrls:
         """Test .gitmodules with secure URLs."""
         with tempfile.TemporaryDirectory() as tmpdir:
             gitmodules = Path(tmpdir) / ".gitmodules"
-            gitmodules.write_text("[submodule \"lib\"]\n\tpath = lib\n\turl = https://github.com/user/lib.git\n")
+            gitmodules.write_text(
+                '[submodule "lib"]\n\tpath = lib\n\turl = https://github.com/user/lib.git\n'
+            )
 
             result = validate_submodule_urls(tmpdir)
             assert result["all_valid"] == "true"
@@ -112,7 +114,9 @@ class TestValidateSubmoduleUrls:
         """Test .gitmodules with insecure HTTP URL."""
         with tempfile.TemporaryDirectory() as tmpdir:
             gitmodules = Path(tmpdir) / ".gitmodules"
-            gitmodules.write_text("[submodule \"lib\"]\n\tpath = lib\n\turl = http://example.com/lib.git\n")
+            gitmodules.write_text(
+                '[submodule "lib"]\n\tpath = lib\n\turl = http://example.com/lib.git\n'
+            )
 
             result = validate_submodule_urls(tmpdir)
             assert result["all_valid"] == "false"
@@ -122,7 +126,9 @@ class TestValidateSubmoduleUrls:
         """Test .gitmodules with git:// protocol."""
         with tempfile.TemporaryDirectory() as tmpdir:
             gitmodules = Path(tmpdir) / ".gitmodules"
-            gitmodules.write_text("[submodule \"lib\"]\n\tpath = lib\n\turl = git://example.com/lib.git\n")
+            gitmodules.write_text(
+                '[submodule "lib"]\n\tpath = lib\n\turl = git://example.com/lib.git\n'
+            )
 
             result = validate_submodule_urls(tmpdir)
             assert result["all_valid"] == "false"

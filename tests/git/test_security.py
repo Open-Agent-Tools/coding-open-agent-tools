@@ -469,7 +469,9 @@ class TestDetectSecurityIssues:
 
             # Create secure config
             config_file = git_dir / "config"
-            config_file.write_text("[remote \"origin\"]\n\turl = https://github.com/user/repo\n")
+            config_file.write_text(
+                '[remote "origin"]\n\turl = https://github.com/user/repo\n'
+            )
 
             # Create .gitignore
             (Path(tmpdir) / ".gitignore").write_text("*.pyc\n.env\n")
@@ -487,7 +489,9 @@ class TestDetectSecurityIssues:
 
             # Create config with HTTP URL
             config_file = git_dir / "config"
-            config_file.write_text("[remote \"origin\"]\n\turl = http://github.com/user/repo\n")
+            config_file.write_text(
+                '[remote "origin"]\n\turl = http://github.com/user/repo\n'
+            )
 
             result = detect_security_issues(tmpdir)
 
@@ -501,7 +505,9 @@ class TestDetectSecurityIssues:
             git_dir.mkdir()
 
             config_file = git_dir / "config"
-            config_file.write_text("[remote \"origin\"]\n\turl = https://github.com/user/repo\n")
+            config_file.write_text(
+                '[remote "origin"]\n\turl = https://github.com/user/repo\n'
+            )
 
             result = detect_security_issues(tmpdir)
 

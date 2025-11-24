@@ -7,11 +7,11 @@ Token Savings: 80-90% (structured extraction vs manual parsing)
 """
 
 from coding_open_agent_tools.config import (
+    env_parser,
     extractors,
     parsers,
-    env_parser,
-    validators,
     security,
+    validators,
 )
 
 # Example 1: Parse and extract from YAML
@@ -75,8 +75,8 @@ DEBUG=true
 env_result = env_parser.parse_env_file(env_content)
 print(f"Variables found: {env_result['variable_count']}")
 print(f"Has errors: {env_result['has_errors']}")
-print(f"\nVariables:")
-for var in eval(env_result['variables'])[:5]:  # Show first 5
+print("\nVariables:")
+for var in eval(env_result["variables"])[:5]:  # Show first 5
     print(f"  {var['key']} = {var['value']}")
 print()
 
@@ -130,10 +130,10 @@ ttl = 3600
 ini_result = parsers.parse_ini_file(ini_content)
 print(f"Sections found: {ini_result['section_count']}")
 print(f"Total settings: {ini_result['total_settings']}")
-print(f"\nSections:")
-for section in eval(ini_result['sections'])[:2]:
+print("\nSections:")
+for section in eval(ini_result["sections"])[:2]:
     print(f"  [{section['section']}]")
-    for key, value in eval(section['settings']).items():
+    for key, value in eval(section["settings"]).items():
         print(f"    {key} = {value}")
 print()
 
@@ -156,8 +156,8 @@ db.pool.size=10
 
 props_result = parsers.parse_properties_file(properties_content)
 print(f"Properties found: {props_result['property_count']}")
-print(f"\nProperties:")
-for prop in eval(props_result['properties'])[:5]:
+print("\nProperties:")
+for prop in eval(props_result["properties"])[:5]:
     print(f"  {prop['key']} = {prop['value']}")
 print()
 
@@ -207,8 +207,8 @@ venv/
 security_check = security.check_gitignore_security(gitignore_content)
 print(f"Is secure: {security_check['is_secure']}")
 print(f"Missing patterns: {security_check['missing_pattern_count']}")
-print(f"\nMissing critical patterns:")
-for pattern in eval(security_check['missing_patterns'])[:5]:
+print("\nMissing critical patterns:")
+for pattern in eval(security_check["missing_patterns"])[:5]:
     print(f"  {pattern['pattern']} - {pattern['reason']}")
 print()
 
@@ -231,8 +231,8 @@ NEW_SETTING=value
 merged = env_parser.merge_env_files(base_env, override_env)
 print(f"Merged variables: {merged['merged_count']}")
 print(f"Conflicts: {merged['conflict_count']}")
-print(f"\nMerged content preview:")
-print(merged['merged_content'][:200])
+print("\nMerged content preview:")
+print(merged["merged_content"][:200])
 print()
 
 # Why this saves tokens:

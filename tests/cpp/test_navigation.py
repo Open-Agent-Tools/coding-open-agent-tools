@@ -27,7 +27,9 @@ from coding_open_agent_tools.cpp.navigation import (
 # Skip all tests if tree-sitter-language-pack is not installed
 pytest_plugins = []
 
-TREE_SITTER_AVAILABLE = importlib.util.find_spec("tree_sitter_language_pack") is not None
+TREE_SITTER_AVAILABLE = (
+    importlib.util.find_spec("tree_sitter_language_pack") is not None
+)
 
 pytestmark = pytest.mark.skipif(
     not TREE_SITTER_AVAILABLE,

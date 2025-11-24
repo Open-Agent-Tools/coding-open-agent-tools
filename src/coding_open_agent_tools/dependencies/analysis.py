@@ -83,7 +83,9 @@ def parse_requirements_txt(content: str) -> dict[str, str]:
             # Extract package name from git URL if possible
             if "@" in stripped:
                 pkg_name = stripped.split("/")[-1].split("@")[0].replace(".git", "")
-                packages.append({"name": pkg_name, "version": "git", "specifier": "git"})
+                packages.append(
+                    {"name": pkg_name, "version": "git", "specifier": "git"}
+                )
             continue
 
         # Parse standard requirement
@@ -610,9 +612,7 @@ def check_license_conflicts(packages_json: str) -> dict[str, str]:
         )
 
     if any("GPL" in p["license"] for p in copyleft_packages):
-        warnings.append(
-            "GPL licenses require derivative works to also be GPL-licensed"
-        )
+        warnings.append("GPL licenses require derivative works to also be GPL-licensed")
 
     return {
         "has_conflicts": "true" if conflicts else "false",
@@ -920,7 +920,9 @@ def identify_circular_dependency_chains(dependency_graph_json: str) -> dict[str,
 
 
 @strands_tool
-def check_outdated_dependencies(packages_json: str, current_versions_json: str) -> dict[str, str]:
+def check_outdated_dependencies(
+    packages_json: str, current_versions_json: str
+) -> dict[str, str]:
     """Check for outdated dependencies with known security issues.
 
     Compares installed package versions against current/latest versions
@@ -1024,7 +1026,9 @@ def check_outdated_dependencies(packages_json: str, current_versions_json: str) 
 
 
 @strands_tool
-def analyze_security_advisories(packages_json: str, advisories_json: str) -> dict[str, str]:
+def analyze_security_advisories(
+    packages_json: str, advisories_json: str
+) -> dict[str, str]:
     """Analyze packages against known security advisories.
 
     Cross-references installed packages with security advisory databases

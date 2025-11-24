@@ -168,17 +168,23 @@ class TestAnalyzeTagHistory:
 
     def test_invalid_max_tags_format(self) -> None:
         """Test ValueError when max_tags is not a valid integer."""
-        with pytest.raises(ValueError, match="max_tags must be a valid positive integer"):
+        with pytest.raises(
+            ValueError, match="max_tags must be a valid positive integer"
+        ):
             analyze_tag_history("/tmp", "not_a_number")
 
     def test_negative_max_tags(self) -> None:
         """Test ValueError when max_tags is negative."""
-        with pytest.raises(ValueError, match="max_tags must be a valid positive integer"):
+        with pytest.raises(
+            ValueError, match="max_tags must be a valid positive integer"
+        ):
             analyze_tag_history("/tmp", "-5")
 
     def test_zero_max_tags(self) -> None:
         """Test ValueError when max_tags is zero."""
-        with pytest.raises(ValueError, match="max_tags must be a valid positive integer"):
+        with pytest.raises(
+            ValueError, match="max_tags must be a valid positive integer"
+        ):
             analyze_tag_history("/tmp", "0")
 
     def test_nonexistent_path(self) -> None:

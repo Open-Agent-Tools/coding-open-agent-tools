@@ -6,11 +6,11 @@ patterns in code before they reach production.
 Token Savings: 85-90% (structured detection vs manual analysis)
 """
 
+import os
+import tempfile
+
 from coding_open_agent_tools.analysis import secrets
 from coding_open_agent_tools.shell import security
-from coding_open_agent_tools.git import security as git_security
-import tempfile
-import os
 
 # Example 1: Scan code for secrets
 print("=" * 60)
@@ -42,8 +42,8 @@ def process_data():
 result = secrets.scan_for_secrets(python_code_with_secrets)
 print(f"Secrets found: {result['secrets_found']}")
 print(f"Secret count: {result['secret_count']}")
-print(f"Secret types detected:")
-for secret in eval(result['secrets_found']):
+print("Secret types detected:")
+for secret in eval(result["secrets_found"]):
     print(f"  - Line {secret['line']}: {secret['type']}")
 print()
 
@@ -82,8 +82,8 @@ print(f"Issues found: {security_result['issue_count']}")
 print(f"Critical issues: {security_result['critical_count']}")
 print(f"High issues: {security_result['high_count']}")
 print(f"Medium issues: {security_result['medium_count']}")
-print(f"\nIssues detected:")
-for issue in eval(security_result['issues']):
+print("\nIssues detected:")
+for issue in eval(security_result["issues"]):
     print(f"  [{issue['severity']}] Line {issue['line']}: {issue['type']}")
     print(f"    {issue['description']}")
 print()
@@ -118,8 +118,8 @@ dir_result = secrets.scan_directory_for_secrets(temp_dir)
 print(f"Total files scanned: {dir_result['total_files']}")
 print(f"Files with secrets: {dir_result['files_with_secrets']}")
 print(f"Total secrets found: {dir_result['total_secrets']}")
-print(f"\nFiles containing secrets:")
-for file_info in eval(dir_result['results']):
+print("\nFiles containing secrets:")
+for file_info in eval(dir_result["results"]):
     print(f"  {file_info['file']}: {file_info['secret_count']} secrets")
 
 # Cleanup
@@ -146,7 +146,7 @@ for pattern in test_patterns:
     validation = secrets.validate_secret_patterns(pattern)
     print(f"Pattern: {pattern[:30]}...")
     print(f"  Is potential secret: {validation['is_potential_secret']}")
-    if validation['is_potential_secret'] == "true":
+    if validation["is_potential_secret"] == "true":
         print(f"  Pattern types: {validation['pattern_types']}")
     print()
 
