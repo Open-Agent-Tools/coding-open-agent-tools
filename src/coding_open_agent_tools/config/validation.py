@@ -6,15 +6,8 @@ JSON schema validation and CI/CD configuration validation.
 
 import json
 import sys
-from typing import Any, Callable
 
-try:
-    from strands import tool as strands_tool
-except ImportError:
-
-    def strands_tool(func: Callable[..., Any]) -> Callable[..., Any]:  # type: ignore[no-redef]
-        return func
-
+from coding_open_agent_tools._decorators import strands_tool
 
 if sys.version_info >= (3, 11):
     import tomllib

@@ -1,5 +1,7 @@
 """Tests for C++ code navigation and analysis functions."""
 
+import importlib.util
+
 import pytest
 
 from coding_open_agent_tools.cpp.navigation import (
@@ -25,12 +27,7 @@ from coding_open_agent_tools.cpp.navigation import (
 # Skip all tests if tree-sitter-language-pack is not installed
 pytest_plugins = []
 
-try:
-    from tree_sitter_language_pack import get_parser
-
-    TREE_SITTER_AVAILABLE = True
-except ImportError:
-    TREE_SITTER_AVAILABLE = False
+TREE_SITTER_AVAILABLE = importlib.util.find_spec("tree_sitter_language_pack") is not None
 
 pytestmark = pytest.mark.skipif(
     not TREE_SITTER_AVAILABLE,

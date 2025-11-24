@@ -1,5 +1,7 @@
 """Tests for Go code navigation and analysis functions."""
 
+import importlib.util
+
 import pytest
 
 from coding_open_agent_tools.go.navigation import (
@@ -25,12 +27,7 @@ from coding_open_agent_tools.go.navigation import (
 # Skip all tests if tree-sitter-language-pack is not installed
 pytest_plugins = []
 
-try:
-    from tree_sitter_language_pack import get_parser
-
-    TREE_SITTER_AVAILABLE = True
-except ImportError:
-    TREE_SITTER_AVAILABLE = False
+TREE_SITTER_AVAILABLE = importlib.util.find_spec("tree_sitter_language_pack") is not None
 
 pytestmark = pytest.mark.skipif(
     not TREE_SITTER_AVAILABLE,
@@ -681,8 +678,6 @@ func GetValue() int {
 
     def test_method_calls(self) -> None:
         """Test function with method calls."""
-        import json
-
         code = """package main
 
 type Person struct {
@@ -694,7 +689,6 @@ func Process(p *Person) {
     println(name)
 }"""
         result = list_go_function_calls(code, "Process")
-        calls = json.loads(result["calls"])
         assert result["call_count"] == "2"
 
     def test_function_not_found(self) -> None:

@@ -12,7 +12,9 @@ Dependencies:
 
 import json
 import re
-from typing import Any, Callable
+from typing import Any
+
+from coding_open_agent_tools._decorators import strands_tool
 
 # Conditional import for esprima
 try:
@@ -21,14 +23,6 @@ try:
     ESPRIMA_AVAILABLE = True
 except ImportError:
     ESPRIMA_AVAILABLE = False
-
-# Import decorator
-try:
-    from strands import tool as strands_tool
-except ImportError:
-
-    def strands_tool(func: Callable[..., Any]) -> Callable[..., Any]:  # type: ignore[no-redef]
-        return func
 
 
 def _parse_javascript(source_code: str) -> dict[str, Any]:

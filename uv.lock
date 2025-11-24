@@ -422,7 +422,7 @@ wheels = [
 
 [[package]]
 name = "coding-open-agent-tools"
-version = "0.7.0"
+version = "0.9.1"
 source = { editable = "." }
 dependencies = [
     { name = "basic-open-agent-tools" },
@@ -430,9 +430,23 @@ dependencies = [
 
 [package.optional-dependencies]
 all = [
+    { name = "detect-secrets" },
     { name = "esprima" },
+    { name = "jsonschema" },
+    { name = "packaging" },
+    { name = "pyyaml" },
+    { name = "tomli", marker = "python_full_version < '3.11'" },
     { name = "tree-sitter-language-pack", version = "0.9.1", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version < '3.10'" },
     { name = "tree-sitter-language-pack", version = "0.10.0", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version >= '3.10'" },
+]
+config = [
+    { name = "jsonschema" },
+    { name = "packaging" },
+    { name = "pyyaml" },
+    { name = "tomli", marker = "python_full_version < '3.11'" },
+]
+config-security = [
+    { name = "detect-secrets" },
 ]
 cpp = [
     { name = "tree-sitter-language-pack", version = "0.9.1", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version < '3.10'" },
@@ -445,17 +459,22 @@ csharp = [
 dev = [
     { name = "anthropic" },
     { name = "basic-open-agent-tools", extra = ["all"] },
+    { name = "detect-secrets" },
     { name = "esprima" },
     { name = "freezegun" },
     { name = "google-adk" },
+    { name = "jsonschema" },
     { name = "mypy" },
+    { name = "packaging" },
     { name = "pre-commit" },
     { name = "pytest" },
     { name = "pytest-asyncio" },
     { name = "pytest-cov" },
     { name = "python-dotenv" },
+    { name = "pyyaml" },
     { name = "ruff" },
     { name = "strands" },
+    { name = "tomli", marker = "python_full_version < '3.11'" },
     { name = "tree-sitter-language-pack", version = "0.9.1", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version < '3.10'" },
     { name = "tree-sitter-language-pack", version = "0.10.0", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version >= '3.10'" },
 ]
@@ -504,6 +523,9 @@ requires-dist = [
     { name = "basic-open-agent-tools", specifier = ">=0.12.0" },
     { name = "basic-open-agent-tools", extras = ["all"], marker = "extra == 'dev'", specifier = ">=0.12.0" },
     { name = "basic-open-agent-tools", extras = ["all"], marker = "extra == 'test'", specifier = ">=0.12.0" },
+    { name = "detect-secrets", marker = "extra == 'all'", specifier = ">=1.5.0" },
+    { name = "detect-secrets", marker = "extra == 'config-security'", specifier = ">=1.5.0" },
+    { name = "detect-secrets", marker = "extra == 'dev'", specifier = ">=1.5.0" },
     { name = "esprima", marker = "extra == 'all'", specifier = ">=4.0.0" },
     { name = "esprima", marker = "extra == 'dev'", specifier = ">=4.0.0" },
     { name = "esprima", marker = "extra == 'javascript'", specifier = ">=4.0.0" },
@@ -511,7 +533,13 @@ requires-dist = [
     { name = "freezegun", marker = "extra == 'test'", specifier = ">=1.2.0" },
     { name = "google-adk", marker = "extra == 'dev'", specifier = ">=0.1.0" },
     { name = "google-adk", marker = "extra == 'test'", specifier = ">=0.1.0" },
+    { name = "jsonschema", marker = "extra == 'all'", specifier = ">=4.0.0" },
+    { name = "jsonschema", marker = "extra == 'config'", specifier = ">=4.0.0" },
+    { name = "jsonschema", marker = "extra == 'dev'", specifier = ">=4.0.0" },
     { name = "mypy", marker = "extra == 'dev'", specifier = ">=1.0.0" },
+    { name = "packaging", marker = "extra == 'all'", specifier = ">=21.0" },
+    { name = "packaging", marker = "extra == 'config'", specifier = ">=21.0" },
+    { name = "packaging", marker = "extra == 'dev'", specifier = ">=21.0" },
     { name = "pre-commit", marker = "extra == 'dev'", specifier = ">=3.0.0" },
     { name = "pytest", marker = "extra == 'dev'", specifier = ">=7.0.0" },
     { name = "pytest", marker = "extra == 'test'", specifier = ">=7.0.0" },
@@ -521,9 +549,15 @@ requires-dist = [
     { name = "pytest-cov", marker = "extra == 'test'", specifier = ">=4.0.0" },
     { name = "python-dotenv", marker = "extra == 'dev'", specifier = ">=1.0.0" },
     { name = "python-dotenv", marker = "extra == 'strands'", specifier = ">=1.0.0" },
+    { name = "pyyaml", marker = "extra == 'all'", specifier = ">=6.0.0" },
+    { name = "pyyaml", marker = "extra == 'config'", specifier = ">=6.0.0" },
+    { name = "pyyaml", marker = "extra == 'dev'", specifier = ">=6.0.0" },
     { name = "ruff", marker = "extra == 'dev'", specifier = ">=0.1.0" },
     { name = "strands", marker = "extra == 'dev'", specifier = ">=0.1.0" },
     { name = "strands", marker = "extra == 'strands'", specifier = ">=0.1.0" },
+    { name = "tomli", marker = "python_full_version < '3.11' and extra == 'all'", specifier = ">=2.0.0" },
+    { name = "tomli", marker = "python_full_version < '3.11' and extra == 'config'", specifier = ">=2.0.0" },
+    { name = "tomli", marker = "python_full_version < '3.11' and extra == 'dev'", specifier = ">=2.0.0" },
     { name = "tree-sitter-language-pack", marker = "extra == 'all'", specifier = ">=0.9.0" },
     { name = "tree-sitter-language-pack", marker = "extra == 'cpp'", specifier = ">=0.9.0" },
     { name = "tree-sitter-language-pack", marker = "extra == 'csharp'", specifier = ">=0.9.0" },
@@ -533,7 +567,7 @@ requires-dist = [
     { name = "tree-sitter-language-pack", marker = "extra == 'ruby'", specifier = ">=0.9.0" },
     { name = "tree-sitter-language-pack", marker = "extra == 'rust'", specifier = ">=0.9.0" },
 ]
-provides-extras = ["all", "javascript", "java", "go", "rust", "cpp", "csharp", "ruby", "strands", "dev", "test"]
+provides-extras = ["all", "javascript", "java", "go", "rust", "cpp", "csharp", "ruby", "config", "config-security", "strands", "dev", "test"]
 
 [package.metadata.requires-dev]
 dev = [{ name = "ruff", specifier = ">=0.12.12" }]
@@ -735,6 +769,19 @@ source = { registry = "https://pypi.org/simple" }
 sdist = { url = "https://files.pythonhosted.org/packages/0f/d5/c66da9b79e5bdb124974bfe172b4daf3c984ebd9c2a06e2b8a4dc7331c72/defusedxml-0.7.1.tar.gz", hash = "sha256:1bb3032db185915b62d7c6209c5a8792be6a32ab2fedacc84e01b52c51aa3e69", size = 75520, upload-time = "2021-03-08T10:59:26.269Z" }
 wheels = [
     { url = "https://files.pythonhosted.org/packages/07/6c/aa3f2f849e01cb6a001cd8554a88d4c77c5c1a31c95bdf1cf9301e6d9ef4/defusedxml-0.7.1-py2.py3-none-any.whl", hash = "sha256:a352e7e428770286cc899e2542b6cdaedb2b4953ff269a210103ec58f6198a61", size = 25604, upload-time = "2021-03-08T10:59:24.45Z" },
+]
+
+[[package]]
+name = "detect-secrets"
+version = "1.5.0"
+source = { registry = "https://pypi.org/simple" }
+dependencies = [
+    { name = "pyyaml" },
+    { name = "requests" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/69/67/382a863fff94eae5a0cf05542179169a1c49a4c8784a9480621e2066ca7d/detect_secrets-1.5.0.tar.gz", hash = "sha256:6bb46dcc553c10df51475641bb30fd69d25645cc12339e46c824c1e0c388898a", size = 97351, upload-time = "2024-05-06T17:46:19.721Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/4e/5e/4f5fe4b89fde1dc3ed0eb51bd4ce4c0bca406246673d370ea2ad0c58d747/detect_secrets-1.5.0-py3-none-any.whl", hash = "sha256:e24e7b9b5a35048c313e983f76c4bd09dad89f045ff059e354f9943bf45aa060", size = 120341, upload-time = "2024-05-06T17:46:16.628Z" },
 ]
 
 [[package]]
@@ -1690,10 +1737,11 @@ name = "jsonschema"
 version = "4.25.1"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
-    { name = "attrs", marker = "python_full_version >= '3.10'" },
-    { name = "jsonschema-specifications", marker = "python_full_version >= '3.10'" },
-    { name = "referencing", marker = "python_full_version >= '3.10'" },
-    { name = "rpds-py", marker = "python_full_version >= '3.10'" },
+    { name = "attrs" },
+    { name = "jsonschema-specifications" },
+    { name = "referencing", version = "0.36.2", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version < '3.10'" },
+    { name = "referencing", version = "0.37.0", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version >= '3.10'" },
+    { name = "rpds-py" },
 ]
 sdist = { url = "https://files.pythonhosted.org/packages/74/69/f7185de793a29082a9f3c7728268ffb31cb5095131a9c139a74078e27336/jsonschema-4.25.1.tar.gz", hash = "sha256:e4a9655ce0da0c0b67a085847e00a3a51449e1157f4f75e9fb5aa545e122eb85", size = 357342, upload-time = "2025-08-18T17:03:50.038Z" }
 wheels = [
@@ -1705,7 +1753,8 @@ name = "jsonschema-specifications"
 version = "2025.9.1"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
-    { name = "referencing", marker = "python_full_version >= '3.10'" },
+    { name = "referencing", version = "0.36.2", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version < '3.10'" },
+    { name = "referencing", version = "0.37.0", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version >= '3.10'" },
 ]
 sdist = { url = "https://files.pythonhosted.org/packages/19/74/a633ee74eb36c44aa6d1095e7cc5569bebf04342ee146178e2d36600708b/jsonschema_specifications-2025.9.1.tar.gz", hash = "sha256:b540987f239e745613c7a9176f3edb72b832a4ac465cf02712288397832b5e8d", size = 32855, upload-time = "2025-09-08T01:34:59.186Z" }
 wheels = [
@@ -3058,8 +3107,31 @@ wheels = [
 
 [[package]]
 name = "referencing"
+version = "0.36.2"
+source = { registry = "https://pypi.org/simple" }
+resolution-markers = [
+    "python_full_version < '3.10'",
+]
+dependencies = [
+    { name = "attrs", marker = "python_full_version < '3.10'" },
+    { name = "rpds-py", marker = "python_full_version < '3.10'" },
+    { name = "typing-extensions", marker = "python_full_version < '3.10'" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/2f/db/98b5c277be99dd18bfd91dd04e1b759cad18d1a338188c936e92f921c7e2/referencing-0.36.2.tar.gz", hash = "sha256:df2e89862cd09deabbdba16944cc3f10feb6b3e6f18e902f7cc25609a34775aa", size = 74744, upload-time = "2025-01-25T08:48:16.138Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/c1/b1/3baf80dc6d2b7bc27a95a67752d0208e410351e3feb4eb78de5f77454d8d/referencing-0.36.2-py3-none-any.whl", hash = "sha256:e8699adbbf8b5c7de96d8ffa0eb5c158b3beafce084968e2ea8bb08c6794dcd0", size = 26775, upload-time = "2025-01-25T08:48:14.241Z" },
+]
+
+[[package]]
+name = "referencing"
 version = "0.37.0"
 source = { registry = "https://pypi.org/simple" }
+resolution-markers = [
+    "python_full_version >= '3.14'",
+    "python_full_version == '3.13.*'",
+    "python_full_version >= '3.11' and python_full_version < '3.13'",
+    "python_full_version == '3.10.*'",
+]
 dependencies = [
     { name = "attrs", marker = "python_full_version >= '3.10'" },
     { name = "rpds-py", marker = "python_full_version >= '3.10'" },

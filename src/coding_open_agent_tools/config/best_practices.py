@@ -7,14 +7,8 @@ import json
 import os
 import platform
 import re
-from typing import Any, Callable
 
-try:
-    from strands import tool as strands_tool
-except ImportError:
-
-    def strands_tool(func: Callable[..., Any]) -> Callable[..., Any]:  # type: ignore[no-redef]
-        return func
+from coding_open_agent_tools._decorators import strands_tool
 
 
 @strands_tool

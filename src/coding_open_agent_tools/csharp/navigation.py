@@ -14,6 +14,8 @@ import json
 import re
 from typing import Any, Callable
 
+from coding_open_agent_tools._decorators import strands_tool
+
 # Conditional import for tree-sitter
 try:
     from tree_sitter_language_pack import get_parser
@@ -21,14 +23,6 @@ try:
     TREE_SITTER_AVAILABLE = True
 except ImportError:
     TREE_SITTER_AVAILABLE = False
-
-# Import decorator
-try:
-    from strands import tool as strands_tool
-except ImportError:
-
-    def strands_tool(func: Callable[..., Any]) -> Callable[..., Any]:
-        return func
 
 
 def _safe_execute(func: Callable[..., dict[str, str]]) -> Callable[..., dict[str, str]]:

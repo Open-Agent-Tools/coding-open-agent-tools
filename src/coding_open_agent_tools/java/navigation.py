@@ -11,7 +11,9 @@ Dependencies:
 """
 
 import json
-from typing import Any, Callable
+from typing import Any
+
+from coding_open_agent_tools._decorators import strands_tool
 
 # Conditional import for tree-sitter
 try:
@@ -20,14 +22,6 @@ try:
     TREE_SITTER_AVAILABLE = True
 except ImportError:
     TREE_SITTER_AVAILABLE = False
-
-# Import decorator
-try:
-    from strands import tool as strands_tool
-except ImportError:
-
-    def strands_tool(func: Callable[..., Any]) -> Callable[..., Any]:  # type: ignore[no-redef]
-        return func
 
 
 def _parse_java(source_code: str) -> Any:
