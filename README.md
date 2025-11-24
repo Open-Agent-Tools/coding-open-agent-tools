@@ -19,15 +19,19 @@ This project provides **parsing, validation, and analysis tools** that save agen
 - ❌ Code refactoring (agents reason through transformations)
 - ❌ Project scaffolding (agents use examples effectively)
 
-## 🆕 What's New in v0.9.0
+## 🆕 What's New in v0.10.0
 
-🔧 **Configuration Module Expansion**: Comprehensive config file tooling (+19 new functions, 28 total):
-- **.env file support** - Parse, validate, merge, and substitute environment variables
-- **Config extraction** - Extract values from YAML/TOML/JSON using dot notation paths
-- **Common formats** - Parse INI, Java properties, and XML configuration files
-- **Security best practices** - Gitignore security scanning, exposed file detection, permission validation
+🎉 **Phase 12 Completion: Quality & Documentation** - Major improvements across the board:
+- **Test Coverage**: 26% → 84% (added 513 new tests for git modules)
+- **Code Quality**: Reduced duplication from 15-20% → <5% (navigation/shared.py)
+- **Decorator Consistency**: 100% of 51 modules using centralized pattern
+- **Documentation**: ~5,000 lines of comprehensive docs with runnable examples
+- **Production Ready**: 1,775 tests passing, all quality gates passing
 
 ### Previous Updates
+
+**v0.9.0** - Configuration Module Expansion (+19 new functions, 42 total)
+- .env file support, config extraction, security best practices
 
 **v0.5.0** - Python Navigation Complete: Added 7 advanced navigation functions (70-90% token reduction)
 
@@ -47,7 +51,7 @@ This project provides **parsing, validation, and analysis tools** that save agen
 
 ## Available Tools
 
-**8 core modules** with **199 functions** + **7 language-specific modules** with **87 functions** = **286 total functions** — all with `@strands_tool` decorator and Google ADK compatible signatures.
+**9 core modules** with **213 functions** + **8 language-specific modules** with **184 functions** = **461 total functions** — all with `@strands_tool` decorator and Google ADK compatible signatures.
 
 ### 📊 Core Module Breakdown
 
@@ -55,20 +59,19 @@ This project provides **parsing, validation, and analysis tools** that save agen
 |--------|-----------|-------------|
 | **Code Analysis** | | |
 | `git` | 79 | Repository operations, history, commits, branches, tags, hooks, workflows |
-| `python` | 32 | **Navigation (17 tools!)**, syntax validation, type checking, import analysis, AST parsing |
-| `analysis` | 14 | Code complexity, AST parsing, import tracking, secret detection |
-| **Configuration & Data** | | |
-| `config` | 28 | **.env/INI/properties/XML parsing**, YAML/TOML/JSON extraction, security scanning |
+| `config` | 42 | **.env/INI/properties/XML parsing**, YAML/TOML/JSON validation, security scanning |
+| `python` | 32 | **Navigation (23 tools!)**, syntax validation, type checking, import analysis, AST parsing |
 | `database` | 18 | SQLite operations, safe query building, schema inspection |
+| `analysis` | 14 | Code complexity, AST parsing, import tracking, secret detection |
 | **Development Tools** | | |
 | `shell` | 13 | Shell validation, security scanning, argument escaping |
 | `profiling` | 8 | Performance profiling, memory analysis, execution timing |
 | `quality` | 7 | Static analysis parsers, linting tool integration |
-| **CORE TOTAL** | **199** | |
+| **CORE TOTAL** | **213** | |
 
-**Language-Specific Modules**: JavaScript/TypeScript (17), Java (17), Go (17), Rust (17), C++ (17), C# (17), Ruby (17) = **87 functions**
+**Language-Specific Modules**: Python (23), JavaScript/TypeScript (23), Java (23), Go (23), Rust (23), C++ (23), C# (23), Ruby (23) = **184 functions**
 
-**GRAND TOTAL**: **286 functions**
+**GRAND TOTAL**: **461 functions** across **17 modules**
 
 See [docs/ROADMAP.md](./docs/ROADMAP.md) and [docs/PRD](./docs/PRD/) for detailed plans.
 
@@ -263,51 +266,87 @@ pip install -e ".[dev]"
 
 ## Helper Functions
 
-The package provides 11 helper functions for tool management and introspection:
+The package provides **29 helper functions** for tool management, loading, and introspection:
 
-### Tool Loading Functions
+### 📦 Core Module Loaders
 
-- **`load_all_tools()`** - Load all 286 functions from all modules (core + language-specific)
-- **`load_all_analysis_tools()`** - Load 14 code analysis functions
-- **`load_all_config_tools()`** - Load 28 configuration validation and parsing functions
-- **`load_all_git_tools()`** - Load 79 git operation functions
-- **`load_all_profiling_tools()`** - Load 8 profiling functions
-- **`load_all_quality_tools()`** - Load 7 static analysis functions
-- **`load_all_shell_tools()`** - Load 13 shell validation functions
-- **`load_all_python_tools()`** - Load 32 Python validation and navigation functions
-- **`load_all_database_tools()`** - Load 18 SQLite operation functions
+| Function | Count | Description |
+|----------|-------|-------------|
+| `load_all_tools()` | 461 | Load **all** functions from all modules (recommended) |
+| `load_all_analysis_tools()` | 14 | AST parsing, complexity, imports, secret detection |
+| `load_all_config_tools()` | 42 | YAML/TOML/JSON, .env, security scanning, validation |
+| `load_all_git_tools()` | 79 | Repository operations, commits, branches, tags, hooks |
+| `load_all_profiling_tools()` | 8 | Performance profiling, memory analysis, benchmarking |
+| `load_all_quality_tools()` | 7 | ruff/mypy/pytest parsers, static analysis |
+| `load_all_shell_tools()` | 13 | Shell validation, security scanning, escaping |
+| `load_all_python_tools()` | 32 | Python validation, navigation, import analysis |
+| `load_all_database_tools()` | 18 | SQLite operations, query building, schema inspection |
 
-### Tool Management Functions
+### 🌍 Language-Specific Loaders (Navigation Tools)
 
-- **`merge_tool_lists(*args)`** - Merge multiple tool lists and individual functions with automatic deduplication
-- **`get_tool_info(tool)`** - Inspect a tool's name, docstring, signature, and parameters
-- **`list_all_available_tools()`** - Get all tools organized by category with metadata
+| Function | Count | Description |
+|----------|-------|-------------|
+| `load_all_javascript_tools()` | 23 | JavaScript/TypeScript code navigation (70-95% token savings) |
+| `load_all_java_tools()` | 23 | Java code navigation and structure analysis |
+| `load_all_go_tools()` | 23 | Go code navigation for microservices/cloud |
+| `load_all_rust_tools()` | 23 | Rust code navigation with memory safety focus |
+| `load_all_cpp_tools()` | 23 | C++ code navigation for systems programming |
+| `load_all_csharp_tools()` | 23 | C# code navigation for .NET/Unity projects |
+| `load_all_ruby_tools()` | 23 | Ruby code navigation for Rails applications |
+
+### 🎯 Language-Specific Loadouts (Pre-Configured Sets)
+
+Curated tool combinations optimized for specific languages:
+
+| Function | Count | Included Modules | Best For |
+|----------|-------|------------------|----------|
+| `load_python_loadout()` | 171 | Python, Analysis, Quality, Git, Shell, Database, Profiling | Python/Django/FastAPI projects |
+| `load_javascript_loadout()` | 149 | JavaScript, Analysis, Git, Shell, Database, Profiling | Node.js/React/Vue.js projects |
+| `load_typescript_loadout()` | 149 | Same as JavaScript (TypeScript is a superset) | TypeScript/Angular projects |
+| `load_java_loadout()` | 149 | Java, Analysis, Git, Shell, Database, Profiling | Spring Boot/enterprise Java |
+| `load_cpp_loadout()` | 149 | C++, Analysis, Git, Shell, Database, Profiling | Systems/performance-critical apps |
+| `load_csharp_loadout()` | 149 | C#, Analysis, Git, Shell, Database, Profiling | .NET/Unity/Xamarin projects |
+| `load_go_loadout()` | 149 | Go, Analysis, Git, Shell, Database, Profiling | Microservices/cloud services |
+| `load_rust_loadout()` | 149 | Rust, Analysis, Git, Shell, Database, Profiling | Memory-safe systems programming |
+| `load_ruby_loadout()` | 149 | Ruby, Analysis, Git, Shell, Database, Profiling | Ruby on Rails web apps |
+| `load_swift_loadout()` | 132 | Analysis, Git, Shell, Database, Profiling | iOS/macOS development |
+| `load_kotlin_loadout()` | 132 | Analysis, Git, Shell, Database, Profiling | Android/JVM applications |
+
+### 🛠️ Utility Functions
+
+| Function | Description |
+|----------|-------------|
+| `merge_tool_lists(*args)` | Merge multiple tool lists and individual functions with automatic deduplication |
+| `get_tool_info(tool)` | Inspect a tool's name, docstring, signature, and parameters |
+| `list_all_available_tools()` | Get all tools organized by category with metadata |
 
 ## Quick Start
 
 ```python
 import coding_open_agent_tools as coat
 
-# Load all 286 functions (core + language-specific)
+# Option 1: Load all 461 functions (recommended for general-purpose agents)
 all_tools = coat.load_all_tools()
 
-# Or load by category
+# Option 2: Load language-specific loadouts (recommended for focused agents)
+python_tools = coat.load_python_loadout()        # 171 functions - Python development
+javascript_tools = coat.load_javascript_loadout()  # 149 functions - JS/TS development
+java_tools = coat.load_java_loadout()            # 149 functions - Java development
+go_tools = coat.load_go_loadout()                # 149 functions - Go development
+rust_tools = coat.load_rust_loadout()            # 149 functions - Rust development
+
+# Option 3: Load individual modules
 analysis_tools = coat.load_all_analysis_tools()  # 14 functions
-config_tools = coat.load_all_config_tools()      # 28 functions (NEW in v0.9.0!)
+config_tools = coat.load_all_config_tools()      # 42 functions
 git_tools = coat.load_all_git_tools()            # 79 functions
-profiling_tools = coat.load_all_profiling_tools()  # 8 functions
-quality_tools = coat.load_all_quality_tools()    # 7 functions
-shell_tools = coat.load_all_shell_tools()        # 13 functions
-python_tools = coat.load_all_python_tools()      # 32 functions (17 navigation tools!)
-database_tools = coat.load_all_database_tools()  # 18 functions
+python_tools = coat.load_all_python_tools()      # 32 functions
 
 # Merge custom tools with built-in tools
 def my_custom_tool(x: str) -> dict[str, str]:
     return {"result": x}
 
 combined_tools = coat.merge_tool_lists(
-    coat.load_all_analysis_tools(),
-    coat.load_all_git_tools(),
+    coat.load_python_loadout(),  # 171 Python-focused tools
     my_custom_tool  # Add individual functions
 )
 
@@ -315,17 +354,21 @@ combined_tools = coat.merge_tool_lists(
 tool_info = coat.get_tool_info(my_custom_tool)
 print(f"Tool: {tool_info['name']}, Params: {tool_info['parameters']}")
 
-# List all available tools by category
-all_available = coat.list_all_available_tools()
-print(f"Categories: {list(all_available.keys())}")
-
 # Use with any agent framework
 from google.adk.agents import Agent
 
-agent = Agent(
-    tools=all_tools,
+# General-purpose code agent
+general_agent = Agent(
+    tools=coat.load_all_tools(),
     name="CodeAnalyzer",
     instruction="Analyze code quality and performance"
+)
+
+# Python-focused agent (more efficient token usage)
+python_agent = Agent(
+    tools=coat.load_python_loadout(),
+    name="PythonDeveloper",
+    instruction="Develop and analyze Python code with quality checks"
 )
 
 # Example: Analyze code complexity
@@ -369,9 +412,9 @@ print(f"Security status: {security['is_secure']}")
 
 ## Development Status
 
-**Current Version**: v0.9.0
+**Current Version**: v0.10.0
 **Status**: Active Development
-**Focus**: Comprehensive configuration file tooling and token-efficient code analysis for AI agents
+**Focus**: Token-efficient code analysis and navigation for AI agents (461 functions across 17 modules)
 
 ## Quality Standards
 
@@ -401,5 +444,5 @@ MIT License (same as basic-open-agent-tools)
 
 ---
 
-**Version**: v0.9.0
-**Last Updated**: 2025-11-08
+**Version**: v0.10.0
+**Last Updated**: 2025-11-24
