@@ -288,7 +288,7 @@ def load_all_tools() -> list[Callable[..., Any]]:
         load_all_shell_tools(),  # 13 functions
         load_all_python_tools(),  # 32 functions
         load_all_database_tools(),  # 18 functions
-        load_all_javascript_tools(),  # 17 functions
+        load_all_javascript_tools(),  # 29 functions
         load_all_java_tools(),  # 17 functions
         load_all_go_tools(),  # 17 functions
         load_all_rust_tools(),  # 17 functions
@@ -363,14 +363,14 @@ def list_all_available_tools() -> dict[str, list[dict[str, Any]]]:
 
 
 def load_all_javascript_tools() -> list[Callable[..., Any]]:
-    """Load all JavaScript and TypeScript navigation tools as a list of callable functions.
+    """Load all JavaScript and TypeScript navigation and validation tools as callable functions.
 
     Returns:
-        List of 17 JavaScript navigation tool functions
+        List of 29 JavaScript/TypeScript tool functions (17 navigation + 12 validation)
 
     Example:
         >>> javascript_tools = load_all_javascript_tools()
-        >>> len(javascript_tools) == 17
+        >>> len(javascript_tools) == 29
         True
     """
     from coding_open_agent_tools import javascript
@@ -550,7 +550,7 @@ def load_javascript_loadout() -> list[Callable[..., Any]]:
     Includes navigation, analysis, version control, and database operations.
 
     Included modules:
-    - JavaScript/TypeScript navigation (17 functions) - Core language tools
+    - JavaScript/TypeScript navigation & validation (29 functions) - Core language tools
     - Code analysis (14 functions) - AST, complexity, imports, secrets
     - Git operations (79 functions) - Version control
     - Shell validation (13 functions) - Script analysis & security
@@ -558,15 +558,15 @@ def load_javascript_loadout() -> list[Callable[..., Any]]:
     - Profiling tools (8 functions) - Performance & memory analysis
 
     Returns:
-        List of 149 tool functions optimized for JavaScript/TypeScript development
+        List of 161 tool functions optimized for JavaScript/TypeScript development
 
     Example:
         >>> js_agent_tools = load_javascript_loadout()
-        >>> len(js_agent_tools) == 149
+        >>> len(js_agent_tools) == 161
         True
     """
     return merge_tool_lists(
-        load_all_javascript_tools(),  # 17 - JavaScript/TypeScript navigation
+        load_all_javascript_tools(),  # 29 - JavaScript/TypeScript navigation & validation
         load_all_analysis_tools(),  # 14 - AST parsing, complexity, imports, secrets
         load_all_git_tools(),  # 79 - Full version control operations
         load_all_shell_tools(),  # 13 - Shell script validation & security

@@ -69,9 +69,9 @@ This project provides **parsing, validation, and analysis tools** that save agen
 | `quality` | 7 | Static analysis parsers, linting tool integration |
 | **CORE TOTAL** | **213** | |
 
-**Language-Specific Modules**: Python (23), JavaScript/TypeScript (23), Java (23), Go (23), Rust (23), C++ (23), C# (23), Ruby (23) = **184 functions**
+**Language-Specific Modules**: Python (23), JavaScript/TypeScript (35), Java (23), Go (23), Rust (23), C++ (23), C# (23), Ruby (23) = **196 functions**
 
-**GRAND TOTAL**: **461 functions** across **17 modules**
+**GRAND TOTAL**: **473 functions** across **17 modules**
 
 See [docs/ROADMAP.md](./docs/ROADMAP.md) and [docs/PRD](./docs/PRD/) for detailed plans.
 
@@ -286,7 +286,7 @@ The package provides **29 helper functions** for tool management, loading, and i
 
 | Function | Count | Description |
 |----------|-------|-------------|
-| `load_all_javascript_tools()` | 23 | JavaScript/TypeScript code navigation (70-95% token savings) |
+| `load_all_javascript_tools()` | 35 | JavaScript/TypeScript navigation & validation (70-85% token savings) |
 | `load_all_java_tools()` | 23 | Java code navigation and structure analysis |
 | `load_all_go_tools()` | 23 | Go code navigation for microservices/cloud |
 | `load_all_rust_tools()` | 23 | Rust code navigation with memory safety focus |
@@ -301,8 +301,8 @@ Curated tool combinations optimized for specific languages:
 | Function | Count | Included Modules | Best For |
 |----------|-------|------------------|----------|
 | `load_python_loadout()` | 171 | Python, Analysis, Quality, Git, Shell, Database, Profiling | Python/Django/FastAPI projects |
-| `load_javascript_loadout()` | 149 | JavaScript, Analysis, Git, Shell, Database, Profiling | Node.js/React/Vue.js projects |
-| `load_typescript_loadout()` | 149 | Same as JavaScript (TypeScript is a superset) | TypeScript/Angular projects |
+| `load_javascript_loadout()` | 161 | JavaScript, Analysis, Git, Shell, Database, Profiling | Node.js/React/Vue.js projects |
+| `load_typescript_loadout()` | 161 | Same as JavaScript (TypeScript is a superset) | TypeScript/Angular projects |
 | `load_java_loadout()` | 149 | Java, Analysis, Git, Shell, Database, Profiling | Spring Boot/enterprise Java |
 | `load_cpp_loadout()` | 149 | C++, Analysis, Git, Shell, Database, Profiling | Systems/performance-critical apps |
 | `load_csharp_loadout()` | 149 | C#, Analysis, Git, Shell, Database, Profiling | .NET/Unity/Xamarin projects |
@@ -330,7 +330,7 @@ all_tools = coat.load_all_tools()
 
 # Option 2: Load language-specific loadouts (recommended for focused agents)
 python_tools = coat.load_python_loadout()        # 171 functions - Python development
-javascript_tools = coat.load_javascript_loadout()  # 149 functions - JS/TS development
+javascript_tools = coat.load_javascript_loadout()  # 161 functions - JS/TS development
 java_tools = coat.load_java_loadout()            # 149 functions - Java development
 go_tools = coat.load_go_loadout()                # 149 functions - Go development
 rust_tools = coat.load_rust_loadout()            # 149 functions - Rust development
