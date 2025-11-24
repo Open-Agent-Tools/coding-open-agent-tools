@@ -63,15 +63,16 @@ This project provides **parsing, validation, and analysis tools** that save agen
 | `python` | 32 | **Navigation (23 tools!)**, syntax validation, type checking, import analysis, AST parsing |
 | `database` | 18 | SQLite operations, safe query building, schema inspection |
 | `analysis` | 14 | Code complexity, AST parsing, import tracking, secret detection |
+| `dependencies` | 12 | **Multi-language parsers, version conflicts, circular dependencies, security advisories** |
 | **Development Tools** | | |
 | `shell` | 13 | Shell validation, security scanning, argument escaping |
 | `profiling` | 8 | Performance profiling, memory analysis, execution timing |
 | `quality` | 7 | Static analysis parsers, linting tool integration |
-| **CORE TOTAL** | **213** | |
+| **CORE TOTAL** | **225** | |
 
 **Language-Specific Modules**: Python (23), JavaScript/TypeScript (35), Java (23), Go (23), Rust (23), C++ (23), C# (23), Ruby (23) = **196 functions**
 
-**GRAND TOTAL**: **473 functions** across **17 modules**
+**GRAND TOTAL**: **485 functions** across **18 modules**
 
 See [docs/ROADMAP.md](./docs/ROADMAP.md) and [docs/PRD](./docs/PRD/) for detailed plans.
 

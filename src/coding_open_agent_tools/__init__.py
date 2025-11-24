@@ -7,7 +7,7 @@ This project provides specialized code generation, script creation, and developm
 automation capabilities designed specifically for AI agents.
 """
 
-__version__ = "0.11.0"
+__version__ = "0.12.0"
 
 # Import migrated modules
 from . import (
@@ -16,6 +16,7 @@ from . import (
     cpp,
     csharp,
     database,
+    dependencies,
     git,
     go,
     java,
@@ -37,6 +38,7 @@ from .helpers import (
     load_all_cpp_tools,
     load_all_csharp_tools,
     load_all_database_tools,
+    load_all_dependencies_tools,
     load_all_git_tools,
     load_all_go_tools,
     load_all_java_tools,
@@ -69,6 +71,7 @@ __all__: list[str] = [
     "cpp",
     "csharp",
     "database",
+    "dependencies",
     "git",
     "go",
     "java",
@@ -87,6 +90,7 @@ __all__: list[str] = [
     "load_all_cpp_tools",
     "load_all_csharp_tools",
     "load_all_database_tools",
+    "load_all_dependencies_tools",
     "load_all_git_tools",
     "load_all_go_tools",
     "load_all_java_tools",

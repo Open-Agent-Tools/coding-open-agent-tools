@@ -17,6 +17,7 @@ __all__ = [
     "load_all_shell_tools",
     "load_all_python_tools",
     "load_all_database_tools",
+    "load_all_dependencies_tools",
     "load_all_javascript_tools",
     "load_all_java_tools",
     "load_all_go_tools",
@@ -263,6 +264,27 @@ def load_all_database_tools() -> list[Callable[..., Any]]:
     return tools
 
 
+def load_all_dependencies_tools() -> list[Callable[..., Any]]:
+    """Load all dependency analysis tools as a list of callable functions.
+
+    Returns:
+        List of 12 dependency analysis tool functions
+
+    Example:
+        >>> dependency_tools = load_all_dependencies_tools()
+        >>> len(dependency_tools) == 12
+        True
+    """
+    from coding_open_agent_tools import dependencies
+
+    tools = []
+    for name in dependencies.__all__:
+        func = getattr(dependencies, name)
+        if callable(func):
+            tools.append(func)
+    return tools
+
+
 def load_all_tools() -> list[Callable[..., Any]]:
     """Load all available tools from all modules as a single list of callable functions.
 
@@ -270,11 +292,11 @@ def load_all_tools() -> list[Callable[..., Any]]:
     implemented modules.
 
     Returns:
-        List of all 286 unique tool functions from all modules (automatically deduplicated)
+        List of all 298 unique tool functions from all modules (automatically deduplicated)
 
     Example:
         >>> all_tools = load_all_tools()
-        >>> len(all_tools) == 286
+        >>> len(all_tools) == 298
         True
         >>> # Use with agent frameworks
         >>> # agent = Agent(tools=load_all_tools())
@@ -288,6 +310,7 @@ def load_all_tools() -> list[Callable[..., Any]]:
         load_all_shell_tools(),  # 13 functions
         load_all_python_tools(),  # 32 functions
         load_all_database_tools(),  # 18 functions
+        load_all_dependencies_tools(),  # 12 functions
         load_all_javascript_tools(),  # 29 functions
         load_all_java_tools(),  # 17 functions
         load_all_go_tools(),  # 17 functions
