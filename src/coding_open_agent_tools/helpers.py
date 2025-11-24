@@ -9,6 +9,7 @@ from typing import Any, Callable, Union
 
 __all__ = [
     "merge_tool_lists",
+    "load_all_advanced_analysis_tools",
     "load_all_analysis_tools",
     "load_all_config_tools",
     "load_all_git_tools",
@@ -285,6 +286,27 @@ def load_all_dependencies_tools() -> list[Callable[..., Any]]:
     return tools
 
 
+def load_all_advanced_analysis_tools() -> list[Callable[..., Any]]:
+    """Load all advanced analysis tools as a list of callable functions.
+
+    Returns:
+        List of 12 advanced analysis tool functions (security, performance, compliance)
+
+    Example:
+        >>> advanced_tools = load_all_advanced_analysis_tools()
+        >>> len(advanced_tools) == 12
+        True
+    """
+    from coding_open_agent_tools import advanced_analysis
+
+    tools = []
+    for name in advanced_analysis.__all__:
+        func = getattr(advanced_analysis, name)
+        if callable(func):
+            tools.append(func)
+    return tools
+
+
 def load_all_tools() -> list[Callable[..., Any]]:
     """Load all available tools from all modules as a single list of callable functions.
 
@@ -292,16 +314,17 @@ def load_all_tools() -> list[Callable[..., Any]]:
     implemented modules.
 
     Returns:
-        List of all 298 unique tool functions from all modules (automatically deduplicated)
+        List of all 310 unique tool functions from all modules (automatically deduplicated)
 
     Example:
         >>> all_tools = load_all_tools()
-        >>> len(all_tools) == 298
+        >>> len(all_tools) == 310
         True
         >>> # Use with agent frameworks
         >>> # agent = Agent(tools=load_all_tools())
     """
     return merge_tool_lists(
+        load_all_advanced_analysis_tools(),  # 12 functions
         load_all_analysis_tools(),  # 14 functions
         load_all_config_tools(),  # 28 functions
         load_all_git_tools(),  # 79 functions

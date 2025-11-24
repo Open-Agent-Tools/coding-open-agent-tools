@@ -7,10 +7,11 @@ This project provides specialized code generation, script creation, and developm
 automation capabilities designed specifically for AI agents.
 """
 
-__version__ = "0.12.0"
+__version__ = "0.13.0"
 
 # Import migrated modules
 from . import (
+    advanced_analysis,
     analysis,
     config,
     cpp,
@@ -33,6 +34,7 @@ from . import (
 from .helpers import (
     get_tool_info,
     list_all_available_tools,
+    load_all_advanced_analysis_tools,
     load_all_analysis_tools,
     load_all_config_tools,
     load_all_cpp_tools,
@@ -66,6 +68,7 @@ from .helpers import (
 
 __all__: list[str] = [
     # Modules
+    "advanced_analysis",
     "analysis",
     "config",
     "cpp",
@@ -85,6 +88,7 @@ __all__: list[str] = [
     # Helper functions
     "get_tool_info",
     "list_all_available_tools",
+    "load_all_advanced_analysis_tools",
     "load_all_analysis_tools",
     "load_all_config_tools",
     "load_all_cpp_tools",
