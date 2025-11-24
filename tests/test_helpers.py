@@ -270,12 +270,14 @@ class TestLoadAllTools:
     """Tests for load_all_tools function."""
 
     def test_loads_all_tools(self) -> None:
-        """Test that all 286 tools are loaded."""
+        """Test that all 322 tools are loaded."""
         tools = helpers.load_all_tools()
-        # Core: 14 + 28 + 79 + 8 + 7 + 13 + 32 + 18 = 199
-        # Languages: 17 * 7 = 119 (JS, Java, Go, Rust, C++, C#, Ruby - but Python counted in core as 32)
-        # Total: 199 + 119 - 32 + 32 = 286 (14+28+79+8+7+13+32+18+17*7)
-        assert len(tools) == 286
+        # Advanced analysis: 12
+        # Core: 14 + 28 + 79 + 8 + 7 + 13 + 32 + 18 + 12 = 211
+        # Languages: JS(29) + Java(17) + Go(17) + Rust(17) + C++(17) + C#(17) + Ruby(17) = 131
+        # (JS increased from 17 to 29 with validation module)
+        # Total: 12 + 211 + 131 - 32 = 322 (Python 32 counted in core, not languages)
+        assert len(tools) == 322
 
     def test_all_tools_callable(self) -> None:
         """Test that all loaded tools are callable."""
@@ -394,8 +396,10 @@ class TestHelperIntegration:
         all_tools = helpers.load_all_tools()
 
         manual_merge = helpers.merge_tool_lists(
+            helpers.load_all_advanced_analysis_tools(),
             helpers.load_all_analysis_tools(),
             helpers.load_all_config_tools(),
+            helpers.load_all_dependencies_tools(),
             helpers.load_all_git_tools(),
             helpers.load_all_profiling_tools(),
             helpers.load_all_quality_tools(),
