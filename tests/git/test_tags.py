@@ -1,8 +1,6 @@
 """Tests for git tag and version management functions."""
 
-import subprocess
 import tempfile
-from pathlib import Path
 from unittest.mock import Mock, patch
 
 import pytest

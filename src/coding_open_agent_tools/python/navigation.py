@@ -16,6 +16,10 @@ import ast
 import json
 
 from coding_open_agent_tools._decorators import strands_tool
+from coding_open_agent_tools.navigation.shared import (
+    validate_identifier,
+    validate_source_code,
+)
 
 
 @strands_tool
@@ -41,12 +45,8 @@ def get_python_function_line_numbers(
         TypeError: If source_code or function_name not strings
         ValueError: If source_code is empty or function not found
     """
-    if not isinstance(source_code, str):
-        raise TypeError("source_code must be a string")
-    if not isinstance(function_name, str):
-        raise TypeError("function_name must be a string")
-    if not source_code.strip():
-        raise ValueError("source_code cannot be empty")
+    validate_source_code(source_code)
+    validate_identifier(function_name, "function_name")
 
     try:
         tree = ast.parse(source_code)
@@ -87,12 +87,8 @@ def get_python_class_line_numbers(source_code: str, class_name: str) -> dict[str
         TypeError: If source_code or class_name not strings
         ValueError: If source_code is empty or class not found
     """
-    if not isinstance(source_code, str):
-        raise TypeError("source_code must be a string")
-    if not isinstance(class_name, str):
-        raise TypeError("class_name must be a string")
-    if not source_code.strip():
-        raise ValueError("source_code cannot be empty")
+    validate_source_code(source_code)
+    validate_identifier(class_name, "class_name")
 
     try:
         tree = ast.parse(source_code)
@@ -138,10 +134,7 @@ def get_python_module_overview(source_code: str) -> dict[str, str]:
         TypeError: If source_code is not a string
         ValueError: If source_code is empty
     """
-    if not isinstance(source_code, str):
-        raise TypeError("source_code must be a string")
-    if not source_code.strip():
-        raise ValueError("source_code cannot be empty")
+    validate_source_code(source_code)
 
     try:
         tree = ast.parse(source_code)
@@ -212,10 +205,7 @@ def list_python_functions(source_code: str) -> list[dict[str, str]]:
         TypeError: If source_code is not a string
         ValueError: If source_code is empty
     """
-    if not isinstance(source_code, str):
-        raise TypeError("source_code must be a string")
-    if not source_code.strip():
-        raise ValueError("source_code cannot be empty")
+    validate_source_code(source_code)
 
     try:
         tree = ast.parse(source_code)
@@ -292,10 +282,7 @@ def list_python_classes(source_code: str) -> list[dict[str, str]]:
         TypeError: If source_code is not a string
         ValueError: If source_code is empty
     """
-    if not isinstance(source_code, str):
-        raise TypeError("source_code must be a string")
-    if not source_code.strip():
-        raise ValueError("source_code cannot be empty")
+    validate_source_code(source_code)
 
     try:
         tree = ast.parse(source_code)
@@ -364,8 +351,7 @@ def get_python_function_signature(
     """
     if not isinstance(source_code, str):
         raise TypeError("source_code must be a string")
-    if not isinstance(function_name, str):
-        raise TypeError("function_name must be a string")
+    validate_identifier(function_name, "function_name")
     if not source_code.strip():
         raise ValueError("source_code cannot be empty")
 
@@ -435,8 +421,7 @@ def get_python_function_docstring(
     """
     if not isinstance(source_code, str):
         raise TypeError("source_code must be a string")
-    if not isinstance(function_name, str):
-        raise TypeError("function_name must be a string")
+    validate_identifier(function_name, "function_name")
     if not source_code.strip():
         raise ValueError("source_code cannot be empty")
 
@@ -492,8 +477,7 @@ def list_python_class_methods(
     """
     if not isinstance(source_code, str):
         raise TypeError("source_code must be a string")
-    if not isinstance(class_name, str):
-        raise TypeError("class_name must be a string")
+    validate_identifier(class_name, "class_name")
     if not source_code.strip():
         raise ValueError("source_code cannot be empty")
 
@@ -580,10 +564,7 @@ def extract_python_public_api(source_code: str) -> dict[str, str]:
         TypeError: If source_code is not a string
         ValueError: If source_code is empty
     """
-    if not isinstance(source_code, str):
-        raise TypeError("source_code must be a string")
-    if not source_code.strip():
-        raise ValueError("source_code cannot be empty")
+    validate_source_code(source_code)
 
     try:
         tree = ast.parse(source_code)
@@ -656,8 +637,7 @@ def get_python_function_details(source_code: str, function_name: str) -> dict[st
     """
     if not isinstance(source_code, str):
         raise TypeError("source_code must be a string")
-    if not isinstance(function_name, str):
-        raise TypeError("function_name must be a string")
+    validate_identifier(function_name, "function_name")
     if not source_code.strip():
         raise ValueError("source_code cannot be empty")
 
@@ -737,8 +717,7 @@ def get_python_function_body(source_code: str, function_name: str) -> dict[str, 
     """
     if not isinstance(source_code, str):
         raise TypeError("source_code must be a string")
-    if not isinstance(function_name, str):
-        raise TypeError("function_name must be a string")
+    validate_identifier(function_name, "function_name")
     if not source_code.strip():
         raise ValueError("source_code cannot be empty")
 
@@ -798,8 +777,7 @@ def list_python_function_calls(source_code: str, function_name: str) -> dict[str
     """
     if not isinstance(source_code, str):
         raise TypeError("source_code must be a string")
-    if not isinstance(function_name, str):
-        raise TypeError("function_name must be a string")
+    validate_identifier(function_name, "function_name")
     if not source_code.strip():
         raise ValueError("source_code cannot be empty")
 
@@ -874,8 +852,7 @@ def find_python_function_usages(source_code: str, function_name: str) -> dict[st
     """
     if not isinstance(source_code, str):
         raise TypeError("source_code must be a string")
-    if not isinstance(function_name, str):
-        raise TypeError("function_name must be a string")
+    validate_identifier(function_name, "function_name")
     if not source_code.strip():
         raise ValueError("source_code cannot be empty")
 
@@ -954,10 +931,8 @@ def get_python_method_line_numbers(
     """
     if not isinstance(source_code, str):
         raise TypeError("source_code must be a string")
-    if not isinstance(class_name, str):
-        raise TypeError("class_name must be a string")
-    if not isinstance(method_name, str):
-        raise TypeError("method_name must be a string")
+    validate_identifier(class_name, "class_name")
+    validate_identifier(method_name, "method_name")
     if not source_code.strip():
         raise ValueError("source_code cannot be empty")
 
@@ -1016,8 +991,7 @@ def get_python_class_hierarchy(source_code: str, class_name: str) -> dict[str, s
     """
     if not isinstance(source_code, str):
         raise TypeError("source_code must be a string")
-    if not isinstance(class_name, str):
-        raise TypeError("class_name must be a string")
+    validate_identifier(class_name, "class_name")
     if not source_code.strip():
         raise ValueError("source_code cannot be empty")
 
@@ -1067,8 +1041,7 @@ def find_python_definitions_by_decorator(
     """
     if not isinstance(source_code, str):
         raise TypeError("source_code must be a string")
-    if not isinstance(decorator_name, str):
-        raise TypeError("decorator_name must be a string")
+    validate_identifier(decorator_name, "decorator_name")
     if not source_code.strip():
         raise ValueError("source_code cannot be empty")
 
@@ -1152,8 +1125,7 @@ def get_python_class_docstring(source_code: str, class_name: str) -> dict[str, s
     """
     if not isinstance(source_code, str):
         raise TypeError("source_code must be a string")
-    if not isinstance(class_name, str):
-        raise TypeError("class_name must be a string")
+    validate_identifier(class_name, "class_name")
     if not source_code.strip():
         raise ValueError("source_code cannot be empty")
 

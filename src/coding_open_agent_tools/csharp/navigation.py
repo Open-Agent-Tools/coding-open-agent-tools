@@ -15,6 +15,10 @@ import re
 from typing import Any, Callable
 
 from coding_open_agent_tools._decorators import strands_tool
+from coding_open_agent_tools.navigation.shared import (
+    validate_identifier,
+    validate_source_code,
+)
 
 # Conditional import for tree-sitter
 try:
@@ -281,12 +285,8 @@ def get_csharp_function_line_numbers(
         TypeError: If source_code or function_name is not a string
         ValueError: If source_code is empty, parsing fails, or method not found
     """
-    if not isinstance(source_code, str):
-        raise TypeError("source_code must be a string")
-    if not isinstance(function_name, str):
-        raise TypeError("function_name must be a string")
-    if not source_code.strip():
-        raise ValueError("source_code cannot be empty")
+    validate_source_code(source_code)
+    validate_identifier(function_name, "function_name")
 
     try:
         tree = _parse_csharp(source_code)
@@ -699,12 +699,8 @@ def get_csharp_function_signature(
         TypeError: If source_code or function_name is not a string
         ValueError: If source_code is empty, parsing fails, or method not found
     """
-    if not isinstance(source_code, str):
-        raise TypeError("source_code must be a string")
-    if not isinstance(function_name, str):
-        raise TypeError("function_name must be a string")
-    if not source_code.strip():
-        raise ValueError("source_code cannot be empty")
+    validate_source_code(source_code)
+    validate_identifier(function_name, "function_name")
 
     try:
         tree = _parse_csharp(source_code)
@@ -785,12 +781,8 @@ def get_csharp_function_docstring(
         TypeError: If source_code or function_name is not a string
         ValueError: If source_code is empty, parsing fails, or method not found
     """
-    if not isinstance(source_code, str):
-        raise TypeError("source_code must be a string")
-    if not isinstance(function_name, str):
-        raise TypeError("function_name must be a string")
-    if not source_code.strip():
-        raise ValueError("source_code cannot be empty")
+    validate_source_code(source_code)
+    validate_identifier(function_name, "function_name")
 
     try:
         tree = _parse_csharp(source_code)
@@ -1053,12 +1045,8 @@ def get_csharp_function_details(source_code: str, function_name: str) -> dict[st
         TypeError: If source_code or function_name is not a string
         ValueError: If source_code is empty, parsing fails, or method not found
     """
-    if not isinstance(source_code, str):
-        raise TypeError("source_code must be a string")
-    if not isinstance(function_name, str):
-        raise TypeError("function_name must be a string")
-    if not source_code.strip():
-        raise ValueError("source_code cannot be empty")
+    validate_source_code(source_code)
+    validate_identifier(function_name, "function_name")
 
     try:
         tree = _parse_csharp(source_code)
@@ -1148,12 +1136,8 @@ def get_csharp_function_body(source_code: str, function_name: str) -> dict[str, 
         TypeError: If source_code or function_name is not a string
         ValueError: If source_code is empty, parsing fails, or method not found
     """
-    if not isinstance(source_code, str):
-        raise TypeError("source_code must be a string")
-    if not isinstance(function_name, str):
-        raise TypeError("function_name must be a string")
-    if not source_code.strip():
-        raise ValueError("source_code cannot be empty")
+    validate_source_code(source_code)
+    validate_identifier(function_name, "function_name")
 
     try:
         tree = _parse_csharp(source_code)
@@ -1213,12 +1197,8 @@ def list_csharp_function_calls(source_code: str, function_name: str) -> dict[str
         TypeError: If source_code or function_name is not a string
         ValueError: If source_code is empty, parsing fails, or method not found
     """
-    if not isinstance(source_code, str):
-        raise TypeError("source_code must be a string")
-    if not isinstance(function_name, str):
-        raise TypeError("function_name must be a string")
-    if not source_code.strip():
-        raise ValueError("source_code cannot be empty")
+    validate_source_code(source_code)
+    validate_identifier(function_name, "function_name")
 
     try:
         tree = _parse_csharp(source_code)
@@ -1291,12 +1271,8 @@ def find_csharp_function_usages(source_code: str, function_name: str) -> dict[st
         TypeError: If source_code or function_name is not a string
         ValueError: If source_code is empty or parsing fails
     """
-    if not isinstance(source_code, str):
-        raise TypeError("source_code must be a string")
-    if not isinstance(function_name, str):
-        raise TypeError("function_name must be a string")
-    if not source_code.strip():
-        raise ValueError("source_code cannot be empty")
+    validate_source_code(source_code)
+    validate_identifier(function_name, "function_name")
 
     try:
         tree = _parse_csharp(source_code)

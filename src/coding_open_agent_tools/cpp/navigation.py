@@ -15,6 +15,10 @@ import re
 from typing import Any
 
 from coding_open_agent_tools._decorators import strands_tool
+from coding_open_agent_tools.navigation.shared import (
+    validate_identifier,
+    validate_source_code,
+)
 
 # Conditional import for tree-sitter
 try:
@@ -326,8 +330,7 @@ def get_cpp_function_line_numbers(
     """
     if not isinstance(source_code, str):
         raise TypeError("source_code must be a string")
-    if not isinstance(function_name, str):
-        raise TypeError("function_name must be a string")
+    validate_identifier(function_name, "function_name")
     if not source_code.strip():
         raise ValueError("source_code cannot be empty")
 
@@ -443,10 +446,7 @@ def get_cpp_module_overview(source_code: str) -> dict[str, str]:
         TypeError: If source_code is not a string
         ValueError: If source_code is empty or parsing fails
     """
-    if not isinstance(source_code, str):
-        raise TypeError("source_code must be a string")
-    if not source_code.strip():
-        raise ValueError("source_code cannot be empty")
+    validate_source_code(source_code)
 
     try:
         tree = _parse_cpp(source_code)
@@ -521,10 +521,7 @@ def list_cpp_functions(source_code: str) -> dict[str, str]:
         TypeError: If source_code is not a string
         ValueError: If source_code is empty or parsing fails
     """
-    if not isinstance(source_code, str):
-        raise TypeError("source_code must be a string")
-    if not source_code.strip():
-        raise ValueError("source_code cannot be empty")
+    validate_source_code(source_code)
 
     try:
         tree = _parse_cpp(source_code)
@@ -594,10 +591,7 @@ def list_cpp_types(source_code: str) -> dict[str, str]:
         TypeError: If source_code is not a string
         ValueError: If source_code is empty or parsing fails
     """
-    if not isinstance(source_code, str):
-        raise TypeError("source_code must be a string")
-    if not source_code.strip():
-        raise ValueError("source_code cannot be empty")
+    validate_source_code(source_code)
 
     try:
         tree = _parse_cpp(source_code)
@@ -675,8 +669,7 @@ def get_cpp_function_signature(source_code: str, function_name: str) -> dict[str
     """
     if not isinstance(source_code, str):
         raise TypeError("source_code must be a string")
-    if not isinstance(function_name, str):
-        raise TypeError("function_name must be a string")
+    validate_identifier(function_name, "function_name")
     if not source_code.strip():
         raise ValueError("source_code cannot be empty")
 
@@ -754,8 +747,7 @@ def get_cpp_function_docstring(source_code: str, function_name: str) -> dict[str
     """
     if not isinstance(source_code, str):
         raise TypeError("source_code must be a string")
-    if not isinstance(function_name, str):
-        raise TypeError("function_name must be a string")
+    validate_identifier(function_name, "function_name")
     if not source_code.strip():
         raise ValueError("source_code cannot be empty")
 
@@ -906,10 +898,7 @@ def extract_cpp_public_api(source_code: str) -> dict[str, str]:
         TypeError: If source_code is not a string
         ValueError: If source_code is empty or parsing fails
     """
-    if not isinstance(source_code, str):
-        raise TypeError("source_code must be a string")
-    if not source_code.strip():
-        raise ValueError("source_code cannot be empty")
+    validate_source_code(source_code)
 
     try:
         tree = _parse_cpp(source_code)
@@ -982,8 +971,7 @@ def get_cpp_function_details(source_code: str, function_name: str) -> dict[str, 
     """
     if not isinstance(source_code, str):
         raise TypeError("source_code must be a string")
-    if not isinstance(function_name, str):
-        raise TypeError("function_name must be a string")
+    validate_identifier(function_name, "function_name")
     if not source_code.strip():
         raise ValueError("source_code cannot be empty")
 
@@ -1067,8 +1055,7 @@ def get_cpp_function_body(source_code: str, function_name: str) -> dict[str, str
     """
     if not isinstance(source_code, str):
         raise TypeError("source_code must be a string")
-    if not isinstance(function_name, str):
-        raise TypeError("function_name must be a string")
+    validate_identifier(function_name, "function_name")
     if not source_code.strip():
         raise ValueError("source_code cannot be empty")
 
@@ -1128,8 +1115,7 @@ def list_cpp_function_calls(source_code: str, function_name: str) -> dict[str, s
     """
     if not isinstance(source_code, str):
         raise TypeError("source_code must be a string")
-    if not isinstance(function_name, str):
-        raise TypeError("function_name must be a string")
+    validate_identifier(function_name, "function_name")
     if not source_code.strip():
         raise ValueError("source_code cannot be empty")
 
@@ -1198,8 +1184,7 @@ def find_cpp_function_usages(source_code: str, function_name: str) -> dict[str, 
     """
     if not isinstance(source_code, str):
         raise TypeError("source_code must be a string")
-    if not isinstance(function_name, str):
-        raise TypeError("function_name must be a string")
+    validate_identifier(function_name, "function_name")
     if not source_code.strip():
         raise ValueError("source_code cannot be empty")
 
@@ -1271,10 +1256,8 @@ def get_cpp_specific_function_line_numbers(
     """
     if not isinstance(source_code, str):
         raise TypeError("source_code must be a string")
-    if not isinstance(class_name, str):
-        raise TypeError("class_name must be a string")
-    if not isinstance(function_name, str):
-        raise TypeError("function_name must be a string")
+    validate_identifier(class_name, "class_name")
+    validate_identifier(function_name, "function_name")
     if not source_code.strip():
         raise ValueError("source_code cannot be empty")
 

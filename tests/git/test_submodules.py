@@ -1,6 +1,5 @@
 """Tests for git submodule management and analysis functions."""
 
-import subprocess
 import tempfile
 from pathlib import Path
 from unittest.mock import Mock, patch

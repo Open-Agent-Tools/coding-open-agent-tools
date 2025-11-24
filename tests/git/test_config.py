@@ -1,6 +1,5 @@
 """Tests for git configuration parsing and validation functions."""
 
-import subprocess
 import tempfile
 from pathlib import Path
 from unittest.mock import Mock, patch

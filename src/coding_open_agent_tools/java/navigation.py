@@ -14,6 +14,10 @@ import json
 from typing import Any
 
 from coding_open_agent_tools._decorators import strands_tool
+from coding_open_agent_tools.navigation.shared import (
+    validate_identifier,
+    validate_source_code,
+)
 
 # Conditional import for tree-sitter
 try:
@@ -146,8 +150,7 @@ def get_java_method_line_numbers(source_code: str, method_name: str) -> dict[str
     """
     if not isinstance(source_code, str):
         raise TypeError("source_code must be a string")
-    if not isinstance(method_name, str):
-        raise TypeError("method_name must be a string")
+    validate_identifier(method_name, "method_name")
     if not source_code.strip():
         raise ValueError("source_code cannot be empty")
 
@@ -217,8 +220,7 @@ def get_java_class_line_numbers(source_code: str, class_name: str) -> dict[str, 
     """
     if not isinstance(source_code, str):
         raise TypeError("source_code must be a string")
-    if not isinstance(class_name, str):
-        raise TypeError("class_name must be a string")
+    validate_identifier(class_name, "class_name")
     if not source_code.strip():
         raise ValueError("source_code cannot be empty")
 
@@ -278,10 +280,7 @@ def get_java_module_overview(source_code: str) -> dict[str, str]:
         TypeError: If source_code is not a string
         ValueError: If source_code is empty or parsing fails
     """
-    if not isinstance(source_code, str):
-        raise TypeError("source_code must be a string")
-    if not source_code.strip():
-        raise ValueError("source_code cannot be empty")
+    validate_source_code(source_code)
 
     try:
         tree = _parse_java(source_code)
@@ -353,10 +352,7 @@ def list_java_methods(source_code: str) -> dict[str, str]:
         TypeError: If source_code is not a string
         ValueError: If source_code is empty or parsing fails
     """
-    if not isinstance(source_code, str):
-        raise TypeError("source_code must be a string")
-    if not source_code.strip():
-        raise ValueError("source_code cannot be empty")
+    validate_source_code(source_code)
 
     try:
         tree = _parse_java(source_code)
@@ -429,10 +425,7 @@ def list_java_classes(source_code: str) -> dict[str, str]:
         TypeError: If source_code is not a string
         ValueError: If source_code is empty or parsing fails
     """
-    if not isinstance(source_code, str):
-        raise TypeError("source_code must be a string")
-    if not source_code.strip():
-        raise ValueError("source_code cannot be empty")
+    validate_source_code(source_code)
 
     try:
         tree = _parse_java(source_code)
@@ -526,8 +519,7 @@ def get_java_method_signature(source_code: str, method_name: str) -> dict[str, s
     """
     if not isinstance(source_code, str):
         raise TypeError("source_code must be a string")
-    if not isinstance(method_name, str):
-        raise TypeError("method_name must be a string")
+    validate_identifier(method_name, "method_name")
     if not source_code.strip():
         raise ValueError("source_code cannot be empty")
 
@@ -609,8 +601,7 @@ def get_java_method_docstring(source_code: str, method_name: str) -> dict[str, s
     """
     if not isinstance(source_code, str):
         raise TypeError("source_code must be a string")
-    if not isinstance(method_name, str):
-        raise TypeError("method_name must be a string")
+    validate_identifier(method_name, "method_name")
     if not source_code.strip():
         raise ValueError("source_code cannot be empty")
 
@@ -665,8 +656,7 @@ def list_java_class_methods(source_code: str, class_name: str) -> dict[str, str]
     """
     if not isinstance(source_code, str):
         raise TypeError("source_code must be a string")
-    if not isinstance(class_name, str):
-        raise TypeError("class_name must be a string")
+    validate_identifier(class_name, "class_name")
     if not source_code.strip():
         raise ValueError("source_code cannot be empty")
 
@@ -768,10 +758,7 @@ def extract_java_public_api(source_code: str) -> dict[str, str]:
         TypeError: If source_code is not a string
         ValueError: If source_code is empty or parsing fails
     """
-    if not isinstance(source_code, str):
-        raise TypeError("source_code must be a string")
-    if not source_code.strip():
-        raise ValueError("source_code cannot be empty")
+    validate_source_code(source_code)
 
     try:
         tree = _parse_java(source_code)
@@ -865,8 +852,7 @@ def get_java_method_details(source_code: str, method_name: str) -> dict[str, str
     """
     if not isinstance(source_code, str):
         raise TypeError("source_code must be a string")
-    if not isinstance(method_name, str):
-        raise TypeError("method_name must be a string")
+    validate_identifier(method_name, "method_name")
     if not source_code.strip():
         raise ValueError("source_code cannot be empty")
 
@@ -955,8 +941,7 @@ def get_java_method_body(source_code: str, method_name: str) -> dict[str, str]:
     """
     if not isinstance(source_code, str):
         raise TypeError("source_code must be a string")
-    if not isinstance(method_name, str):
-        raise TypeError("method_name must be a string")
+    validate_identifier(method_name, "method_name")
     if not source_code.strip():
         raise ValueError("source_code cannot be empty")
 
@@ -1020,8 +1005,7 @@ def list_java_method_calls(source_code: str, method_name: str) -> dict[str, str]
     """
     if not isinstance(source_code, str):
         raise TypeError("source_code must be a string")
-    if not isinstance(method_name, str):
-        raise TypeError("method_name must be a string")
+    validate_identifier(method_name, "method_name")
     if not source_code.strip():
         raise ValueError("source_code cannot be empty")
 
@@ -1094,8 +1078,7 @@ def find_java_method_usages(source_code: str, method_name: str) -> dict[str, str
     """
     if not isinstance(source_code, str):
         raise TypeError("source_code must be a string")
-    if not isinstance(method_name, str):
-        raise TypeError("method_name must be a string")
+    validate_identifier(method_name, "method_name")
     if not source_code.strip():
         raise ValueError("source_code cannot be empty")
 
@@ -1160,10 +1143,8 @@ def get_java_specific_method_line_numbers(
     """
     if not isinstance(source_code, str):
         raise TypeError("source_code must be a string")
-    if not isinstance(class_name, str):
-        raise TypeError("class_name must be a string")
-    if not isinstance(method_name, str):
-        raise TypeError("method_name must be a string")
+    validate_identifier(class_name, "class_name")
+    validate_identifier(method_name, "method_name")
     if not source_code.strip():
         raise ValueError("source_code cannot be empty")
 
@@ -1236,8 +1217,7 @@ def get_java_class_hierarchy(source_code: str, class_name: str) -> dict[str, str
     """
     if not isinstance(source_code, str):
         raise TypeError("source_code must be a string")
-    if not isinstance(class_name, str):
-        raise TypeError("class_name must be a string")
+    validate_identifier(class_name, "class_name")
     if not source_code.strip():
         raise ValueError("source_code cannot be empty")
 
@@ -1406,8 +1386,7 @@ def get_java_class_docstring(source_code: str, class_name: str) -> dict[str, str
     """
     if not isinstance(source_code, str):
         raise TypeError("source_code must be a string")
-    if not isinstance(class_name, str):
-        raise TypeError("class_name must be a string")
+    validate_identifier(class_name, "class_name")
     if not source_code.strip():
         raise ValueError("source_code cannot be empty")
 

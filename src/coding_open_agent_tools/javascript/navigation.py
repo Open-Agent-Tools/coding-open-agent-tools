@@ -15,6 +15,10 @@ import re
 from typing import Any
 
 from coding_open_agent_tools._decorators import strands_tool
+from coding_open_agent_tools.navigation.shared import (
+    validate_identifier,
+    validate_source_code,
+)
 
 # Conditional import for esprima
 try:
@@ -184,8 +188,7 @@ def get_javascript_function_line_numbers(
     """
     if not isinstance(source_code, str):
         raise TypeError("source_code must be a string")
-    if not isinstance(function_name, str):
-        raise TypeError("function_name must be a string")
+    validate_identifier(function_name, "function_name")
     if not source_code.strip():
         raise ValueError("source_code cannot be empty")
 
@@ -268,8 +271,7 @@ def get_javascript_class_line_numbers(
     """
     if not isinstance(source_code, str):
         raise TypeError("source_code must be a string")
-    if not isinstance(class_name, str):
-        raise TypeError("class_name must be a string")
+    validate_identifier(class_name, "class_name")
     if not source_code.strip():
         raise ValueError("source_code cannot be empty")
 
@@ -324,10 +326,7 @@ def get_javascript_module_overview(source_code: str) -> dict[str, str]:
         TypeError: If source_code is not a string
         ValueError: If source_code is empty or parsing fails
     """
-    if not isinstance(source_code, str):
-        raise TypeError("source_code must be a string")
-    if not source_code.strip():
-        raise ValueError("source_code cannot be empty")
+    validate_source_code(source_code)
 
     try:
         ast = _parse_javascript(source_code)
@@ -404,10 +403,7 @@ def list_javascript_functions(source_code: str) -> dict[str, str]:
         TypeError: If source_code is not a string
         ValueError: If source_code is empty or parsing fails
     """
-    if not isinstance(source_code, str):
-        raise TypeError("source_code must be a string")
-    if not source_code.strip():
-        raise ValueError("source_code cannot be empty")
+    validate_source_code(source_code)
 
     try:
         ast = _parse_javascript(source_code)
@@ -483,10 +479,7 @@ def list_javascript_classes(source_code: str) -> dict[str, str]:
         TypeError: If source_code is not a string
         ValueError: If source_code is empty or parsing fails
     """
-    if not isinstance(source_code, str):
-        raise TypeError("source_code must be a string")
-    if not source_code.strip():
-        raise ValueError("source_code cannot be empty")
+    validate_source_code(source_code)
 
     try:
         ast = _parse_javascript(source_code)
@@ -559,8 +552,7 @@ def get_javascript_function_signature(
     """
     if not isinstance(source_code, str):
         raise TypeError("source_code must be a string")
-    if not isinstance(function_name, str):
-        raise TypeError("function_name must be a string")
+    validate_identifier(function_name, "function_name")
     if not source_code.strip():
         raise ValueError("source_code cannot be empty")
 
@@ -659,8 +651,7 @@ def get_javascript_function_docstring(
     """
     if not isinstance(source_code, str):
         raise TypeError("source_code must be a string")
-    if not isinstance(function_name, str):
-        raise TypeError("function_name must be a string")
+    validate_identifier(function_name, "function_name")
     if not source_code.strip():
         raise ValueError("source_code cannot be empty")
 
@@ -740,8 +731,7 @@ def list_javascript_class_methods(source_code: str, class_name: str) -> dict[str
     """
     if not isinstance(source_code, str):
         raise TypeError("source_code must be a string")
-    if not isinstance(class_name, str):
-        raise TypeError("class_name must be a string")
+    validate_identifier(class_name, "class_name")
     if not source_code.strip():
         raise ValueError("source_code cannot be empty")
 
@@ -819,10 +809,7 @@ def extract_javascript_public_api(source_code: str) -> dict[str, str]:
         TypeError: If source_code is not a string
         ValueError: If source_code is empty or parsing fails
     """
-    if not isinstance(source_code, str):
-        raise TypeError("source_code must be a string")
-    if not source_code.strip():
-        raise ValueError("source_code cannot be empty")
+    validate_source_code(source_code)
 
     try:
         ast = _parse_javascript(source_code)
@@ -928,8 +915,7 @@ def get_javascript_function_details(
     """
     if not isinstance(source_code, str):
         raise TypeError("source_code must be a string")
-    if not isinstance(function_name, str):
-        raise TypeError("function_name must be a string")
+    validate_identifier(function_name, "function_name")
     if not source_code.strip():
         raise ValueError("source_code cannot be empty")
 
@@ -1059,8 +1045,7 @@ def get_javascript_function_body(
     """
     if not isinstance(source_code, str):
         raise TypeError("source_code must be a string")
-    if not isinstance(function_name, str):
-        raise TypeError("function_name must be a string")
+    validate_identifier(function_name, "function_name")
     if not source_code.strip():
         raise ValueError("source_code cannot be empty")
 
@@ -1189,8 +1174,7 @@ def list_javascript_function_calls(
     """
     if not isinstance(source_code, str):
         raise TypeError("source_code must be a string")
-    if not isinstance(function_name, str):
-        raise TypeError("function_name must be a string")
+    validate_identifier(function_name, "function_name")
     if not source_code.strip():
         raise ValueError("source_code cannot be empty")
 
@@ -1316,8 +1300,7 @@ def find_javascript_function_usages(
     """
     if not isinstance(source_code, str):
         raise TypeError("source_code must be a string")
-    if not isinstance(function_name, str):
-        raise TypeError("function_name must be a string")
+    validate_identifier(function_name, "function_name")
     if not source_code.strip():
         raise ValueError("source_code cannot be empty")
 
@@ -1407,8 +1390,7 @@ def get_javascript_method_line_numbers(
     """
     if not isinstance(source_code, str):
         raise TypeError("source_code must be a string")
-    if not isinstance(class_name, str):
-        raise TypeError("class_name must be a string")
+    validate_identifier(class_name, "class_name")
     if not isinstance(method_name, str):
         raise TypeError("method_name must be a string")
     if not source_code.strip():
@@ -1482,8 +1464,7 @@ def get_javascript_class_hierarchy(source_code: str, class_name: str) -> dict[st
     """
     if not isinstance(source_code, str):
         raise TypeError("source_code must be a string")
-    if not isinstance(class_name, str):
-        raise TypeError("class_name must be a string")
+    validate_identifier(class_name, "class_name")
     if not source_code.strip():
         raise ValueError("source_code cannot be empty")
 
@@ -1641,8 +1622,7 @@ def get_javascript_class_docstring(source_code: str, class_name: str) -> dict[st
     """
     if not isinstance(source_code, str):
         raise TypeError("source_code must be a string")
-    if not isinstance(class_name, str):
-        raise TypeError("class_name must be a string")
+    validate_identifier(class_name, "class_name")
     if not source_code.strip():
         raise ValueError("source_code cannot be empty")
 

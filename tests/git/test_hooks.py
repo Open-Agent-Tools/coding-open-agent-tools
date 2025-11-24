@@ -1,7 +1,5 @@
 """Tests for git hooks management and validation functions."""
 
-import os
-import stat
 import subprocess
 import tempfile
 from pathlib import Path
