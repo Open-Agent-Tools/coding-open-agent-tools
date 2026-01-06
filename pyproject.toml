@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta:__legacy__"
 
 [project]
 name = "coding-open-agent-tools"
-version = "0.14.0"  # Minor: Phase 12 completion - test coverage expansion, code duplication reduction, decorator migration, comprehensive documentation
+version = "0.14.1"  # Hotfix: Remove basic-open-agent-tools dependency, fix 21 detector tests, update to strands-agents
 description = "Advanced code generation and shell scripting toolkit for AI agents, complementing basic-open-agent-tools with development-focused capabilities."
 readme = "README.md"
 requires-python = ">=3.9"

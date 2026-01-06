@@ -721,7 +721,11 @@ def scan_for_hardcoded_credentials(source_code: str) -> dict[str, str]:
             "secret_key",
             "critical",
         ),
-        (r"aws[_-]?secret[_-]?(access[_-]?)?key\s*=\s*['\"]([A-Za-z0-9/+=]{20,})['\"]", "aws_key", "critical"),
+        (
+            r"aws[_-]?secret[_-]?(access[_-]?)?key\s*=\s*['\"]([A-Za-z0-9/+=]{20,})['\"]",
+            "aws_key",
+            "critical",
+        ),
         (r"token\s*=\s*['\"]([A-Za-z0-9_\-\.]{10,})['\"]", "token", "high"),
         (
             r"private[_-]?key\s*=\s*['\"]([A-Za-z0-9+/=\n\-]{40,})['\"]",
@@ -733,8 +737,16 @@ def scan_for_hardcoded_credentials(source_code: str) -> dict[str, str]:
             "aws_access_key",
             "critical",
         ),
-        (r"sk-[a-zA-Z0-9\-]{10,}", "openai_key", "critical"),  # OpenAI keys (flexible length)
-        (r"ghp_[a-zA-Z0-9]{10,}", "github_token", "critical"),  # GitHub tokens (flexible length)
+        (
+            r"sk-[a-zA-Z0-9\-]{10,}",
+            "openai_key",
+            "critical",
+        ),  # OpenAI keys (flexible length)
+        (
+            r"ghp_[a-zA-Z0-9]{10,}",
+            "github_token",
+            "critical",
+        ),  # GitHub tokens (flexible length)
     ]
 
     for i, line in enumerate(lines, 1):
@@ -985,7 +997,8 @@ def detect_memory_leak_patterns(source_code: str, language: str) -> dict[str, st
                 # Check if .close() is present in next few lines (i is 1-indexed, lines is 0-indexed)
                 # Skip lines that are comments
                 has_close = any(
-                    ".close()" in lines[j].strip() and not lines[j].strip().startswith("#")
+                    ".close()" in lines[j].strip()
+                    and not lines[j].strip().startswith("#")
                     for j in range(i - 1, min(i + 10, len(lines)))
                 )
                 if not has_close:
@@ -1040,9 +1053,7 @@ def detect_memory_leak_patterns(source_code: str, language: str) -> dict[str, st
             # JavaScript: look for var/const declarations or direct .push()
             is_global_pattern = (
                 lang == "python" and "self." not in stripped and "." in stripped
-            ) or (
-                lang in ["javascript", "typescript"]
-            )
+            ) or (lang in ["javascript", "typescript"])
             if is_global_pattern:
                 patterns.append(
                     {
@@ -1174,7 +1185,9 @@ def find_blocking_io(source_code: str, language: str) -> dict[str, str]:
 
             elif lang in ["javascript", "typescript"]:
                 # Pattern 4: XMLHttpRequest (sync) - look for .open() with false
-                if "XMLHttpRequest" in stripped or (".open(" in stripped and "false" in stripped):
+                if "XMLHttpRequest" in stripped or (
+                    ".open(" in stripped and "false" in stripped
+                ):
                     operations.append(
                         {
                             "line": i,
@@ -1296,7 +1309,9 @@ def check_gdpr_compliance(source_code: str, language: str) -> dict[str, str]:
         # Check for form data or request parameter collection
         if any(pii in stripped for pii in pii_keywords):
             # Check if this is collecting data from user input (form, request, input, etc.)
-            is_collecting = any(term in stripped for term in ["request.", "form[", "input(", "params["])
+            is_collecting = any(
+                term in stripped for term in ["request.", "form[", "input(", "params["]
+            )
             if is_collecting:
                 # Check for consent nearby (i is 1-indexed, lines is 0-indexed)
                 # Exclude comments when checking for consent
@@ -1337,11 +1352,17 @@ def check_gdpr_compliance(source_code: str, language: str) -> dict[str, str]:
             pass  # Presence of deletion is positive
 
         # Pattern 4: No audit trail for PII access
-        if "select" in stripped or "query" in stripped or "find" in stripped or "get_user" in stripped:
+        if (
+            "select" in stripped
+            or "query" in stripped
+            or "find" in stripped
+            or "get_user" in stripped
+        ):
             if any(pii in stripped for pii in pii_keywords):
                 # Check for logging in current line or nearby lines (i is 1-indexed, lines is 0-indexed)
                 has_logging = any(
-                    term in lines[j].lower() for term in ["log", "audit", "track"]
+                    term in lines[j].lower()
+                    for term in ["log", "audit", "track"]
                     for j in range(max(0, i - 5), min(i + 5, len(lines)))
                 )
                 if not has_logging:
@@ -1452,9 +1473,12 @@ def validate_accessibility(source_code: str) -> dict[str, str]:
                 content = stripped[start:end]
                 # Remove all HTML tags to check for text content
                 import re
-                text_only = re.sub(r'<[^>]+>', '', content).strip()
+
+                text_only = re.sub(r"<[^>]+>", "", content).strip()
                 # Check if there's actual text content
-                has_text_content = len(text_only) > 0 and any(c.isalpha() for c in text_only)
+                has_text_content = len(text_only) > 0 and any(
+                    c.isalpha() for c in text_only
+                )
             has_aria = "aria-label=" in stripped
             if not has_text_content and not has_aria:
                 issues.append(
@@ -1501,8 +1525,21 @@ def validate_accessibility(source_code: str) -> dict[str, str]:
 
         # Check for divs with semantic class names that should use semantic HTML
         if "<div" in stripped:
-            semantic_class_names = ["header", "footer", "nav", "main", "article", "section", "aside"]
-            if any(f'class="{name}"' in stripped or f"class='{name}'" in stripped or f'"{name}"' in stripped for name in semantic_class_names):
+            semantic_class_names = [
+                "header",
+                "footer",
+                "nav",
+                "main",
+                "article",
+                "section",
+                "aside",
+            ]
+            if any(
+                f'class="{name}"' in stripped
+                or f"class='{name}'" in stripped
+                or f'"{name}"' in stripped
+                for name in semantic_class_names
+            ):
                 issues.append(
                     {
                         "line": i,
@@ -1628,9 +1665,9 @@ def detect_license_violations(
     project_license_upper = project_license.upper()
     # Check for LGPL separately to avoid substring matching with GPL
     project_is_lgpl = "LGPL" in project_license_upper
-    project_is_copyleft = any(
-        cl in project_license_upper for cl in copyleft
-    ) and not project_is_lgpl
+    project_is_copyleft = (
+        any(cl in project_license_upper for cl in copyleft) and not project_is_lgpl
+    )
 
     # Handle both dict format {name: license} and array format [{name, license}]
     if isinstance(dependencies, dict):
