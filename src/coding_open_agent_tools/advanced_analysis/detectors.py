@@ -10,7 +10,7 @@ from typing import Any, Callable, Optional
 
 # Conditional import for strands decorator
 try:
-    from strands import tool as strands_tool
+    from strands_agents import tool as strands_tool
 except ImportError:
 
     def strands_tool(func: Callable[..., Any]) -> Callable[..., Any]:  # type: ignore[no-redef]
@@ -109,9 +109,9 @@ def detect_circular_imports(import_graph_json: str) -> dict[str, str]:
         severity = "none"
     elif len(unique_cycles) > 5 or any(len(c) > 5 for c in unique_cycles):
         severity = "critical"
-    elif len(unique_cycles) > 2:
+    elif len(unique_cycles) > 2 or any(len(c) > 3 for c in unique_cycles):
         severity = "high"
-    elif len(unique_cycles) > 1:
+    elif len(unique_cycles) > 1 or any(len(c) > 2 for c in unique_cycles):
         severity = "medium"
     else:
         severity = "low"
@@ -182,9 +182,25 @@ def find_unused_dependencies(
     except json.JSONDecodeError as e:
         raise ValueError(f"Invalid JSON: {e}") from e
 
+    # Common package name to import name mappings
+    PACKAGE_MAPPINGS = {
+        "pyyaml": "yaml",
+        "pillow": "PIL",
+        "python_dateutil": "dateutil",
+        "attrs": "attr",
+        "beautifulsoup4": "bs4",
+        "protobuf": "google_protobuf",
+        "googleapis_common_protos": "google",
+        "google_cloud_storage": "google_cloud_storage",
+    }
+
     # Normalize names (handle package name vs import name differences)
     def normalize(name: str) -> str:
-        return name.lower().replace("-", "_").replace(".", "_")
+        normalized = name.lower().replace("-", "_").replace(".", "_")
+        # Check if this matches a known package mapping
+        if normalized in PACKAGE_MAPPINGS:
+            return PACKAGE_MAPPINGS[normalized].lower().replace(".", "_")
+        return normalized
 
     # Extract package names from import statements
     import_names = set()
@@ -192,10 +208,15 @@ def find_unused_dependencies(
         # Handle "import package" or "from package import ..."
         match = re.match(r"(?:from|import)\s+([A-Za-z_][A-Za-z0-9_.\-]*)", imp)
         if match:
-            import_names.add(match.group(1))
+            pkg = match.group(1)
+            # Handle google.cloud.storage -> google_cloud_storage
+            import_names.add(pkg.replace(".", "_"))
+            # Also add first part for packages like google.cloud.storage -> google
+            if "." in pkg:
+                import_names.add(pkg.split(".")[0])
         else:
             # If no import keyword, treat as package name directly
-            import_names.add(imp)
+            import_names.add(imp.replace(".", "_"))
 
     declared_normalized = {normalize(d): d for d in declared}
     import_normalized = {normalize(i) for i in import_names}
@@ -560,7 +581,7 @@ def find_xss_vulnerabilities(source_code: str, language: str) -> dict[str, str]:
                     {
                         "line": i,
                         "type": "xss",
-                        "pattern": "document_write",
+                        "pattern": "document.write",
                         "severity": "high",
                     }
                 )
@@ -584,7 +605,7 @@ def find_xss_vulnerabilities(source_code: str, language: str) -> dict[str, str]:
                     {
                         "line": i,
                         "type": "xss",
-                        "pattern": "dangerous_react_prop",
+                        "pattern": "dangerouslySetInnerHTML",
                         "severity": "high",
                     }
                 )
@@ -694,13 +715,14 @@ def scan_for_hardcoded_credentials(source_code: str) -> dict[str, str]:
             "password",
             "critical",
         ),
-        (r"api[_-]?key\s*=\s*['\"]([A-Za-z0-9_\-]{20,})['\"]", "api_key", "critical"),
+        (r"api[_-]?key\s*=\s*['\"]([A-Za-z0-9_\-]{10,})['\"]", "api_key", "critical"),
         (
-            r"secret[_-]?key\s*=\s*['\"]([A-Za-z0-9_\-]{20,})['\"]",
+            r"secret([_-]?key)?\s*=\s*['\"]([A-Za-z0-9_\-/+=]{10,})['\"]",
             "secret_key",
             "critical",
         ),
-        (r"token\s*=\s*['\"]([A-Za-z0-9_\-\.]{20,})['\"]", "token", "high"),
+        (r"aws[_-]?secret[_-]?(access[_-]?)?key\s*=\s*['\"]([A-Za-z0-9/+=]{20,})['\"]", "aws_key", "critical"),
+        (r"token\s*=\s*['\"]([A-Za-z0-9_\-\.]{10,})['\"]", "token", "high"),
         (
             r"private[_-]?key\s*=\s*['\"]([A-Za-z0-9+/=\n\-]{40,})['\"]",
             "private_key",
@@ -708,11 +730,11 @@ def scan_for_hardcoded_credentials(source_code: str) -> dict[str, str]:
         ),
         (
             r"aws[_-]?access[_-]?key[_-]?id\s*=\s*['\"]([A-Z0-9]{20})['\"]",
-            "aws_key",
+            "aws_access_key",
             "critical",
         ),
-        (r"sk-[a-zA-Z0-9]{48}", "openai_key", "critical"),  # OpenAI keys
-        (r"ghp_[a-zA-Z0-9]{36}", "github_token", "critical"),  # GitHub tokens
+        (r"sk-[a-zA-Z0-9\-]{10,}", "openai_key", "critical"),  # OpenAI keys (flexible length)
+        (r"ghp_[a-zA-Z0-9]{10,}", "github_token", "critical"),  # GitHub tokens (flexible length)
     ]
 
     for i, line in enumerate(lines, 1):
@@ -960,16 +982,17 @@ def detect_memory_leak_patterns(source_code: str, language: str) -> dict[str, st
         # Pattern 1: Unclosed file handles
         if lang == "python":
             if "open(" in stripped and "with " not in stripped:
-                # Check if .close() is present in next few lines
+                # Check if .close() is present in next few lines (i is 1-indexed, lines is 0-indexed)
+                # Skip lines that are comments
                 has_close = any(
-                    ".close()" in lines[j].strip()
-                    for j in range(i, min(i + 10, len(lines)))
+                    ".close()" in lines[j].strip() and not lines[j].strip().startswith("#")
+                    for j in range(i - 1, min(i + 10, len(lines)))
                 )
                 if not has_close:
                     patterns.append(
                         {
                             "line": i,
-                            "type": "unclosed_file",
+                            "type": "file",
                             "severity": "high",
                         }
                     )
@@ -978,16 +1001,16 @@ def detect_memory_leak_patterns(source_code: str, language: str) -> dict[str, st
         # Pattern 2: Event listeners without removal
         if lang in ["javascript", "typescript"]:
             if "addEventListener(" in stripped:
-                # Check for removeEventListener in reasonable range
+                # Check for removeEventListener in reasonable range (i is 1-indexed, lines is 0-indexed)
                 has_remove = any(
                     "removeEventListener(" in lines[j].strip()
-                    for j in range(i, min(i + 50, len(lines)))
+                    for j in range(i - 1, min(i + 50, len(lines)))
                 )
                 if not has_remove:
                     patterns.append(
                         {
                             "line": i,
-                            "type": "unremoved_event_listener",
+                            "type": "event_listener",
                             "severity": "medium",
                         }
                     )
@@ -995,29 +1018,36 @@ def detect_memory_leak_patterns(source_code: str, language: str) -> dict[str, st
 
             # Pattern 3: setInterval without clearInterval
             if "setInterval(" in stripped:
+                # Check for clearInterval in reasonable range (i is 1-indexed, lines is 0-indexed)
                 has_clear = any(
                     "clearInterval(" in lines[j].strip()
-                    for j in range(i, min(i + 50, len(lines)))
+                    for j in range(i - 1, min(i + 50, len(lines)))
                 )
                 if not has_clear:
                     patterns.append(
                         {
                             "line": i,
-                            "type": "uncleaned_interval",
+                            "type": "interval",
                             "severity": "high",
                         }
                     )
                     affected_lines.append(i)
 
         # Pattern 4: Growing global arrays/objects
-        if "global " in stripped.lower() or (
-            lang in ["javascript", "typescript"] and stripped.startswith("var ")
-        ):
-            if any(op in stripped for op in [".append(", ".push(", "["]):
+        # Check for append/push on global-looking variables (lowercase with underscores, no self/this)
+        if any(op in stripped for op in [".append(", ".push("]):
+            # Python: look for global_var.append() or just var.append() patterns
+            # JavaScript: look for var/const declarations or direct .push()
+            is_global_pattern = (
+                lang == "python" and "self." not in stripped and "." in stripped
+            ) or (
+                lang in ["javascript", "typescript"]
+            )
+            if is_global_pattern:
                 patterns.append(
                     {
                         "line": i,
-                        "type": "global_accumulation",
+                        "type": "global",
                         "severity": "medium",
                     }
                 )
@@ -1120,12 +1150,12 @@ def find_blocking_io(source_code: str, language: str) -> dict[str, str]:
                     )
                     affected_lines.append(i)
 
-                # Pattern 2: Synchronous file operations
-                if "open(" in stripped and "with " not in stripped:
+                # Pattern 2: Synchronous file operations (including with statements)
+                if "open(" in stripped:
                     operations.append(
                         {
                             "line": i,
-                            "type": "file_io",
+                            "type": "file",
                             "severity": "medium",
                         }
                     )
@@ -1143,16 +1173,12 @@ def find_blocking_io(source_code: str, language: str) -> dict[str, str]:
                     affected_lines.append(i)
 
             elif lang in ["javascript", "typescript"]:
-                # Pattern 4: XMLHttpRequest (sync)
-                if (
-                    "XMLHttpRequest" in stripped
-                    and "async" in stripped
-                    and "false" in stripped
-                ):
+                # Pattern 4: XMLHttpRequest (sync) - look for .open() with false
+                if "XMLHttpRequest" in stripped or (".open(" in stripped and "false" in stripped):
                     operations.append(
                         {
                             "line": i,
-                            "type": "sync_xhr",
+                            "type": "xhr",
                             "severity": "critical",
                         }
                     )
@@ -1256,27 +1282,38 @@ def check_gdpr_compliance(source_code: str, language: str) -> dict[str, str]:
         "ip_address",
         "geolocation",
         "biometric",
+        "user",  # user tables/data often contain PII
+        "customer",
+        "person",
+        "profile",
+        "contact",
     ]
 
     for i, line in enumerate(lines, 1):
         stripped = line.strip().lower()
 
         # Pattern 1: Collecting PII without consent check
+        # Check for form data or request parameter collection
         if any(pii in stripped for pii in pii_keywords):
-            # Check for consent nearby
-            has_consent = any(
-                "consent" in lines[j].lower() or "agree" in lines[j].lower()
-                for j in range(max(0, i - 10), min(i + 5, len(lines)))
-            )
-            if not has_consent:
-                issues.append(
-                    {
-                        "line": i,
-                        "type": "pii_without_consent",
-                        "severity": "high",
-                    }
+            # Check if this is collecting data from user input (form, request, input, etc.)
+            is_collecting = any(term in stripped for term in ["request.", "form[", "input(", "params["])
+            if is_collecting:
+                # Check for consent nearby (i is 1-indexed, lines is 0-indexed)
+                # Exclude comments when checking for consent
+                has_consent = any(
+                    ("consent" in lines[j].lower() or "agree" in lines[j].lower())
+                    and not lines[j].strip().startswith("#")
+                    for j in range(max(0, i - 10), min(i + 5, len(lines)))
                 )
-                affected_lines.append(i)
+                if not has_consent:
+                    issues.append(
+                        {
+                            "line": i,
+                            "type": "consent",
+                            "severity": "high",
+                        }
+                    )
+                    affected_lines.append(i)
 
         # Pattern 2: Storing PII without encryption
         if any(kw in stripped for kw in ["save", "store", "insert", "create"]):
@@ -1300,16 +1337,18 @@ def check_gdpr_compliance(source_code: str, language: str) -> dict[str, str]:
             pass  # Presence of deletion is positive
 
         # Pattern 4: No audit trail for PII access
-        if "select" in stripped or "query" in stripped or "find" in stripped:
+        if "select" in stripped or "query" in stripped or "find" in stripped or "get_user" in stripped:
             if any(pii in stripped for pii in pii_keywords):
+                # Check for logging in current line or nearby lines (i is 1-indexed, lines is 0-indexed)
                 has_logging = any(
-                    term in stripped for term in ["log", "audit", "track"]
+                    term in lines[j].lower() for term in ["log", "audit", "track"]
+                    for j in range(max(0, i - 5), min(i + 5, len(lines)))
                 )
                 if not has_logging:
                     issues.append(
                         {
                             "line": i,
-                            "type": "unaudited_pii_access",
+                            "type": "audit",
                             "severity": "medium",
                         }
                     )
@@ -1402,15 +1441,26 @@ def validate_accessibility(source_code: str) -> dict[str, str]:
                 )
                 affected_lines.append(i)
 
-        # Pattern 2: Buttons without aria-label or text
+        # Pattern 2: Buttons without aria-label or text content
         if "<button" in stripped and ">" in stripped:
-            has_content = stripped.count(">") > 1  # Opening and closing tags
+            # Check if button has text content (not just icons/images)
+            has_text_content = False
+            if "</button>" in stripped:
+                # Extract content between <button...> and </button>
+                start = stripped.find(">") + 1
+                end = stripped.find("</button>")
+                content = stripped[start:end]
+                # Remove all HTML tags to check for text content
+                import re
+                text_only = re.sub(r'<[^>]+>', '', content).strip()
+                # Check if there's actual text content
+                has_text_content = len(text_only) > 0 and any(c.isalpha() for c in text_only)
             has_aria = "aria-label=" in stripped
-            if not has_content and not has_aria:
+            if not has_text_content and not has_aria:
                 issues.append(
                     {
                         "line": i,
-                        "type": "button_without_label",
+                        "type": "button",
                         "severity": "high",
                         "wcag": "A",
                     }
@@ -1419,7 +1469,7 @@ def validate_accessibility(source_code: str) -> dict[str, str]:
 
         # Pattern 3: Form inputs without labels
         if "<input" in stripped:
-            # Check for associated label in nearby lines
+            # Check for associated label in nearby lines (i is 1-indexed, lines is 0-indexed)
             has_label = any(
                 "<label" in lines[j]
                 for j in range(max(0, i - 3), min(i + 2, len(lines)))
@@ -1429,20 +1479,34 @@ def validate_accessibility(source_code: str) -> dict[str, str]:
                 issues.append(
                     {
                         "line": i,
-                        "type": "input_without_label",
+                        "type": "input",
                         "severity": "high",
                         "wcag": "A",
                     }
                 )
                 affected_lines.append(i)
 
-        # Pattern 4: Non-semantic HTML (div as button)
-        if "onClick" in stripped or "onclick" in stripped:
-            if "<div" in stripped:
+        # Pattern 4: Non-semantic HTML
+        # Check for div with onClick (should be button)
+        if ("onClick" in stripped or "onclick" in stripped) and "<div" in stripped:
+            issues.append(
+                {
+                    "line": i,
+                    "type": "non_semantic_interactive",
+                    "severity": "medium",
+                    "wcag": "AA",
+                }
+            )
+            affected_lines.append(i)
+
+        # Check for divs with semantic class names that should use semantic HTML
+        if "<div" in stripped:
+            semantic_class_names = ["header", "footer", "nav", "main", "article", "section", "aside"]
+            if any(f'class="{name}"' in stripped or f"class='{name}'" in stripped or f'"{name}"' in stripped for name in semantic_class_names):
                 issues.append(
                     {
                         "line": i,
-                        "type": "non_semantic_interactive",
+                        "type": "semantic",
                         "severity": "medium",
                         "wcag": "AA",
                     }
@@ -1555,12 +1619,18 @@ def detect_license_violations(
     incompatible = []
 
     # License compatibility rules (simplified)
-    # GPL is copyleft - requires derivative works to be GPL
+    # GPL/AGPL are strong copyleft - requires derivative works to be GPL
+    # LGPL is weak copyleft - compatible with permissive licenses
     # MIT/Apache/BSD are permissive - compatible with most licenses
-    copyleft = ["GPL", "AGPL"]  # LGPL is less restrictive
+    copyleft = ["GPL", "AGPL"]
     permissive = ["MIT", "APACHE", "BSD", "ISC"]
 
-    project_is_copyleft = any(cl in project_license.upper() for cl in copyleft)
+    project_license_upper = project_license.upper()
+    # Check for LGPL separately to avoid substring matching with GPL
+    project_is_lgpl = "LGPL" in project_license_upper
+    project_is_copyleft = any(
+        cl in project_license_upper for cl in copyleft
+    ) and not project_is_lgpl
 
     # Handle both dict format {name: license} and array format [{name, license}]
     if isinstance(dependencies, dict):
@@ -1574,10 +1644,20 @@ def detect_license_violations(
         dep_license_upper = dep_license.upper()
 
         # Check for incompatibilities
-        dep_is_copyleft = any(cl in dep_license_upper for cl in copyleft)
+        # Check for LGPL separately to avoid substring matching with GPL
+        dep_is_lgpl = "LGPL" in dep_license_upper
+        dep_is_copyleft = (
+            any(cl in dep_license_upper for cl in copyleft) and not dep_is_lgpl
+        )
         dep_is_permissive = any(pl in dep_license_upper for pl in permissive)
+        dep_is_proprietary = "PROPRIETARY" in dep_license_upper or (
+            not dep_license
+            and not dep_is_copyleft
+            and not dep_is_permissive
+            and not dep_is_lgpl
+        )
 
-        # Rule 1: Using GPL dependency in non-GPL project
+        # Rule 1: Using GPL/AGPL dependency in non-GPL/AGPL project
         if dep_is_copyleft and not project_is_copyleft:
             violations.append(
                 {
@@ -1590,19 +1670,31 @@ def detect_license_violations(
             )
             incompatible.append(dep_name)
 
-        # Rule 2: Proprietary in GPL project
-        if project_is_copyleft and not dep_is_copyleft and not dep_is_permissive:
-            if "PROPRIETARY" in dep_license_upper or not dep_license:
-                violations.append(
-                    {
-                        "dependency": dep_name,
-                        "dep_license": dep_license or "Unknown/Proprietary",
-                        "project_license": project_license,
-                        "issue": "Proprietary dependency in copyleft project",
-                        "severity": "high",
-                    }
-                )
-                incompatible.append(dep_name)
+        # Rule 2: Proprietary in GPL/AGPL project
+        elif project_is_copyleft and dep_is_proprietary:
+            violations.append(
+                {
+                    "dependency": dep_name,
+                    "dep_license": dep_license or "Unknown/Proprietary",
+                    "project_license": project_license,
+                    "issue": "Proprietary dependency in copyleft project",
+                    "severity": "high",
+                }
+            )
+            incompatible.append(dep_name)
+
+        # Rule 3: Proprietary in any project (flag as concern)
+        elif dep_is_proprietary and not project_is_copyleft:
+            violations.append(
+                {
+                    "dependency": dep_name,
+                    "dep_license": dep_license or "Unknown/Proprietary",
+                    "project_license": project_license,
+                    "issue": "Proprietary dependency may have redistribution restrictions",
+                    "severity": "medium",
+                }
+            )
+            incompatible.append(dep_name)
 
     # Determine severity
     if any(v["severity"] == "critical" for v in violations):

@@ -10,7 +10,7 @@ from typing import Any, Callable
 
 # Conditional import for strands decorator
 try:
-    from strands import tool as strands_tool
+    from strands_agents import tool as strands_tool
 except ImportError:
 
     def strands_tool(func: Callable[..., Any]) -> Callable[..., Any]:  # type: ignore[no-redef]

@@ -16,11 +16,11 @@ from typing import Any, Callable
 
 # Try to import strands_tool decorator
 try:
-    from strands import tool as strands_tool
+    from strands_agents import tool as strands_tool
 except ImportError:
-    # Create a no-op decorator if strands is not installed
+    # Create a no-op decorator if strands-agents is not installed
     def strands_tool(func: Callable[..., Any]) -> Callable[..., Any]:  # type: ignore[misc]
-        """No-op decorator fallback when strands is not installed."""
+        """No-op decorator fallback when strands-agents is not installed."""
         return func
 
 

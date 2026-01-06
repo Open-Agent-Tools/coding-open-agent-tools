@@ -40,15 +40,13 @@ classifiers = [
     "Topic :: System :: Shells",
     "Typing :: Typed",
 ]
-dependencies = [
-    "basic-open-agent-tools>=0.12.0",
-]
+dependencies = []
 
 [project.optional-dependencies]
 # All optional features
 all = [
     "esprima>=4.0.0",
-    "tree-sitter-language-pack>=0.9.0",
+    "tree-sitter-language-pack>=0.13.0",
     "PyYAML>=6.0.0",
     "tomli>=2.0.0; python_version < '3.11'",
     "jsonschema>=4.0.0",
@@ -58,17 +56,17 @@ all = [
 # JavaScript/TypeScript navigation support
 javascript = ["esprima>=4.0.0"]
 # Java navigation support
-java = ["tree-sitter-language-pack>=0.9.0"]
+java = ["tree-sitter-language-pack>=0.13.0"]
 # Go navigation support
-go = ["tree-sitter-language-pack>=0.9.0"]
+go = ["tree-sitter-language-pack>=0.13.0"]
 # Rust navigation support
-rust = ["tree-sitter-language-pack>=0.9.0"]
+rust = ["tree-sitter-language-pack>=0.13.0"]
 # C++ navigation support
-cpp = ["tree-sitter-language-pack>=0.9.0"]
+cpp = ["tree-sitter-language-pack>=0.13.0"]
 # C# navigation support
-csharp = ["tree-sitter-language-pack>=0.9.0"]
+csharp = ["tree-sitter-language-pack>=0.13.0"]
 # Ruby navigation support
-ruby = ["tree-sitter-language-pack>=0.9.0"]
+ruby = ["tree-sitter-language-pack>=0.13.0"]
 # Configuration validation support
 config = [
     "PyYAML>=6.0.0",
@@ -80,25 +78,24 @@ config = [
 config-security = ["detect-secrets>=1.5.0"]
 # Strands integration testing
 strands = [
-    "strands>=0.1.0",
+    "strands-agents>=1.20.0",
     "anthropic>=0.25.0",
     "python-dotenv>=1.0.0",
 ]
 # Development dependencies
 dev = [
-    "pytest>=7.0.0",
-    "pytest-cov>=4.0.0",
+    "pytest>=9.0.0",
+    "pytest-cov>=7.0.0",
     "pytest-asyncio>=0.21.0",
-    "ruff>=0.1.0",
-    "mypy>=1.0.0",
+    "ruff>=0.14.0",
+    "mypy>=1.19.0",
     "pre-commit>=3.0.0",
     "freezegun>=1.2.0",
     "google-adk>=0.1.0",
-    "basic-open-agent-tools[all]>=0.12.0",
     # JavaScript/TypeScript support for testing
     "esprima>=4.0.0",
     # Java support for testing
-    "tree-sitter-language-pack>=0.9.0",
+    "tree-sitter-language-pack>=0.13.0",
     # Config validation support for testing
     "PyYAML>=6.0.0",
     "tomli>=2.0.0; python_version < '3.11'",
@@ -106,17 +103,16 @@ dev = [
     "packaging>=21.0",
     "detect-secrets>=1.5.0",
     # Strands testing dependencies
-    "strands>=0.1.0",
+    "strands-agents>=1.20.0",
     "anthropic>=0.25.0",
     "python-dotenv>=1.0.0",
 ]
 test = [
-    "pytest>=7.0.0",
-    "pytest-cov>=4.0.0",
+    "pytest>=9.0.0",
+    "pytest-cov>=7.0.0",
     "pytest-asyncio>=0.21.0",
     "freezegun>=1.2.0",
     "google-adk>=0.1.0",
-    "basic-open-agent-tools[all]>=0.12.0",
 ]
 
 [project.urls]
@@ -172,7 +168,7 @@ follow_imports = "skip"  # Skip type checking of imported modules
 ignore_missing_imports = true  # Ignore missing imports in dependencies
 
 [[tool.mypy.overrides]]
-module = ["strands", "strands.*", "pkg_resources", "basic_open_agent_tools", "basic_open_agent_tools.*", "google.adk", "google.adk.*", "langgraph", "langgraph.*", "detect_secrets", "detect_secrets.*", "mcp", "mcp.*", "yaml", "tomli", "jsonschema"]
+module = ["strands_agents", "strands_agents.*", "pkg_resources", "basic_open_agent_tools", "basic_open_agent_tools.*", "google.adk", "google.adk.*", "langgraph", "langgraph.*", "detect_secrets", "detect_secrets.*", "mcp", "mcp.*", "yaml", "tomli", "jsonschema"]
 ignore_missing_imports = true
 
 [tool.pytest.ini_options]
@@ -220,5 +216,5 @@ exclude_lines = [
 
 [dependency-groups]
 dev = [
-    "ruff>=0.12.12",
+    "ruff>=0.14.0",
 ]
